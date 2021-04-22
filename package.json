@@ -10,11 +10,15 @@
     "firebase": "^8.4.1",
     "three": "^0.127.0",
     "troisjs": "^0.2.3",
-    "vue": "^3.0.11"
+    "vue": "^3.0.11",
+    "vue-router": "4",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.11",
+    "sass": "^1.32.11",
+    "sass-loader": "^11.0.1",
     "vite": "^2.1.5"
   }
 }
