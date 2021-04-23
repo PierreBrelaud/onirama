@@ -1,0 +1,25 @@
+$breakpoints: (
+        "phoneS": 320px,
+        "phone": 420px,
+        "phabletS": 600px,
+        "phablet": 810px,
+        "desktop": 1080px,
+        "desktopL": 1280px,
+        "desktopXL": 1480px,
+        "desktopXXL": 1680px,
+);
+
+@import "../vendors/include-media";
+
+// surcouche pour avoir la meme que breakpointSlicer
+@mixin phablet() {
+  @include media("<=phablet"){
+    @content;
+  }
+}
+
+@mixin desktop() {
+  @include media(">phablet"){
+    @content;
+  }
+}
