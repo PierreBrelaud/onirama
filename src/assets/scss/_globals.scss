@@ -1,0 +1,21 @@
+body,
+html {
+  font-size: 10px;
+}
+
+.app {
+  font-size: 1.8rem;
+}
+
+// --------------------------------------------------------------------------------------------------------- Container
+.boxed {
+  max-width: 113rem;
+  width: calc(100% - #{$G-side} * 2);
+  margin-left: auto;
+  margin-right: auto;
+
+  @include phablet(){
+    width: calc(100% - #{$G-side-phablet} * 2);
+  }
+}
+
