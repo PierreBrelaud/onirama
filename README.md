@@ -1,7 +1,7 @@
 # onirama
 
 ## (Code of conduct)[https://v3.vuejs.org/style-guide]
-
+## (Methodo BEM)[https://www.alticreation.com/blog/bem-pour-le-css/]
 ## Github
 
 ### Branches : 
