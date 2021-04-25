@@ -27,4 +27,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+
+<style lang="scss" scoped>
+
+.navigation__item {
+    padding: 3px;
+    &.router-link-active {
+        background: lightslategray;
+    }
+
+    &__title {
+        color: white;
+    }
+}
+
+</style>

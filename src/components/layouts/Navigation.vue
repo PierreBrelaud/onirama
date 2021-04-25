@@ -34,5 +34,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+
+.navigation {
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    bottom: 0;
+    width: 100%;
+    padding: 20px 5px;
+    background-color: lightgray;
+}
+
 </style> 
