@@ -26,6 +26,10 @@ export default {
     },
     methods: {
         btn1Clicked() {
+            this.$store.dispatch('loader/pending')
+            setTimeout(() => {
+                this.$store.dispatch('loader/done')
+            }, 2000);
             console.log('button 1 clicked')
         },
         btn2Clicked() {
