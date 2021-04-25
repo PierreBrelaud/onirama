@@ -1,17 +1,24 @@
 <template>
-    <h1>Test view</h1>
-    <firestore-test/>
-    <trois-js-test />
+    <scan-text 
+        :successCallback="success"
+        :errorCallback="error"
+    />
 </template>
 
 <script>
-import FirestoreTest from '@/components/test/FirestoreTest.vue'
-import TroisJsTest from '@/components/test/TroisJsTest.vue'
+import ScanText from '@/components/ScanText.vue'
 export default {
+    methods: {
+        success(data) {
+            console.log(data)
+        },
+        error(error) {
+            console.log(error.message)
+        }
+    },
     components: {
-        FirestoreTest,
-        TroisJsTest
-    }
+        ScanText
+    },
 }
 </script>
 <style>
