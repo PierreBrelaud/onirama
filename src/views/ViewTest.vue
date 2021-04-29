@@ -1,12 +1,10 @@
 <template>
-    <scan-text 
-        :successCallback="success"
-        :errorCallback="error"
-    />
+    <trois-js-test/>
 </template>
 
 <script>
-import ScanText from '@/components/ScanText.vue'
+import TroisJsTest from '@/components/test/TroisJsTest.vue';
+
 export default {
     methods: {
         success(data) {
@@ -17,7 +15,7 @@ export default {
         }
     },
     components: {
-        ScanText
+        TroisJsTest
     },
 }
 </script>

@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "camera-controls": "^1.28.0",
     "firebase": "^8.4.1",
+    "swipe-detect": "^1.0.1",
     "three": "^0.127.0",
     "troisjs": "^0.2.3",
     "vue": "^3.0.11",
