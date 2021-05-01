@@ -38,3 +38,7 @@ npm run lint
 ```
 firebase deploy
 ```
+or
+```
+firebase deploy --only hosting
+```

@@ -1,9 +1,9 @@
 <template>
-    <trois-js-test/>
+    <three-test />
 </template>
 
 <script>
-import TroisJsTest from '@/components/test/TroisJsTest.vue';
+import ThreeTest from '@/components/test/ThreeTest.vue'
 
 export default {
     methods: {
@@ -15,10 +15,11 @@ export default {
         }
     },
     components: {
-        TroisJsTest
+        ThreeTest,
     },
 }
 </script>
-<style>
+
+        ThreeTest<style>
 
 </style>
