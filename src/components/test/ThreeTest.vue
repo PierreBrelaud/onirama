@@ -34,6 +34,7 @@ export default {
             this.portalScenes = [];
             this.portals = [];
             this.dreamScenes = [];
+            this.crystals = [];
 			
             this.camera = new THREE.PerspectiveCamera(75, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 1000);
             this.camera.position.z = 10;
@@ -130,6 +131,10 @@ export default {
 
             this.stats.end();
 
+            this.crystals.forEach(crystal => {
+                crystal.rotation.y += 0.01;
+            })
+
             requestAnimationFrame(this.animate);
         },
         generateWorld(position) {
@@ -197,6 +202,7 @@ export default {
             crystal.position.z = 3;
             crystal.position.y = 1;
             dreamGroup.add(crystal);
+            this.crystals.push(crystal);
             
             // Pedestal
             const pedestalGeo = new THREE.BoxGeometry(1.5, 2.5, 1.5);
