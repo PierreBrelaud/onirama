@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { OrbitControls } from '@three-ts/orbit-controls';
 import CameraControls from 'camera-controls';
 import swipeDetect from 'swipe-detect';
-import Stats from 'stats.js';
+import Stats from 'stats.js/src/Stats';
 
 export default {
     mounted() {
@@ -29,18 +29,22 @@ export default {
             this.clock = new THREE.Clock();
 
             this.canvas = document.getElementById('threeCanvas');
-            
+
             this.mainScene = new THREE.Scene();
             this.portalScenes = [];
             this.portals = [];
             this.dreamScenes = [];
             this.crystals = [];
-			
-            this.camera = new THREE.PerspectiveCamera(75, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 1000);
+
+            const width = window.innerWidth;
+            const height = window.innerHeight
+
+            this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
             this.camera.position.z = 10;
-            
+
             this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true});
-            this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+            this.renderer.setSize(width, height);
+            this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setClearColor(0xFFF0EA);
             this.renderer.autoClear = false;
 
@@ -65,7 +69,7 @@ export default {
                 },
                 10
 		    );
-            
+
             const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
             this.mainScene.add(ambientLight);
             const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 1 );
@@ -75,7 +79,9 @@ export default {
             this.generateWorld({x: 10});
             this.generateWorld({x: 20});
 
-            // Zoom
+            //==================================================
+            //  Zoom
+            //==================================================
             let zoom = true;
 
             this.canvas.addEventListener('click', () => {
@@ -87,28 +93,29 @@ export default {
                     this.mainScene.add(ray);*/
                     const intersects = raycaster.intersectObjects(this.portals);
                     if(intersects.length > 0) {
-                        this.cameraControls.zoomTo(2, true)
+                        this.cameraControls.zoomTo(2.3, true)
                         zoom = false;
                     }
                 } else {
                     this.cameraControls.zoomTo(1, true);
                     zoom = true
                 }
-            }) 
+            })
         },
         animate() {
             this.stats.begin();
 
+
             const delta = this.clock.getDelta();
-			this.cameraControls.update( delta );
+      			this.cameraControls.update( delta );
 
             this.renderer.clear();
-            
+
             this.renderer.render(this.mainScene, this.camera);
 
             for (let index = 0; index < this.portalScenes.length; index++) {
                 const gl = this.renderer.getContext();
-                
+
                 gl.enable(gl.STENCIL_TEST);
                 gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
 
@@ -116,7 +123,7 @@ export default {
                 gl.stencilMask(0xFF);
 
                 this.renderer.render(this.portalScenes[index], this.camera);
-                
+
                 gl.stencilFunc(gl.EQUAL, 1, 0xFF);
                 gl.stencilMask(0x00);
 
@@ -127,7 +134,7 @@ export default {
                 gl.disable(gl.STENCIL_TEST);
 
                 this.renderer.clearStencil();
-            } 
+            }
 
             this.stats.end();
 
@@ -149,7 +156,7 @@ export default {
             plane.position.x = position.x;
             plane.rotation.x = Math.PI / 2;
             this.mainScene.add(plane);
-            
+
             this.generateDream(position);
         },
         generateDream(position) {
@@ -171,16 +178,16 @@ export default {
 
             //==================================================
             //  Inside the portal
-            //================================================== 
+            //==================================================
             const dreamHemLight = new THREE.HemisphereLight(0xffffff, 0xF3A712, 0.8 );
             dreamScene.add(dreamHemLight);
 
             const dreamGroup = new THREE.Group();
             dreamGroup.position.z = -5;
             dreamGroup.position.x = position.x;
-            
+
             const dreamPlaneGeo = new THREE.PlaneGeometry(10, 10);
-            
+
             // Floor
             const dreamFloorMat = new THREE.MeshStandardMaterial({
                 color: 0xFF6F59,
@@ -192,7 +199,7 @@ export default {
             dreamGroup.add(dreamFloor)
 
             // Background
-            
+
             // Crystal
             const crystalGeo = new THREE.IcosahedronGeometry(0.8);
             const crystalMat = new THREE.MeshStandardMaterial({
@@ -203,7 +210,7 @@ export default {
             crystal.position.y = 1;
             dreamGroup.add(crystal);
             this.crystals.push(crystal);
-            
+
             // Pedestal
             const pedestalGeo = new THREE.BoxGeometry(1.5, 2.5, 1.5);
             const pedestalMat = new THREE.MeshStandardMaterial({
@@ -213,7 +220,7 @@ export default {
             pedestal.position.y = -1.5;
             pedestal.position.z = 3;
             dreamGroup.add(pedestal);
-            
+
             dreamScene.add(dreamGroup);
             //==================================================
 
@@ -229,6 +236,10 @@ export default {
 </script>
 
 <style scoped>
+* {
+    box-sizing: border-box;
+}
+
 #threeCanvas {
     width: 100%;
     height: 95vh;
