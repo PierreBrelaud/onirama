@@ -1,10 +1,31 @@
-//exemple ajout font
-/*
 @font-face {
-  font-family: "Futura";
-  src: url("../fonts/FuturaStd/FuturaStd-Book.woff") format("woff");
+  font-family: "Canela";
+  src: url("@/assets/fonts/Canela/Canela-Thin.otf") format("otf");
+  font-weight: $FW-thin;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela";
+  src: url("@/assets/fonts/Canela/Canela-ThinItalic.otf") format("otf");
+  font-weight: $FW-thin;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela";
+  src: url("@/assets/fonts/Canela/Canela-Regular.otf") format("otf");
   font-weight: $FW-normal;
   font-style: normal;
   font-display: swap;
 }
-*/
+
+@font-face {
+  font-family: "Canela";
+  src: url("@/assets/fonts/Canela/Canela-Bold.otf") format("otf");
+  font-weight: $FW-bold;
+  font-style: normal;
+  font-display: swap;
+}
