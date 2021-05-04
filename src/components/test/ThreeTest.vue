@@ -1,5 +1,14 @@
 <template>
     <canvas id="threeCanvas"/>
+
+    <div id="debug" v-show="isDebug">
+        <p>absolute : {{absolute}}</p>
+        <p>alpha : {{alpha}}</p>
+        <p>beta : {{beta}}</p>
+        <p>gamma : {{gamma}}</p>
+        <p>secure : {{secure}}</p>
+        <button @click="onDevOrAllow">Allow device orientation</button>
+    </div>
 </template>
 
 <script>
@@ -8,8 +17,20 @@ import { OrbitControls } from '@three-ts/orbit-controls';
 import CameraControls from 'camera-controls';
 import swipeDetect from 'swipe-detect';
 import Stats from 'stats.js/src/Stats';
+import {DeviceOrientationControls} from 'three/examples/jsm/controls/DeviceOrientationControls';
+import Dream from "../../core/visualisation/Dream";
 
 export default {
+    data() {
+        return {
+            isDebug: false,
+            absolute: 0,
+            alpha: 0,
+            beta: 0,
+            gamma: 0,
+            secure: null,
+        }
+    },
     mounted() {
         this.init();
         this.animate();
@@ -30,12 +51,6 @@ export default {
 
             this.canvas = document.getElementById('threeCanvas');
 
-            this.mainScene = new THREE.Scene();
-            this.portalScenes = [];
-            this.portals = [];
-            this.dreamScenes = [];
-            this.crystals = [];
-
             const width = window.innerWidth;
             const height = window.innerHeight
 
@@ -44,7 +59,7 @@ export default {
 
             this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true});
             this.renderer.setSize(width, height);
-            this.renderer.setPixelRatio(window.devicePixelRatio);
+            //this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setClearColor(0xFFF0EA);
             this.renderer.autoClear = false;
 
@@ -53,7 +68,7 @@ export default {
             this.cameraControls.touches.two = CameraControls.ACTION.NONE;
             this.cameraControls.touches.three = CameraControls.ACTION.NONE;
 
-            let zoomable = true
+            let zoomable = true;
 
             swipeDetect(
                 this.renderer.domElement,
@@ -68,46 +83,124 @@ export default {
                     }
                 },
                 10
-		    );
-
-            const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
-            this.mainScene.add(ambientLight);
-            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 1 );
-            this.mainScene.add(hemisphereLight);
-
-            this.generateWorld({x: 0});
-            this.generateWorld({x: 10});
-            this.generateWorld({x: 20});
+            );
 
             //==================================================
             //  Zoom
             //==================================================
             let zoom = true;
+            this.isZoom = false;
 
             this.canvas.addEventListener('click', () => {
+                //this.onDevOrAllow();
                 if(zoom && zoomable) {
                     const raycaster = new THREE.Raycaster();
                     raycaster.setFromCamera(new THREE.Vector2(), this.camera);
-                    /*
-                    const ray = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff )
-                    this.mainScene.add(ray);*/
-                    const intersects = raycaster.intersectObjects(this.portals);
+
+                    const intersects = raycaster.intersectObjects(this.getPortals());
+
                     if(intersects.length > 0) {
                         this.cameraControls.zoomTo(2.3, true)
                         zoom = false;
+                        this.isZoom = true;
                     }
                 } else {
                     this.cameraControls.zoomTo(1, true);
                     zoom = true
+                    this.isZoom = false;
                 }
             })
+            this.secure = window.isSecureContext;
+
+            this.mainScene = new THREE.Scene();
+
+            const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
+            this.mainScene.add(ambientLight);
+            const hemisphereLight = new THREE.HemisphereLight(
+                0xffffff,
+                0x000000,
+                1
+            );
+            this.mainScene.add(hemisphereLight);
+
+            this.portalScenes = [];
+            this.dreamScenes = [];
+
+            const dreamsData = this.getDreamsData();
+            const dreams = this.createDreams(dreamsData);
+            this.disposeDreams(dreams);
+        },
+        getDreamsData(){
+            return [
+                {
+                    outsidePart: {color: 0x444554},
+                    insidePart: {
+                        floorData: {color: 0xffffff},
+                        backgroundData: {color:0xffffff},
+                        pedestalData: {color: 0xffffff},
+                        crystalData: {color:0xffffff},
+                    },
+                },
+                {
+                    outsidePart: {color: 0x444554},
+                    insidePart: {
+                        floorData: {color: 0xffffff},
+                        backgroundData: {color:0xffffff},
+                        pedestalData: {color: 0xffffff},
+                        crystalData: {color:0xffffff},
+                    },
+                }
+            ]
+        },
+        createDreams(dreamsData){
+            const dreams = [];
+            let step = 0;
+            dreamsData.forEach(dreamData => {
+                const dream = new Dream(dreamData, step).createDream();
+                dreams.push(dream);
+
+                step += 10;
+            })
+            return dreams;
+        },
+        disposeDreams(dreams){
+            dreams.forEach(dream => {
+                this.mainScene.add(dream.outsidePart);
+                this.portalScenes.push(dream.portal);
+                this.dreamScenes.push(dream.insidePart);
+            });
+        },
+        getPortals(){
+            const portals = [];
+            this.portalScenes.forEach(portalScene => {
+                portals.push(portalScene.getObjectByName('portal'));
+            })
+            return portals
+        },
+        onDevOrAllow() {
+            const dreamGp = this.dreamScenes[0].getObjectByName("Dream Group", true);
+            DeviceOrientationEvent.requestPermission()
+                .then(response => {
+                    if (response === 'granted') {
+                        window.addEventListener('deviceorientation', ({absolute, alpha, beta, gamma}) => {
+                            this.absolute = absolute;
+                            // augmente vers la droite et diminue vers la gauche
+                            this.alpha = Math.round(alpha);
+                            this.beta = Math.round(beta);
+                            this.gamma = Math.round(gamma);
+                            if(this.isZoom) {
+                              dreamGp.rotation.y = gamma * Math.PI/180;
+                            }
+                        })
+                    }
+                })
+                .catch(console.error)
         },
         animate() {
             this.stats.begin();
 
-
             const delta = this.clock.getDelta();
-      			this.cameraControls.update( delta );
+            this.cameraControls.update( delta );
 
             this.renderer.clear();
 
@@ -128,6 +221,7 @@ export default {
                 gl.stencilMask(0x00);
 
                 this.renderer.clearDepth();
+
                 this.renderer.render(this.dreamScenes[index], this.camera);
 
                 gl.stencilMask(0xFF);
@@ -137,99 +231,19 @@ export default {
             }
 
             this.stats.end();
-
-            this.crystals.forEach(crystal => {
+            this.dreamScenes.forEach(scene => {
+                const crystal = scene.getObjectByName('crystal');
                 crystal.rotation.y += 0.01;
             })
 
             requestAnimationFrame(this.animate);
         },
-        generateWorld(position) {
-            // Main Scene
-            const planeGeo = new THREE.PlaneGeometry(8, 8);
-            const planeMat = new THREE.MeshBasicMaterial({
-                color: 0x9A4C95,
-                side: THREE.DoubleSide
-            });
-            const plane = new THREE.Mesh(planeGeo, planeMat);
-            plane.position.y = -2.5;
-            plane.position.x = position.x;
-            plane.rotation.x = Math.PI / 2;
-            this.mainScene.add(plane);
-
-            this.generateDream(position);
-        },
-        generateDream(position) {
-            // Portal
-            const portalScene = new THREE.Scene();
-            const portalGeometry = new THREE.PlaneGeometry(3.5, 5);
-            const portalMaterial = new THREE.MeshBasicMaterial({
-                color: 0x222222,
-                colorWrite: true,
-                depthWrite: false
-            });
-            const portal = new THREE.Mesh(portalGeometry, portalMaterial);
-            portal.position.x = position.x;
-            portalScene.add(portal);
-            this.portals.push(portal);
-            this.portalScenes.push(portalScene);
-
-            const dreamScene  = new THREE.Scene();
-
-            //==================================================
-            //  Inside the portal
-            //==================================================
-            const dreamHemLight = new THREE.HemisphereLight(0xffffff, 0xF3A712, 0.8 );
-            dreamScene.add(dreamHemLight);
-
-            const dreamGroup = new THREE.Group();
-            dreamGroup.position.z = -5;
-            dreamGroup.position.x = position.x;
-
-            const dreamPlaneGeo = new THREE.PlaneGeometry(10, 10);
-
-            // Floor
-            const dreamFloorMat = new THREE.MeshStandardMaterial({
-                color: 0xFF6F59,
-                side: THREE.DoubleSide,
-            })
-            const dreamFloor = new THREE.Mesh(dreamPlaneGeo, dreamFloorMat);
-            dreamFloor.rotation.x = Math.PI / 2;
-            dreamFloor.position.y = - 2.6;
-            dreamGroup.add(dreamFloor)
-
-            // Background
-
-            // Crystal
-            const crystalGeo = new THREE.IcosahedronGeometry(0.8);
-            const crystalMat = new THREE.MeshStandardMaterial({
-                color: 0x337CA0,
-            });
-            const crystal = new THREE.Mesh(crystalGeo, crystalMat);
-            crystal.position.z = 3;
-            crystal.position.y = 1;
-            dreamGroup.add(crystal);
-            this.crystals.push(crystal);
-
-            // Pedestal
-            const pedestalGeo = new THREE.BoxGeometry(1.5, 2.5, 1.5);
-            const pedestalMat = new THREE.MeshStandardMaterial({
-                color: 0xF3A712,
-            });
-            const pedestal = new THREE.Mesh(pedestalGeo, pedestalMat);
-            pedestal.position.y = -1.5;
-            pedestal.position.z = 3;
-            dreamGroup.add(pedestal);
-
-            dreamScene.add(dreamGroup);
-            //==================================================
-
-            this.dreamScenes.push(dreamScene);
-        },
         resize() {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
+
+
         }
     }
 }
@@ -243,5 +257,17 @@ export default {
 #threeCanvas {
     width: 100%;
     height: 95vh;
+}
+
+#debug {
+    background: black;
+    color: white;
+    font-size: 1rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 1rem;
+    width: 20rem;
+    height: 20rem;
 }
 </style>
