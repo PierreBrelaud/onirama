@@ -1,96 +1,53 @@
 <template>
     <h1>Labelisation</h1>
-    <div class="labeling__display">
-        <span
-            v-for="word in textLabeled" :key="word"
-            class="labeling__display__word" 
-            :class="`labeling__display__word--${word.label}`"
-            @click="labelize(word)"
-        >
-            {{word.value}}
-        </span>
-    </div>
-    <div class="labeling__actions">
-        <div v-if="!isLabeling">
-            <button @click="labeling('action')">action</button>
-            <button @click="labeling('person')">person</button>
-            <button @click="labeling('place')">place</button>
+    <div class="labeling">
+        <div class="labeling__display">
+            <!-- <h1 class="labeling__display__title">plop</h1> -->
+            <span
+                v-for="word in textLabeled" :key="word"
+                class="labeling__display__word" 
+                :class="`labeling__display__word--${word.label}`"
+                @click="labelize(word)"
+            >
+                {{word.value}}
+            </span>
         </div>
-    </div>
-    <!-- {{ labeledText }} -->
-    <!-- <div v-if="isLabeling" class="labeling">
-        <span
-            v-for="wordData in labeledText" :key="wordData"
-            class="labeling__word" 
-            :class="`labeling__word--${wordData.label}`"
-            @click="label(wordData)"
-        >
-            {{wordData.value}}
-        </span>
-    </div>
-    <div>
-        <button v-if="isLabeling && !isLabelingActive" @click="labelingWords">Labeliser</button><br/><br/>
-        <div v-if="isLabelingWords && !isLabelingActive">
-            <button @click="labeling('action')">action</button>
-            <button @click="labeling('person')">person</button>
-            <button @click="labeling('place')">place</button>
+        <div class="labeling__actions">
+            <div v-if="!isLabeling">
+                <button @click="currentLabel = 'action'">action</button>
+                <button @click="currentLabel = 'person'">person</button>
+                <button @click="currentLabel = 'place'">place</button>
+            </div>
         </div>
-        <div v-if="isLabelingActive">
-            {{ labelingType }}
-            <button @click="validateLabeling">valider</button>
-        </div>
-    </div> -->
+        <div v-if="currentLabel"> {{ currentLabel }} </div>
+    </div>
 </template>
 
 <script>
-
-import LabelingHelper from '@/utils/labelingHelper.js'
+import { mapGetters } from 'vuex'
 
 export default {
     beforeMount() {
-        this.labelingHelper.text = this.initialtext
-        console.log(this.textLabeled)
+        this.helper = this['labeling/instance']
+        this.helper.text = this.initialtext
     },
     data() {
         return {
             currentLabel: null,
             isLabeling: false,
+            helper: null,
         }
     },
     methods: {
         labelize(data) {
-            if(this.currentLabel !== null) {
-                console.log("ok", data)
+            if(data.canBeLabeled && this.currentLabel !== null) {
+                this.helper.labelWord(data, this.currentLabel)
+                this.$forceUpdate()
             }
-            // if(wordData.canBeLabeled && this.isLabelingActive) {
-            //     this.labelingHelper.labelWord(wordData, this.labelingType)
-            //     this.labeledText = this.labelingHelper.textLabeled
-            //     this.$forceUpdate()
-            // }
         },
         labelingWords() {
             this.isLabelingWords = !this.isLabelingWords
         },
-        test() {
-            this.isLabeling = !this.isLabeling
-
-            if(this.isLabeling) {
-                //set new text
-                this.labelingHelper.text = this.textArea
-                //get labeled text
-                this.labeledText = this.labelingHelper.textLabeled
-            }
-            else {
-                this.isLabelingActive = false
-            }
-        },
-        // labelize(wordData) {
-        //     if(wordData.canBeLabeled && this.isLabelingActive) {
-        //         this.labelingHelper.labelWord(wordData, this.labelingType)
-        //         this.labeledText = this.labelingHelper.textLabeled
-        //         this.$forceUpdate()
-        //     }
-        // },
         labeling(type) {
             this.isLabelingActive = true
             this.labelingType = type
@@ -100,11 +57,11 @@ export default {
         }
     },
     computed: {
-        labelingHelper() {
-            return new LabelingHelper()
-        },
+        ...mapGetters([
+            'labeling/instance',
+        ]),
         textLabeled() {
-            return this.labelingHelper.textLabeled
+            return this.helper.textLabeled
         }
     },
     props: {
@@ -118,22 +75,24 @@ export default {
 
 
 <style lang="scss" scoped>
-    .labeling__display {
+.labeling {
+
+    &__display {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
 
         &__word {
-            font-size: 2em;
-            margin-top: 0.2em;
-            margin-right: 0.2em;
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+            margin-right: 0.2rem;
 
             &--default {
                 border: solid thin lightgray;
             }
 
             &--special {
-                margin-left: -0.2em;
+                margin-left: -0.2rem;
             }
 
             &--action {
@@ -149,6 +108,6 @@ export default {
 
         &__toggle {
         }
-
     }
+}
 </style>
