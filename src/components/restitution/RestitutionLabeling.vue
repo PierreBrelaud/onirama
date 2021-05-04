@@ -1,8 +1,7 @@
 <template>
-    <h1>Labelisation</h1>
-    <div class="labeling">
+    <h2>Labelisation</h2>
+    <!-- <div class="labeling">
         <div class="labeling__display">
-            <!-- <h1 class="labeling__display__title">plop</h1> -->
             <span
                 v-for="word in textLabeled" :key="word"
                 class="labeling__display__word" 
@@ -20,7 +19,7 @@
             </div>
         </div>
         <div v-if="currentLabel"> {{ currentLabel }} </div>
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -28,6 +27,7 @@ import { mapGetters } from 'vuex'
 
 export default {
     beforeMount() {
+        this.$store.dispatch('labeling/init')
         this.helper = this['labeling/instance']
         this.helper.text = this.initialtext
     },
