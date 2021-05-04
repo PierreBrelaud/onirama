@@ -63,55 +63,31 @@ export default {
             this.renderer.setClearColor(0xFFF0EA);
             this.renderer.autoClear = false;
 
-            this.cameraControls = new CameraControls(this.camera, this.renderer.domElement);
-            this.cameraControls.touches.one = CameraControls.ACTION.NONE;
-            this.cameraControls.touches.two = CameraControls.ACTION.NONE;
-            this.cameraControls.touches.three = CameraControls.ACTION.NONE;
+            this.initMainScene();
+            this.initCameraControls();
 
-            let zoomable = true;
+            this.isZoom = false;
+            this.zoomable = true;
+            this.zoom = true;
 
             swipeDetect(
                 this.renderer.domElement,
-                (dir) => {
-                    zoomable = false;
-                    if (dir === "left") {
-                        this.cameraControls.truck(10, 0, true);
-                        zoomable = true;
-                    } else if (dir === "right") {
-                        this.cameraControls.truck(-10, 0, true);
-                        zoomable = true;
-                    }
-                },
+                (dir)=>{this.onSwipe(dir)},
                 10
             );
 
-            //==================================================
-            //  Zoom
-            //==================================================
-            let zoom = true;
-            this.isZoom = false;
+            this.canvas.addEventListener('click',
+                () => { this.onClick()
+            });
 
-            this.canvas.addEventListener('click', () => {
-                //this.onDevOrAllow();
-                if(zoom && zoomable) {
-                    const raycaster = new THREE.Raycaster();
-                    raycaster.setFromCamera(new THREE.Vector2(), this.camera);
+            this.portalScenes = [];
+            this.dreamScenes = [];
 
-                    const intersects = raycaster.intersectObjects(this.getPortals());
-
-                    if(intersects.length > 0) {
-                        this.cameraControls.zoomTo(2.3, true)
-                        zoom = false;
-                        this.isZoom = true;
-                    }
-                } else {
-                    this.cameraControls.zoomTo(1, true);
-                    zoom = true
-                    this.isZoom = false;
-                }
-            })
-            this.secure = window.isSecureContext;
-
+            const dreamsData = this.getDreamsData();
+            const dreams = this.createDreams(dreamsData);
+            this.disposeDreams(dreams);
+        },
+        initMainScene(){
             this.mainScene = new THREE.Scene();
 
             const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5);
@@ -122,13 +98,12 @@ export default {
                 1
             );
             this.mainScene.add(hemisphereLight);
-
-            this.portalScenes = [];
-            this.dreamScenes = [];
-
-            const dreamsData = this.getDreamsData();
-            const dreams = this.createDreams(dreamsData);
-            this.disposeDreams(dreams);
+        },
+        initCameraControls(){
+            this.cameraControls = new CameraControls(this.camera, this.renderer.domElement);
+            this.cameraControls.touches.one = CameraControls.ACTION.NONE;
+            this.cameraControls.touches.two = CameraControls.ACTION.NONE;
+            this.cameraControls.touches.three = CameraControls.ACTION.NONE;
         },
         getDreamsData(){
             return [
@@ -177,7 +152,7 @@ export default {
             })
             return portals
         },
-        onDevOrAllow() {
+        onDevOrAllow(){
             const dreamGp = this.dreamScenes[0].getObjectByName("Dream Group", true);
             DeviceOrientationEvent.requestPermission()
                 .then(response => {
@@ -196,7 +171,7 @@ export default {
                 })
                 .catch(console.error)
         },
-        animate() {
+        animate(){
             this.stats.begin();
 
             const delta = this.clock.getDelta();
@@ -238,12 +213,42 @@ export default {
 
             requestAnimationFrame(this.animate);
         },
-        resize() {
+        resize(){
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
 
 
+        },
+        onSwipe(dir){
+            this.zoomable = false;
+            if (dir === "left") {
+                this.cameraControls.truck(10, 0, true);
+                this.zoomable = true;
+            } else if (dir === "right") {
+                this.cameraControls.truck(-10, 0, true);
+                this.zoomable = true;
+            }
+        },
+        onClick(){
+            if(window.isSecureContext)
+            this.onDevOrAllow();
+            if(this.zoom && this.zoomable) {
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(new THREE.Vector2(), this.camera);
+
+                const intersects = raycaster.intersectObjects(this.getPortals());
+
+                if(intersects.length > 0) {
+                    this.cameraControls.zoomTo(2.3, true)
+                    this.zoom = false;
+                    this.isZoom = true;
+                }
+            } else {
+                this.cameraControls.zoomTo(1, true);
+                this.zoom = true
+                this.isZoom = false;
+            }
         }
     }
 }
