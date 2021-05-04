@@ -1,20 +1,3 @@
-/**
-
- -- constantes
-CLASSES : classes à appliquer pour mettre en forme le texte
-
- -- variables
- 
-text : tout le text brut
-textLabeled: objet contenant les mots labellisés (type + value) + spans pour l'affichage
-
--- fonctions
-
-splitText : split le text
-c
-
- */
-
 import { isSpecialChar } from './textHelper.js'
 
 export default class LabelingHelper {
@@ -28,13 +11,15 @@ export default class LabelingHelper {
 		action: { label: "action", canBeLabeled: true },
 		person: { label: "person", canBeLabeled: true },
 		place: { label: "place", canBeLabeled: true },
+		emotion: { label: "emotion", canBeLabeled: true },
 	}
 
 	_finalData = {
 		action: { label: "action", words: [], count: 0 },
-		person: { label: "person", words: [], count: 0},
-		place: { label: "place", words: [], count: 0},
-    }
+		person: { label: "person", words: [], count: 0 },
+		place: { label: "place", words: [], count: 0 },
+		emotion: { label: "emotion", words: [], count: 0 },
+	}
 
 	constructor() {
 		this._wordCount = 0
@@ -55,15 +40,16 @@ export default class LabelingHelper {
 			action: { label: "action", words: [], count: 0 },
 			person: { label: "person", words: [], count: 0 },
 			place: { label: "place", words: [], count: 0 },
+			emotion: { label: "emotion", words: [], count: 0 },
 		};
-		
+
 		this._textLabeled.forEach(el => {
-            let dataLabel = this._finalData[el.label]
-            if (dataLabel) {
+			let dataLabel = this._finalData[el.label]
+			if (dataLabel) {
 				dataLabel.words.push(el.value)
-                dataLabel.count = dataLabel.count + 1
+				dataLabel.count = dataLabel.count + 1
 			}
-        })
+		})
 		return this._finalData
 	}
 
@@ -93,21 +79,32 @@ export default class LabelingHelper {
 		//get last char
 		const lastChar = word.charAt(word.length - 1)
 
+		let firstCharToAdd = null
+		let lastCharToAdd = null
+
 		//check if first char is special char & store
 		if (isSpecialChar(firstChar) && firstChar !== "") {
-			this._storeWord(firstChar, this.LABELS.special)
+			firstCharToAdd = firstChar
 			word = word.slice(1, word.length)
 		}
 
 		//check if last char is special char & store
 		if (isSpecialChar(lastChar) && lastChar !== "") {
-			this._storeWord(lastChar, this.LABELS.special)
+			lastCharToAdd = lastChar
 			word = word.slice(0, word.length - 1)
 		}
 
+		//store first special char
+		if (firstCharToAdd) {
+			this._storeWord(firstCharToAdd, this.LABELS.special)
+		}
 		//store word
 		if (word !== "") {
 			this._storeWord(word, this.LABELS.default)
+		}
+		//store last special char
+		if (lastCharToAdd) {
+			this._storeWord(lastCharToAdd, this.LABELS.special)
 		}
 	}
 
