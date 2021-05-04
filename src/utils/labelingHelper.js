@@ -64,7 +64,6 @@ export default class LabelingHelper {
                 dataLabel.count = dataLabel.count + 1
 			}
         })
-		console.log(this._finalData)
 		return this._finalData
 	}
 

@@ -14,15 +14,10 @@ export const labeling = {
 		init(state) {
             if(!state.labelingHelper) {
                 state.labelingHelper = new LabelingHelper()
-                console.log("init labeling helper");
-            }
-            else {
-                console.log("init labeling helper exists")
             }
 		},
         destroy(state) {
             state.labelingHelper = null
-            console.log("destroy labeling helper")
         }
 	},
     getters: {
