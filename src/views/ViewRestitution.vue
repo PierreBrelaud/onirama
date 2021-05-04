@@ -1,21 +1,41 @@
 <template>
-    <h1>Restitution</h1>
-    <div class="restitution__header">
-        Header
-    </div>
-    <div class="restitution__content">
-        <restitution-story v-if="current === 1"/>
-        <restitution-survey v-if="current === 2"/>
-        <restitution-survey  v-if="current === 3"/>
-        <restitution-labeling 
-            v-if="current === 4"
-            :initialtext="''"
-        />
-    </div>
-    <div class="resitution__footer">
-        <button @click="previous" :disabled="current <= 1">Précédent</button>
-        <button @click="next" v-if="current < elementsCount">Suivant</button>
-        <button @click="end"  v-if="current >= elementsCount">Terminer</button>  
+    <div class="restitution">
+        <div class="restitution__header">
+            <div class="restitution__header__left">Modifier</div> 
+            <div class="restitution__header__right">Abandonner</div> 
+        </div>
+        <div class="restitution__content">
+            <restitution-story v-if="current === 1"/>
+            <restitution-labeling v-if="current === 2"/>
+            <restitution-survey v-if="current === 3"/>
+            <restitution-survey  v-if="current === 4"/>
+        </div>
+        <div class="restitution__footer">
+            <!-- previous button -->
+            <button 
+                class="restitution__footer__button restitution__footer__button--previous" 
+                @click="previous" 
+                v-if="current > 1"
+            >
+                Précédent
+            </button>
+            <!-- next button -->
+            <button 
+                class="restitution__footer__button restitution__footer__button--next" 
+                @click="next" 
+                v-if="current < elementsCount"
+            >
+                Suivant
+            </button>
+            <!-- end button -->
+            <button 
+                class="restitution__footer__button restitution__footer__button--end" 
+                @click="end"  
+                v-if="current >= elementsCount"
+            >
+                Terminer
+            </button>  
+        </div>
     </div>
 </template>
 
@@ -47,4 +67,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.restitution {
+    height: 100vh;
+    background: white;
+    overflow: hidden;
+
+    &__header, &__content, &__footer {
+        position: fixed;
+        width: 100%;
+    }
+
+    &__header {
+        z-index: 2;
+        top: 0;
+        height: 10%;
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+
+        &__left, &__right {
+            cursor: pointer;
+            font-weight: $FW-bold;
+        }
+
+        &__left {
+            margin-left: 1rem;
+        }
+        &__right {
+            margin-left: auto;
+            margin-right: 1rem;
+        }
+    }
+    &__content { 
+        top: 10%;
+        height: 75%;
+        overflow-x: scroll;
+    }
+    &__footer {
+        z-index: 2;
+        bottom: 0;
+        height: 15%;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &__button {
+            font-size: 1.4rem;
+            background: none;
+            margin: 0 1rem;
+            width: 14rem;
+            height: 4rem;
+            cursor: pointer;
+
+            &--previous {
+                color: grey;
+                border: none;
+            }
+
+            &--next, &--end {
+                color: black;
+                border: solid .3rem black;
+            }
+        }
+    }
+}
 </style> 
