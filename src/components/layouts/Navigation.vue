@@ -9,7 +9,6 @@
             :icon="navItem.icon"
         />
     </div>
-	<router-view></router-view>
 </template>
 
 <script>
