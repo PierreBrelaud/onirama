@@ -43,6 +43,7 @@ import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vu
 import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import RestitutionStory from '@/components/restitution/RestitutionStory.vue'
 import { feeling, wakeUp } from '@/utils/restitutionData.js'
+import DreamController from '@/firebase/db/DreamController.js'
 
 export default {
     data() {
@@ -64,7 +65,14 @@ export default {
             this.current += 1
         },
         end() {
-            console.log('end')
+            this.$store.dispatch('loader/pending')
+            DreamController.addDream(this.$store.getters['restitution/data'], 
+            (result) => {
+                this.$store.dispatch('loader/hide')
+            }, 
+            (error) => {
+                this.$store.dispatch('loader/hide')
+            })
         }
     },
     components: { RestitutionLabeling, RestitutionSurvey, RestitutionStory }
