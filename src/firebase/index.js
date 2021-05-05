@@ -1,13 +1,16 @@
 import firebase from "firebase";
 
+
 const firebaseConfig = {
-	apiKey: "AIzaSyBsLO7Ggxn3bFW_-1bxutRh4WbCwcX-s3A",
-	authDomain: "onirama-gobelins.firebaseapp.com",
-	projectId: "onirama-gobelins",
-	storageBucket: "onirama-gobelins.appspot.com",
-	messagingSenderId: "8973216839",
-	appId: "1:8973216839:web:df2999922bf60bdd1d1562",
+	apiKey: "AIzaSyBqVaYFgabWZ7xAbNdvbZelYMomDBrYTvk",
+	authDomain: "gobelins-onirama.firebaseapp.com",
+	projectId: "gobelins-onirama",
+	storageBucket: "gobelins-onirama.appspot.com",
+	messagingSenderId: "881779640866",
+	appId: "1:881779640866:web:654b30a9b9df917859187b"
 };
+
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 

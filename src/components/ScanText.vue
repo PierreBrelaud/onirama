@@ -1,6 +1,13 @@
 <template>
     <div class="scantext">
+        <div 
+            @click="$refs.inputFile.click()"
+            class="scantext__label"
+        >
+            Scanner le texte
+        </div>
         <input 
+            ref="inputFile"
             class="scantext__file" 
             type="file" 
             accept="image/*" 
@@ -18,6 +25,8 @@ import { imageToBase64, removeBase64Head } from '@/utils/imageHelper.js'
 export default {
     methods: {
         onFileChanged: async function(event) {
+            //init loader
+            this.$store.dispatch('loader/pending')
             //get files
             const files = event.target.files || event.dataTransfer.files
             if (!files.length)
@@ -41,7 +50,7 @@ export default {
                     this.successCallback(response.data)
                 })
                 .catch(function (error) {
-                    this.successCallback(error)
+                    this.errorCallback(error)
                 })
         },
     },
@@ -60,4 +69,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scantext {
+    &__file {
+        display: none;
+    }
+}
 </style>

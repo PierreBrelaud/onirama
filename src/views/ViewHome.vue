@@ -1,5 +1,8 @@
 <template>
-    <h1>Home</h1>
+    <div class="home">
+        
+    </div>
+    <!-- <h1>Home</h1>
 
     <div class="home__buttons">
         <base-home-button
@@ -14,7 +17,7 @@
             :icon="'3'" 
             :action="btn3Clicked"
         />
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -43,6 +46,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.home {
+    background: url('@/assets/images/home.png') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    width: 100%;
+    height: calc(100vh - 8rem);
+}
 .home__buttons {
     display: flex;
     flex-direction: column;
