@@ -6,8 +6,8 @@
         <div class="restitution__content">
             <restitution-story v-if="current === 1"/>
             <restitution-labeling v-if="current === 2"/>
-            <restitution-survey v-if="current === 3"/>
-            <restitution-survey  v-if="current === 4"/>
+            <restitution-survey v-if="current === 3" :survey="feelingData"/>
+            <restitution-survey  v-if="current === 4" :survey="wakeUpData"/>
         </div>
         <div class="restitution__footer">
             <!-- previous button -->
@@ -42,12 +42,15 @@
 import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vue'
 import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import RestitutionStory from '@/components/restitution/RestitutionStory.vue'
+import { feeling, wakeUp } from '@/utils/restitutionData.js'
 
 export default {
     data() {
         return {
             elementsCount: 4,
             current: 1,
+            feelingData: feeling,
+            wakeUpData: wakeUp
         }
     },
     methods: {
