@@ -2,20 +2,20 @@
     <div class="story">
         <!-- title -->
         <input 
-            v-model="title" 
+            v-model="storeData.title" 
             type="text" 
             class="story__title story__item" 
             placeholder="Nouveau rêve"
         />
         <!-- date -->
         <input 
-            v-model="date"
+            v-model="storeData.date"
             type="date" 
             class="story__date story__item"
         />
         <!-- text -->
         <textarea 
-            v-model="text"
+            v-model="storeData.text"
             class="story__text story__item" 
             placeholder="Récit de votre rêve"
         ></textarea>
@@ -24,30 +24,17 @@
 
 <script>
 export default {
+    watch: {
+        storeData: {
+            handler(value) {
+                this.$store.commit('restitution/setData', value)
+            },
+            deep: true
+        }
+    },
     computed: {
-        title: {
-            get () {
-                return this.$store.getters['restitution/title']
-            },
-            set (value) {
-                this.$store.commit('restitution/setTitle', value)
-            }
-        },
-        date: {
-            get () {
-                return this.$store.getters['restitution/date']
-            },
-            set (value) {
-                this.$store.commit('restitution/setDate', value)
-            }
-        },
-        text: {
-            get () {
-                return this.$store.getters['restitution/text']
-            },
-            set (value) {
-                this.$store.commit('restitution/setText', value)
-            }
+        storeData() {
+            return this.$store.getters['restitution/data']
         }
     }
 }

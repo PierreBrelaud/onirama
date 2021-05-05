@@ -1,8 +1,8 @@
 <template>
 	<div class="labeling">
 		<div class="labeling__infos">
-			<div class="labeling__infos__title">{{ $store.getters['restitution/title'] }}</div>
-			<div class="labeling__infos__date">{{ $store.getters['restitution/date'] }}</div>
+			<div class="labeling__infos__title">{{ $store.getters['restitution/data'].title }}</div>
+			<div class="labeling__infos__date">{{ $store.getters['restitution/data'].date }}</div>
 		</div>
 		<div class="labeling__display">
 			<span
@@ -101,7 +101,7 @@ export default {
 		},
 		initialText: {
 			get() {
-				return this.$store.getters["restitution/text"]
+				return this.$store.getters["restitution/data"].text
 			}
 		}
 	}
