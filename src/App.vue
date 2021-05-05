@@ -1,6 +1,7 @@
 <template>
 	<global-loader v-if="loading" />
-	<navigation />
+	<router-view></router-view>
+	<navigation v-if="isVisible"/>
 </template>
 
 <script>
@@ -10,7 +11,10 @@ import GlobalLoader from '@/components/layouts/GlobalLoader.vue';
 import { mapState } from 'vuex'
 export default {
 	computed: {
-		...mapState('loader', ['loading'])
+		...mapState('loader', ['loading']),
+		isVisible() {
+			return this.$route.name !== 'restitution'
+		}
 	},
 	components: {
 		Navigation,
@@ -20,5 +24,7 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "assets/scss/main";
+* {
+	font-family: $F-main;
+}
 </style>

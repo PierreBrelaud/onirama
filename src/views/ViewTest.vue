@@ -20,6 +20,6 @@ export default {
 }
 </script>
 
-        ThreeTest<style>
+<style lang="scss" scoped>
 
 </style>

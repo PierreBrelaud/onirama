@@ -9,35 +9,38 @@ import ViewStatistics from '@/views/ViewStatistics.vue'
 import ViewVisualisation from '@/views/ViewVisualisation.vue'
 
 const routes = [
-    {
-        path: '/',
-        component: ViewHome
-    },
-    {
-        path: '/visualisation',
-        component: ViewVisualisation
-    },
-    {
-        path: '/restitution',
-        component: ViewRestitution
-    },
-    {
-        path: '/sommeil',
-        component: ViewSleepMode
-    },
-    {
-        path: '/statistiques',
-        component: ViewStatistics
-    },
-    {
-        path: '/profil',
-        component: ViewProfile
-    },
-    {
-        path: '/test',
-        component: ViewTest
-    }
-]
+	{
+		path: "/",
+		name: "home",
+		component: ViewHome,
+	},
+	{
+		path: "/visualisation",
+		name: "visualisation",
+		component: ViewVisualisation,
+	},
+	{
+		path: "/restitution",
+		name: "restitution",
+		component: ViewRestitution,
+	},
+	{
+		path: "/sommeil",
+		component: ViewSleepMode,
+	},
+	{
+		path: "/statistiques",
+		component: ViewStatistics,
+	},
+	{
+		path: "/profil",
+		component: ViewProfile,
+	},
+	{
+		path: "/test",
+		component: ViewTest,
+	},
+];
 
 const router = createRouter({
     history: createWebHistory(),
