@@ -1,8 +1,7 @@
 <template>
     <div class="restitution">
         <div class="restitution__header">
-            <div class="restitution__header__left">Modifier</div> 
-            <div class="restitution__header__right">Abandonner</div> 
+            <div class="restitution__header__item" @click="leave">Abandonner</div> 
         </div>
         <div class="restitution__content">
             <restitution-story v-if="current === 1"/>
@@ -52,6 +51,9 @@ export default {
         }
     },
     methods: {
+        leave() {
+            this.$router.push('/')
+        },
         previous() {
             this.current -= 1
         },
@@ -85,15 +87,9 @@ export default {
         align-items: center;
         font-size: 1.2rem;
 
-        &__left, &__right {
+        &__item {
             cursor: pointer;
             font-weight: $FW-bold;
-        }
-
-        &__left {
-            margin-left: 1rem;
-        }
-        &__right {
             margin-left: auto;
             margin-right: 1rem;
         }
