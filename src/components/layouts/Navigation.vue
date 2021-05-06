@@ -9,7 +9,7 @@
         <div 
             class="navigation__item navigation__item--more"
             @click="showRestitutionMenu = !showRestitutionMenu">
-            <div 
+            <div
                 class="navigation__item__more" 
                 :class="{'navigation__item__more--active' : showRestitutionMenu}"
             ></div>
@@ -22,18 +22,26 @@
         </router-link>
     </div>
     <div 
-        class="restitution__menu" 
-        :class="{'restitution__menu--active' : showRestitutionMenu }"
+        class="restitution" 
+        :class="{'restitution--active' : showRestitutionMenu }"
     >
-        <div class="restitution__menu__item">
+        <div class="restitution__item">
+            <div class="restitution__item__icon restitution__item__icon--scan"></div>
             <scan-text 
                 :successCallback="scanSuccess"
                 :errorCallback="scanError"
             />
         </div>
         <router-link :to="'/restitution'">
-            <div class="restitution__menu__item">Ecrire manuellement</div>
+            <div class="restitution__item">
+                <div class="restitution__item__icon restitution__item__icon--write"></div>
+                <div>Ecrire manuellement</div>
+            </div>
         </router-link>
+        <div class="restitution__item">
+            <div class="restitution__item__icon restitution__item__icon--micro"></div>
+            <div>Dicter le rêve</div>
+        </div>
     </div>
 </template>
 
@@ -67,7 +75,7 @@ export default {
 <style lang="scss" scoped>
 
 //transitions
-.restitution__menu {
+.restitution {
     transform: translateY(20rem);
     opacity: 0;
     transition: 0.5s ease;
@@ -97,7 +105,7 @@ export default {
     }
 }
 
-.restitution__menu {
+.restitution {
     z-index: 1;
     position: absolute;
     bottom: 8rem;
@@ -116,9 +124,35 @@ export default {
         font-size: 1.5rem;
         text-align: center;
         padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
         &:first-child {
             border-bottom: solid thin lightgrey;
         }
+    &__icon {
+
+        width: 2rem;
+        height: 2rem;
+        background: black;
+        margin-right: 1rem;
+
+        &--scan {
+            -webkit-mask: url('@/assets/images/icons/scan.svg') no-repeat center;
+            mask: url('@/assets/images/icons/scan.svg') no-repeat center;
+        }
+
+        &--write {
+            -webkit-mask: url('@/assets/images/icons/write.svg') no-repeat center;
+            mask: url('@/assets/images/icons/write.svg') no-repeat center;
+        }
+
+        &--micro {
+            -webkit-mask: url('@/assets/images/icons/micro.svg') no-repeat center;
+            mask: url('@/assets/images/icons/micro.svg') no-repeat center;
+        }
+    }
     }
 }
 
