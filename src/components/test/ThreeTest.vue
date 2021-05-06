@@ -255,7 +255,7 @@ export default {
             }
         },
         onClick(){
-            if(window.isSecureContext) {
+            if(window.location.protocol === "https:") {
                 this.onDevOrAllow();
             }
             if(this.zoom && this.zoomable) {
