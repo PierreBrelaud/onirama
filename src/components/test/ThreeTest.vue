@@ -19,6 +19,7 @@ import swipeDetect from 'swipe-detect';
 import Stats from 'stats.js/src/Stats';
 import {DeviceOrientationControls} from 'three/examples/jsm/controls/DeviceOrientationControls';
 import Dream from "../../core/visualisation/Dream";
+import DreamController from "@/firebase/db/DreamController";
 
 export default {
     data() {
@@ -29,6 +30,7 @@ export default {
             beta: 0,
             gamma: 0,
             secure: null,
+            test: "quelconque",
         }
     },
     mounted() {
@@ -83,9 +85,7 @@ export default {
             this.portalScenes = [];
             this.dreamScenes = [];
 
-            const dreamsData = this.getDreamsData();
-            const dreams = this.createDreams(dreamsData);
-            this.disposeDreams(dreams);
+            this.getDreamsData();
         },
         initMainScene(){
             this.mainScene = new THREE.Scene();
@@ -105,27 +105,51 @@ export default {
             this.cameraControls.touches.two = CameraControls.ACTION.NONE;
             this.cameraControls.touches.three = CameraControls.ACTION.NONE;
         },
-        getDreamsData(){
-            return [
-                {
-                    outsidePart: {color: 0x444554},
-                    insidePart: {
-                        floorData: {color: 0xffffff},
-                        backgroundData: {color:0xffffff},
-                        pedestalData: {color: 0xffffff},
-                        crystalData: {color:0xffffff},
-                    },
+        async getDreamsData(){
+            const feelingColor      = [0x91F9E5, 0x76F7BF, 0x5FDD9D, 0x499167, 0x3F4531 ];
+            const memoryColor       = [0x75F4F4, 0x90E0F3, 0xB8B3E9, 0xD999B9, 0xD17B88 ];
+            const credibilityColor  = [0xF5DD90, 0xF68E5F, 0xF76C5E, 0x721121];
+            const sleepColor        = [0x2DE1C2, 0x6AD5CB, 0x7FBEAB, 0x7E998A, 0x85877C];
+            const impactColor       = [0x11151C, 0x212D40, 0x364156, 0x7D4E57, 0xD66853];
+
+
+            DreamController.getAll(
+                (snapshot) => {
+                    /*
+                    const dreamsData = []
+                    snapshot.docs.forEach(doc => {
+                        console.log(doc.data());
+                        dreamsData.push(
+                            {
+                                outsidePart: {color: impactColor[doc.data().credibility]},
+                                insidePart: {
+                                    floorData: {color: feelingColor[doc.data().feeling]},
+                                    backgroundData: {color: memoryColor[doc.data().memory]},
+                                    pedestalData: {color: sleepColor[doc.data().sleep]},
+                                    crystalData: {color: credibilityColor[doc.data().impact]},
+                                },
+                            }
+                        )
+                    })*/
+                    const data = snapshot.docs[0].data();
+                    const dreamsData = [
+                        {
+                            outsidePart: {color: impactColor[data.credibility]},
+                            insidePart: {
+                                floorData: {color: feelingColor[data.feeling]},
+                                backgroundData: {color: memoryColor[data.memory]},
+                                pedestalData: {color: sleepColor[data.sleep]},
+                                crystalData: {color: credibilityColor[data.impact]},
+                            },
+                        }
+                    ];
+                    const dreams = this.createDreams(dreamsData);
+                    this.disposeDreams(dreams);
                 },
-                {
-                    outsidePart: {color: 0x444554},
-                    insidePart: {
-                        floorData: {color: 0xffffff},
-                        backgroundData: {color:0xffffff},
-                        pedestalData: {color: 0xffffff},
-                        crystalData: {color:0xffffff},
-                    },
+                (error) => {
+                    console.log(error);
                 }
-            ]
+            )
         },
         createDreams(dreamsData){
             const dreams = [];
@@ -231,8 +255,9 @@ export default {
             }
         },
         onClick(){
-            if(window.isSecureContext)
-            this.onDevOrAllow();
+            if(window.location.protocol === "https:") {
+                this.onDevOrAllow();
+            }
             if(this.zoom && this.zoomable) {
                 const raycaster = new THREE.Raycaster();
                 raycaster.setFromCamera(new THREE.Vector2(), this.camera);

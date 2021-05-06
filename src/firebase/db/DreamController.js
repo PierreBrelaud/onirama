@@ -13,5 +13,16 @@ export default {
             .catch((error) => {
                 errorCallback(error)
             })
+    },
+    getAll: (successCallback, errorCallback) => {
+        db
+            .collection(collection)
+            .get()
+            .then((result) => {
+                successCallback(result)
+            })
+            .catch((error) => {
+                errorCallback(error)
+            })
     }
 }
