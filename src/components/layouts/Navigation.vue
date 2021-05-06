@@ -1,44 +1,48 @@
 <template>
-    <div class="navigation">
+    <div class="navigation" :class="{'restitution-active' : showRestitutionMenu}">
         <router-link :to="'/'">
-            <div class="navigation__item">
-                    
-            </div>
+            <div class="navigation__item navigation__item--home"></div>
         </router-link>
-        <router-link :to="'/visualisation'">
-            <div class="navigation__item">
-                    
-            </div>
+        <router-link :to="'/sommeil'">
+            <div class="navigation__item navigation__item--sleep"></div>
         </router-link>
         <div 
-            class="navigation__item navigation__item--center"
+            class="navigation__item navigation__item--more"
             @click="showRestitutionMenu = !showRestitutionMenu">
-                
+            <div
+                class="navigation__item__more" 
+                :class="{'navigation__item__more--active' : showRestitutionMenu}"
+            ></div>
         </div>
-        <router-link :to="'/sommeil'">
-            <div class="navigation__item">
-                    
-            </div>
-        </router-link>
         <router-link :to="'/statistiques'">
-            <div class="navigation__item">
-                    
-            </div>
+            <div class="navigation__item navigation__item--statistics"></div>
+        </router-link>
+        <router-link :to="'/profil'">
+            <div class="navigation__item navigation__item--profile"></div>
         </router-link>
     </div>
-    <transition name="slide-fade">
-        <div v-if="showRestitutionMenu" class="restitution__menu">
-            <div class="restitution__menu__item">
-                <scan-text 
-                    :successCallback="scanSuccess"
-                    :errorCallback="scanError"
-                />
-            </div>
-            <router-link :to="'/restitution'">
-                <div class="restitution__menu__item">Ecrire manuellement</div>
-            </router-link>
+    <div 
+        class="restitution" 
+        :class="{'restitution--active' : showRestitutionMenu }"
+    >
+        <div class="restitution__item">
+            <div class="restitution__item__icon restitution__item__icon--scan"></div>
+            <scan-text 
+                :successCallback="scanSuccess"
+                :errorCallback="scanError"
+            />
         </div>
-    </transition>
+        <router-link :to="'/restitution'">
+            <div class="restitution__item">
+                <div class="restitution__item__icon restitution__item__icon--write"></div>
+                <div>Ecrire manuellement</div>
+            </div>
+        </router-link>
+        <div class="restitution__item">
+            <div class="restitution__item__icon restitution__item__icon--micro"></div>
+            <div>Dicter le rêve</div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -53,24 +57,59 @@ export default {
     },
     methods: {
         scanSuccess(data) {
-            this.$store.commit('restitution/setText', data)
+            this.$store.state.restitution.text = data.replace(/(\r\n|\n|\r)/gm, " ")
             this.$router.push('/restitution')
-            this.$store.dispatch('loader/hide')
+            this.$store.dispatch('loader/done')
         },
         scanError(error) {
-            console.log(error)
-            this.$store.dispatch('loader/hide')
+            this.$store.dispatch('loader/done')
         }
     },
     components: {
         ScanText
+    },
+    computed: {
+        storeData() {
+            return this.$store.getters['restitution/data']
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 
-.restitution__menu {
+//transitions
+.restitution {
+    transform: translateY(20rem);
+    opacity: 0;
+    transition: 0.5s ease;
+    &--active {
+        transform: translateY(0rem);
+        opacity: 1;
+    }
+}
+
+.navigation {
+    .navigation__item:not(.navigation__item--more) {
+        opacity: 1;
+        transition: opacity 0.5s ease, background .2s ease;
+    }
+    .navigation__item__more {
+        transform: translate(-50%, -50%);
+        transition: 0.5s ease;
+    }
+
+    &.restitution-active {
+        .navigation__item:not(.navigation__item--more) {
+            opacity: 0;
+        }
+        .navigation__item__more {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+    }
+}
+
+.restitution {
     z-index: 1;
     position: absolute;
     bottom: 8rem;
@@ -81,7 +120,7 @@ export default {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    background: lightgray;
+    background: white;
 
     &__item {
         color: black;
@@ -89,9 +128,41 @@ export default {
         font-size: 1.5rem;
         text-align: center;
         padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
         &:first-child {
-            border-bottom: solid thin black;
+            border-bottom: solid thin lightgrey;
         }
+    &__icon {
+
+        width: 2rem;
+        height: 2rem;
+        background: black;
+        margin-right: 1rem;
+
+        &--scan {
+            -webkit-mask: url('@/assets/images/icons/scan.svg') no-repeat center;
+            mask: url('@/assets/images/icons/scan.svg') no-repeat center;
+        }
+
+        &--write {
+            -webkit-mask: url('@/assets/images/icons/write.svg') no-repeat center;
+            mask: url('@/assets/images/icons/write.svg') no-repeat center;
+        }
+
+        &--micro {
+            -webkit-mask: url('@/assets/images/icons/micro.svg') no-repeat center;
+            mask: url('@/assets/images/icons/micro.svg') no-repeat center;
+        }
+    }
+    }
+}
+
+.router-link-active {
+    .navigation__item {
+        background: black;
     }
 }
 
@@ -106,36 +177,51 @@ export default {
     padding: 0 1rem;
     height: 8rem;
     box-sizing: border-box;
-    background-color: lightgray;
+    background-color: white;
     
     &__item {
         cursor: pointer;
-        width: 3rem;
-        height: 3rem;
-        background: grey;
-        border-radius: 50%;
+        width: 2.2rem;
+        height: 2.2rem;
+        background: lightgray;
 
-        &--center {
+        &--home {
+            -webkit-mask: url('@/assets/images/icons/home.svg') no-repeat center;
+            mask: url('@/assets/images/icons/home.svg') no-repeat center;
+        }
+
+        &--sleep {
+            -webkit-mask: url('@/assets/images/icons/sleep.svg') no-repeat center;
+            mask: url('@/assets/images/icons/sleep.svg') no-repeat center;
+        }
+
+        &--statistics {
+            -webkit-mask: url('@/assets/images/icons/statistics.svg') no-repeat center;
+            mask: url('@/assets/images/icons/statistics.svg') no-repeat center;
+        }
+
+        &--profile {
+            -webkit-mask: url('@/assets/images/icons/profile.svg') no-repeat center;
+            mask: url('@/assets/images/icons/profile.svg') no-repeat center;
+        }
+        
+        &__more {
+            -webkit-mask: url('@/assets/images/icons/add.svg') no-repeat center;
+            mask: url('@/assets/images/icons/add.svg') no-repeat center;
+            background: black;
+            width: 1.8rem;
+            height: 1.8rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        &--more {
             width: 5rem;
             height: 5rem;
+            border-radius: 50%;
+            position: relative;
         }
     }
 }
-
-
-//restitution menu animation
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateY(20rem);
-  opacity: 0;
-}
-
 </style> 

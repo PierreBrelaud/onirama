@@ -1,10 +1,8 @@
 <template>
     <div class="loader">
-        <div class="loader__icon">
-            icon
-        </div>
+        <!-- <div class="loader__icon"></div> -->
         <h1 class="loader__title">
-            Onirama
+            onirama
         </h1>
     </div>
 </template>
@@ -25,5 +23,23 @@ export default {
     height: 100vh;
     background: black;
     color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__icon {
+        
+
+        width: 5rem;
+        height: 5rem;
+        background: white;
+        -webkit-mask: url('@/assets/images/icons/micro.svg') no-repeat center;
+        mask: url('@/assets/images/icons/micro.svg') no-repeat center;
+    }
+
+    &__title {
+        font-size: 4rem;
+    }
 }
 </style>
