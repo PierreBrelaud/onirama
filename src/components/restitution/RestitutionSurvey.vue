@@ -32,11 +32,14 @@
                         <div class="block__checkbox__title block__title">
                             {{ data.title }}
                         </div>
-                        <input 
-                            type="checkbox" 
-                            class="block__checkbox__input"
-                            v-model="storeData[data.id]"
-                        >
+
+                        <label class="block__checkbox__switch">
+                            <input 
+                                type="checkbox"
+                                v-model="storeData[data.id]"
+                            >
+                            <span></span>
+                        </label>
                     </div>
                     <!-- select -->
                     <div v-if="data.type === 'select'" class="block__select">
@@ -84,6 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .survey__wrapper {
 	min-height: 100%;
 	background: #f1f2f6;
@@ -129,8 +133,56 @@ export default {
     flex-direction: row;
     align-items: center;
 
-    &__input {
+
+    &__switch {
         margin-left: auto;
+        position: relative;
+        display: inline-block;
+        width: 5rem;
+        height: 3rem;
+        
+        input:checked + span {
+        background-color: #888888;
+        }
+
+        input:checked + span:before {
+            -webkit-transform: translateX(2rem);
+            -ms-transform: translateX(2rem);
+            transform: translateX(2rem);
+        }
+
+        input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+
+        span {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #E5E5EA;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 2.2rem;
+
+            &:before {
+                position: absolute;
+                content: "";
+                height: 2.6rem;
+                width: 2.6rem;
+                left: .2rem;
+                bottom: .2rem;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+                border-radius: 50%;
+            }
+        }
     }
 }
 
