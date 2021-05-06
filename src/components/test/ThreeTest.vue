@@ -45,9 +45,9 @@ export default {
         init() {
             CameraControls.install({THREE: THREE});
 
-            this.stats = new Stats();
-            this.stats.showPanel(0);
-            document.body.appendChild(this.stats.dom);
+            //this.stats = new Stats();
+            //this.stats.showPanel(0);
+            //document.body.appendChild(this.stats.dom);
 
             this.clock = new THREE.Clock();
 
@@ -61,7 +61,7 @@ export default {
 
             this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true});
             this.renderer.setSize(width, height);
-            //this.renderer.setPixelRatio(window.devicePixelRatio);
+            this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setClearColor(0xFFF0EA);
             this.renderer.autoClear = false;
 
@@ -106,11 +106,11 @@ export default {
             this.cameraControls.touches.three = CameraControls.ACTION.NONE;
         },
         async getDreamsData(){
-            const feelingColor      = [0x91F9E5, 0x76F7BF, 0x5FDD9D, 0x499167, 0x3F4531 ];
-            const memoryColor       = [0x75F4F4, 0x90E0F3, 0xB8B3E9, 0xD999B9, 0xD17B88 ];
-            const credibilityColor  = [0xF5DD90, 0xF68E5F, 0xF76C5E, 0x721121];
-            const sleepColor        = [0x2DE1C2, 0x6AD5CB, 0x7FBEAB, 0x7E998A, 0x85877C];
-            const impactColor       = [0x11151C, 0x212D40, 0x364156, 0x7D4E57, 0xD66853];
+            const feelingColor      = [0x223361, 0x223361, 0x223361, 0x223361, 0x223361 ];
+            const memoryColor       = [0x102133, 0x102133, 0x102133, 0x102133, 0x102133 ];
+            const credibilityColor  = [0xbed1f0, 0xbed1f0, 0xbed1f0, 0xbed1f0];
+            const sleepColor        = [0xc4ccdc, 0xc4ccdc, 0xc4ccdc, 0xc4ccdc, 0xc4ccdc];
+            const impactColor       = [0x466588, 0x466588, 0x466588, 0x466588, 0x466588];
 
 
             DreamController.getAll(
@@ -196,7 +196,7 @@ export default {
                 .catch(console.error)
         },
         animate(){
-            this.stats.begin();
+            //this.stats.begin();
 
             const delta = this.clock.getDelta();
             this.cameraControls.update( delta );
@@ -229,7 +229,7 @@ export default {
                 this.renderer.clearStencil();
             }
 
-            this.stats.end();
+            //this.stats.end();
             this.dreamScenes.forEach(scene => {
                 const crystal = scene.getObjectByName('crystal');
                 crystal.rotation.y += 0.01;
