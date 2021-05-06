@@ -1,7 +1,7 @@
 
 const initialState = {
 	title: 'Images de voyage',
-	date: new Date(),
+	date: '2021-05-02',
 	text: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi velit, suscipit ea iste error omnis sint, corporis recusandae, quae ad necessitatibus quidem dolorem animi earum veniam molestiae ipsa placeat aut.',
 	feeling: 2,
 	memory: 3,
