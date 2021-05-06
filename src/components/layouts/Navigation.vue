@@ -80,7 +80,7 @@ export default {
 .navigation {
     .navigation__item:not(.navigation__item--more) {
         opacity: 1;
-        transition: 0.5s ease;
+        transition: opacity 0.5s ease, background .2s ease;
     }
     .navigation__item__more {
         transform: translate(-50%, -50%);
