@@ -68,10 +68,11 @@ export default {
             this.$store.dispatch('loader/pending')
             DreamController.addDream(this.$store.getters['restitution/data'], 
             (result) => {
-                this.$store.dispatch('loader/hide')
+                this.$store.dispatch('loader/done')
+                this.$router.push('/generation_pending')
             }, 
             (error) => {
-                this.$store.dispatch('loader/hide')
+                this.$store.dispatch('loader/done')
             })
         }
     },

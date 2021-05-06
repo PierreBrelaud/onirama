@@ -57,17 +57,21 @@ export default {
     },
     methods: {
         scanSuccess(data) {
-            this.$store.commit('restitution/setText', data)
+            this.$store.state.restitution.text = data.replace(/(\r\n|\n|\r)/gm, " ")
             this.$router.push('/restitution')
-            this.$store.dispatch('loader/hide')
+            this.$store.dispatch('loader/done')
         },
         scanError(error) {
-            console.log(error)
-            this.$store.dispatch('loader/hide')
+            this.$store.dispatch('loader/done')
         }
     },
     components: {
         ScanText
+    },
+    computed: {
+        storeData() {
+            return this.$store.getters['restitution/data']
+        }
     }
 }
 </script>

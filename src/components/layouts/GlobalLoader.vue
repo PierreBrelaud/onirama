@@ -1,6 +1,6 @@
 <template>
     <div class="loader">
-        <div class="loader__icon"></div>
+        <!-- <div class="loader__icon"></div> -->
         <h1 class="loader__title">
             onirama
         </h1>
