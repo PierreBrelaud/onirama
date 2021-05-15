@@ -1,35 +1,25 @@
 import { auth } from '@/firebase'
 
 export default {
-	register(email, password) {
+	register(email, password, success, error) {
 		auth.createUserWithEmailAndPassword(email, password)
-			.then((result) => {
-                console.log('registered')
-                console.log(result)
-			})
-			.catch((error) => console.log(error.message))
+			.then((res) => success(res))
+			.catch((err) => error(err))
 	},
-	login(email, password) {
+	login(email, password, success, error) {
 		auth.signInWithEmailAndPassword(email, password)
-			.then((result) => {
-                console.log('login')
-                console.log(result)
-			})
-			.catch((error) => console.log(error.message))
+			.then((res) => success(res))
+			.catch((err) => error(err))
 	},
-	logout() {
+	logout(success, error) {
 		auth.signOut()
-			.then(() => {
-                console.log('logout')
-			})
-			.catch((error) => console.log(error.message))
+			.then((res) => success(res))
+			.catch((err) => error(err))
 	},
-	resetPassword(email) {
+	resetPassword(email, success, error) {
 		auth.sendPasswordResetEmail(email)
-			.then(() => {
-                console.log('reset')
-            })
-			.catch((error) => console.log(error.message))
+			.then((res) => success(res))
+			.catch((err) => error(err))
 	},
 	onAuthChanged() {
 		auth.onAuthStateChanged((user) => {

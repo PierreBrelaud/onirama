@@ -9,12 +9,18 @@ import ViewStatistics from '@/views/ViewStatistics.vue'
 import ViewVisualisation from '@/views/ViewVisualisation.vue'
 import ViewTest1 from '@/views/ViewTest1.vue'
 import ViewTest2 from '@/views/ViewTest2.vue'
+import ViewAuthentication from '@/views/ViewAuthentication.vue'
 
 const routes = [
 	{
 		path: "/",
 		name: "home",
 		component: ViewHome,
+	},
+	{
+		path: "/authentification",
+		name: "authentification",
+		component: ViewAuthentication,
 	},
 	{
 		path: "/visualisation",

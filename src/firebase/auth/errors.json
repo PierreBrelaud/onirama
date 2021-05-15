@@ -1,0 +1,23 @@
+{
+	"codeError": {
+		"invalidEmail": "auth/invalid-email",
+		"userNotFound": "auth/user-not-found",
+		"weakPassword": "auth/weak-password",
+		"wrongPassword": "auth/wrong-password",
+		"tooManyRequests": "auth/too-many-requests",
+		"emailAlreadyUsed": "auth/email-already-in-use",
+		"fillAllFields": "auth/argument-error",
+		"notAuthorized": "auth/not-authorized"
+	},
+	"errorMessage": {
+		"contactAdmin": "Une erreur est survenue merci de contacter un administrateur.",
+		"invalidEmail": "L'adresse mail est invalide.",
+		"userNotFound": "Cette adresse mail ne correspond à aucun utilisateur.",
+		"weakPassword": "Le mot de passe doit contenir au moins 6 caractères.",
+		"wrongPassword": "Le mot de passe est incorrect.",
+		"tooManyRequests": "Trop de demandes effectuées, merci de réessayer plus tard.",
+		"emailAlreadyUsed": "Cette adresse mail est déjà utilisée.",
+		"fillAllFields": "Veuillez renseigner tous les champs",
+		"notAuthorized": "Vous n'avez pas les accès nécessaires."
+	}
+}
