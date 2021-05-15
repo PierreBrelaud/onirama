@@ -1,4 +1,5 @@
 import { auth } from '@/firebase'
+import store from '@/store'
 
 export default {
 	register(email, password, success, error) {
@@ -23,7 +24,7 @@ export default {
 	},
 	onAuthChanged() {
 		auth.onAuthStateChanged((user) => {
-            console.log('status changed')
+			store.dispatch("auth/fetchUser", user);
 		});
 	},
 }

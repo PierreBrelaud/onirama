@@ -73,7 +73,7 @@ export default {
                     this.register.email,
                     this.register.password,
                     (res) => {
-                        
+                        this.$router.push('/')
                     },
                     (err) => {
                         this.register.error = authError.getAuthErrorMessage(err.code)
@@ -89,7 +89,9 @@ export default {
                 auth.login(
                     this.login.email,
                     this.login.password,
-                    (res) => {},
+                    (res) => {
+                        this.$router.push('/')
+                    },
                     (err) => {
                         this.login.error = authError.getAuthErrorMessage(err.code)
                     }
@@ -103,7 +105,9 @@ export default {
             if (this.reset.email) {
                 auth.resetPassword(
                     this.reset.email,
-                    (res) => {},
+                    (res) => {
+                        this.state = 'login'
+                    },
                     (err) => {
                         this.reset.error = authError.getAuthErrorMessage(err.code)
                     }
