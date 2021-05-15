@@ -7,9 +7,13 @@
 <script>
 import Navigation from '@/components/layouts/Navigation.vue'
 import GlobalLoader from '@/components/layouts/GlobalLoader.vue';
+import auth from '@/firebase/auth'
 
 import { mapState } from 'vuex'
 export default {
+	created() {
+		auth.onAuthChanged()
+	},
 	computed: {
 		...mapState('loader', ['loading']),
 		isVisible() {
