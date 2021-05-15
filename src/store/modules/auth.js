@@ -1,3 +1,5 @@
+import router from '@/router'
+
 export const auth = {
     namespaced: true,
     state: {
@@ -27,8 +29,10 @@ export const auth = {
                     uid: user.uid,
                     email: user.email,
                 })
+                router.push('/')
             } else {
                 commit('setUser', null)
+                router.push('/authentification')
             }
         },
     },

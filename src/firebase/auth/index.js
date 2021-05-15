@@ -24,7 +24,8 @@ export default {
 	},
 	onAuthChanged() {
 		auth.onAuthStateChanged((user) => {
-			store.dispatch("auth/fetchUser", user);
+            store.dispatch('loader/done')
+			store.dispatch('auth/fetchUser', user)
 		});
 	},
 }
