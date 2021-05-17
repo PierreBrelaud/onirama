@@ -42,6 +42,7 @@
 <script>
 import auth from "@/firebase/auth"
 import authError from "@/firebase/auth/errors"
+import UserController from '@/firebase/db/UserController'
 
 export default {
     data() {
@@ -73,7 +74,13 @@ export default {
                     this.register.email,
                     this.register.password,
                     (res) => {
-                        this.$router.push('/')
+                        UserController.add(res.user.uid, { email: res.user.email }, 
+                        () => {
+                            this.$router.push('/')
+                        }, 
+                        (err) => {
+                            console.log(err.message)
+                        })
                     },
                     (err) => {
                         this.register.error = authError.getAuthErrorMessage(err.code)
