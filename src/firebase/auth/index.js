@@ -2,17 +2,6 @@ import { auth } from '@/firebase'
 import store from '@/store'
 
 export default {
-	getCurrentUser() {
-		// console.log('plop')
-		// return true;
-		return new Promise((resolve, reject) => {
-		  	const unsubscribe = auth.onAuthStateChanged(user => {
-				// store.dispatch('auth/fetchUser', user)
-				unsubscribe();
-				resolve(user);
-		  	}, reject);
-		})
-	},
 	register(email, password, success, error) {
 		auth.createUserWithEmailAndPassword(email, password)
 			.then((res) => success(res))
@@ -33,10 +22,10 @@ export default {
 			.then((res) => success(res))
 			.catch((err) => error(err))
 	},
-	// onAuthChanged() {
-	// 	auth.onAuthStateChanged((user) => {
-    //         store.dispatch('loader/done')
-	// 		store.dispatch('auth/fetchUser', user)
-	// 	});
-	// },
+	onAuthChanged() {
+		auth.onAuthStateChanged((user) => {
+			console.log('auth changed')
+			store.dispatch('auth/fetchUser', user)
+		});
+	},
 }

@@ -12,10 +12,7 @@ import { mapState } from 'vuex'
 
 export default {
 	created() {
-		// auth.onAuthChanged()
-		// if(!this.user.loggedIn) {
-        //     this.$store.dispatch('loader/pending')
-		// }
+		auth.onAuthChanged()
 	},
 	computed: {
 		...mapState('loader', ['loading']),

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from "@/store";
-import firebaseAuth from '@/firebase/auth/index'
+import { user } from '@/firebase/index'
 
 import ViewTest from '@/views/ViewTest.vue'
 import ViewHome from '@/views/ViewHome.vue'
@@ -85,25 +84,14 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 })
-//https://medium.com/@gaute.meek/vue-guard-routes-with-firebase-authentication-7a139bb8b4f6
 
 router.beforeEach(async (to, from, next) => {
-	const requireAuth = to.matched.some((record) => record.meta.requireAuth);
-	const isLoggedIn = store.getters['auth/user'].loggedIn;
 
-	// const t = await firebaseAuth.getCurrentUser()
-	// console.log('test', t)
-	//redirect to login if not connected
-	const currentUser = await firebaseAuth.getCurrentUser();
-	console.log(currentUser.email)
+	const requireAuth = to.matched.some((record) => record.meta.requireAuth);
 	
-	if (requireAuth /* && !await firebaseAuth.getCurrentUser() */) {
+	if (requireAuth && !await user.getCurrentUser()) {
 		next("/authentification");
 	}
-	//redirect to dashboard if connected and tring to log in
-	// else if (!requireAuth && isLoggedIn) {
-	// 	next("/");
-	// } 
 	else {
 		next();
 	}
