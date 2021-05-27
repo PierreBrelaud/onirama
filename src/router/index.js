@@ -1,22 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from "@/store";
+import { user } from '@/firebase/index'
 
-import ViewTest from '@/views/ViewTest.vue'
-import ViewHome from '@/views/ViewHome.vue'
-import ViewProfile from '@/views/ViewProfile.vue'
-import ViewRestitution from '@/views/ViewRestitution.vue'
-import ViewSleepMode from '@/views/ViewSleepMode.vue'
-import ViewStatistics from '@/views/ViewStatistics.vue'
-import ViewVisualisation from '@/views/ViewVisualisation.vue'
-import ViewTest1 from '@/views/ViewTest1.vue'
-import ViewTest2 from '@/views/ViewTest2.vue'
-import ViewAuthentication from '@/views/ViewAuthentication.vue'
+import Test from '@/views/Test.vue'
+import Home from '@/views/Home.vue'
+import Profile from '@/views/Profile.vue'
+import Restitution from '@/views/Restitution.vue'
+import SleepMode from '@/views/SleepMode.vue'
+import Statistics from '@/views/Statistics.vue'
+import Visualisation from '@/views/Visualisation.vue'
+import Authentication from '@/views/Authentication.vue'
 
 const routes = [
 	{
 		path: "/",
 		name: "home",
-		component: ViewHome,
+		component: Home,
 		meta:{
 		  requireAuth: true
 		}
@@ -24,15 +22,12 @@ const routes = [
 	{
 		path: "/authentification",
 		name: "authentification",
-		component: ViewAuthentication,
-		meta:{
-		  requireAuth: false
-		}
+		component: Authentication,
 	},
 	{
 		path: "/visualisation",
 		name: "visualisation",
-		component: ViewVisualisation,
+		component: Visualisation,
 		meta:{
 		  requireAuth: true
 		}
@@ -40,43 +35,35 @@ const routes = [
 	{
 		path: "/restitution",
 		name: "restitution",
-		component: ViewRestitution,
+		component: Restitution,
 		meta:{
 		  requireAuth: true
 		}
 	},
 	{
 		path: "/sommeil",
-		component: ViewSleepMode,
+		component: SleepMode,
 		meta:{
 		  requireAuth: true
 		}
 	},
 	{
 		path: "/statistiques",
-		component: ViewStatistics,
+		component: Statistics,
 		meta:{
 		  requireAuth: true
 		}
 	},
 	{
 		path: "/profil",
-		component: ViewProfile,
+		component: Profile,
 		meta:{
 		  requireAuth: true
 		}
 	},
 	{
 		path: "/test",
-		component: ViewTest,
-	},
-	{
-		path: "/generation_pending",
-		component: ViewTest1,
-	},
-	{
-		path: "/generation_done",
-		component: ViewTest2,
+		component: Test,
 	},
 ];
 
@@ -85,18 +72,14 @@ const router = createRouter({
     routes
 })
 
+router.beforeEach(async (to, from, next) => {
 
-router.beforeEach((to, from, next) => {
 	const requireAuth = to.matched.some((record) => record.meta.requireAuth);
-	const isLoggedIn = store.getters['auth/user'].loggedIn;
-	//redirect to login if not connected
-	if (requireAuth && !isLoggedIn) {
+	
+	if (requireAuth && !await user.getCurrentUser()) {
 		next("/authentification");
 	}
-	//redirect to dashboard if connected and tring to log in
-	else if (!requireAuth && isLoggedIn) {
-		next("/");
-	} else {
+	else {
 		next();
 	}
 });

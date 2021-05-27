@@ -24,7 +24,7 @@ export default {
 	},
 	onAuthChanged() {
 		auth.onAuthStateChanged((user) => {
-            store.dispatch('loader/done')
+			console.log('auth changed')
 			store.dispatch('auth/fetchUser', user)
 		});
 	},
