@@ -1,55 +1,43 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin")
-const vision = require("@google-cloud/vision");
-const express = require("express");
-const cors = require("cors");
+
+//init firebase
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
-const app = express();
 
 const { DeviceHelper } = require('./helpers/device/DeviceHelper');
+const { VisionHelper } = require('./helpers/vision/VisionHelper');
+
 
 
 exports.deviceListener = functions.firestore
     .document('user/{userId}/device/listener')
     .onWrite(async (change, context) => {
-        //récupération du userId
+        //get user id
         const userId = context.params.userId;
-        //vérification du status
+        //check status
         const data = change.after.data();
         const status = data.status;
-        //si les données sont disponibles
+
+        //if data are available
         if(status === 'done') {
-            //initialisation du helper
+            //init helper
             const helper = new DeviceHelper(userId, db)
-
-            //récupérer les data temporaires
+            //get temp data from device
             const data = await helper.getData();
-
+            //save data as a new dream
             await helper.saveDream(data)
-
+            //reset temp data
             await helper.deleteTempData();
-
+            //reset device listener status
             await helper.setNewStatus();
-
         }
     });
 
+exports.imageToText = functions.https.onCall( async (data, context) => {
 
-app.use(cors({origin: true}));
+    const helper = new VisionHelper(data.base64Image);
+    
+    return await helper.getTextFromImage();
 
-app.post("/imageToText", async (req, res) => {
-    const client = new vision.ImageAnnotatorClient();
-
-    const options = {
-        image: {
-            content: Buffer.from(req.body.base64Image, "base64"),
-        },
-    };
-
-    const [result] = await client.documentTextDetection(options);
-
-    res.send(result.fullTextAnnotation.text);
-});
-
-exports.api = functions.https.onRequest(app);
+    });

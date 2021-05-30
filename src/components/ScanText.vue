@@ -19,8 +19,8 @@
 
 <script>
 
-import axios from 'axios'
 import { imageToBase64, removeBase64Head } from '@/utils/imageHelper.js'
+import { functions } from '@/firebase'
 
 export default {
     methods: {
@@ -42,16 +42,15 @@ export default {
         },
 
         apiCall: function(base64Image) {
-            axios
-                .post(`${this.$api}/imageTotext`, {
-                    base64Image: base64Image
-                })
-                .then((response) => {
-                    this.successCallback(response.data)
-                })
-                .catch(function (error) {
-                    this.errorCallback(error)
-                })
+            const imageToText = functions.httpsCallable('imageToText');
+
+            imageToText({ 
+                base64Image: base64Image 
+            }).then((response) => {
+                this.successCallback(response.data)
+            }).catch(function (error) {
+                this.errorCallback(error)
+            })
         },
     },
     props: {

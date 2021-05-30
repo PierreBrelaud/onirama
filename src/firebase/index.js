@@ -1,7 +1,7 @@
 import firebase from "firebase/app"
 import 'firebase/auth'
 import 'firebase/firestore'
-
+import 'firebase/functions'
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBqVaYFgabWZ7xAbNdvbZelYMomDBrYTvk",
@@ -28,3 +28,4 @@ firebase.getCurrentUser = () => {
 export const user = firebase;
 export const db = firebase.firestore();
 export const auth = firebase.auth();
+export const functions = firebase.functions();
