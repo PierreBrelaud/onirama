@@ -18,7 +18,7 @@ class VisionHelper {
 
         const [result] = await this.client.documentTextDetection(options);
     
-        return result.fullTextAnnotation.text;
+        return result.fullTextAnnotation.text.replace(/(\r\n|\n|\r)/gm, " ");
     }
 }
 

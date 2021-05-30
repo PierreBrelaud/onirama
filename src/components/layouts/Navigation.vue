@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         scanSuccess(data) {
-            this.$store.state.restitution.text = data.replace(/(\r\n|\n|\r)/gm, " ")
+            this.$store.state.restitution.text = data
             this.$router.push('/restitution')
             this.$store.dispatch('loader/done')
         },
