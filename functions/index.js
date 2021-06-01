@@ -24,7 +24,7 @@ exports.createDream = functions.firestore
 		await client.index({
 			index: "dream",
 			type: "_doc",
-			id: snap.id,
+			id: context.params.dreamId,
 			body: snap.data(),
 		});
 	});
@@ -32,11 +32,12 @@ exports.createDream = functions.firestore
 exports.updateDream = functions.firestore
 	.document("dream/{dreamId}")
 	.onUpdate(async (snap, context) => {
-		await client.index({
+		await client.update({
 			index: "dream",
-			type: "_doc",
-			id: snap.id,
-			body: snap.after.data(),
+			id: context.params.dreamId,
+			body: {
+				doc: snap.after.data(),
+			}
 		});
 	});
 
@@ -46,7 +47,7 @@ exports.deleteDream = functions.firestore
 		await client.delete({
 			index: "dream",
 			type: "_doc",
-			id: snap.id,
+			id: context.params.dreamId,
 		});
 	});
 
