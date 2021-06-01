@@ -9,6 +9,7 @@ import SleepMode from '@/views/SleepMode.vue'
 import Statistics from '@/views/Statistics.vue'
 import Visualisation from '@/views/Visualisation.vue'
 import Authentication from '@/views/Authentication.vue'
+import PortalLab from '@/views/PortalLab.vue'
 
 const routes = [
 	{
@@ -65,6 +66,10 @@ const routes = [
 		path: "/test",
 		component: Test,
 	},
+	{
+		path: "/portal-lab",
+		component: PortalLab,
+	}
 ];
 
 const router = createRouter({

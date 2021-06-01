@@ -72,6 +72,8 @@ export default class Dream {
         const portalSize = 5;
         insidePartGroup.position.set(this.position, - portalSize/2, -3);
 
+        insidePartGroup.name = "dream scene";
+
         insidePartScene.add(insidePartGroup);
 
         return insidePartScene;
@@ -112,6 +114,8 @@ export default class Dream {
         return pedestal;
     };
     createCrystal({color}){
+        // TODO : Delete this old implementation
+        /*
         const crystalGeo = new THREE.IcosahedronGeometry(0.8);
         const crystalMat = new THREE.MeshStandardMaterial({
             color,
@@ -120,6 +124,6 @@ export default class Dream {
         crystal.name ="crystal";
         crystal.position.set(0, 3.5, 0,);
 
-        return crystal;
+        return crystal;*/
     };
 }
