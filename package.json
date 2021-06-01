@@ -8,6 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^7.13.0",
     "@three-ts/orbit-controls": "^1.4.7",
     "axios": "^0.21.1",
     "camera-controls": "^1.28.0",

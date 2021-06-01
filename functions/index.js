@@ -1,14 +1,57 @@
 const functions = require("firebase-functions");
-const admin = require("firebase-admin")
+const admin = require("firebase-admin");
+const { Client } = require("@elastic/elasticsearch");
 
 //init firebase
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
+const env = functions.config();
+
+const auth = {
+	username: env.elasticsearch.username,
+	password: env.elasticsearch.password,
+};
+
+const client = new Client({
+	node: env.elasticsearch.url,
+	auth: auth,
+});
+
+exports.createDream = functions.firestore
+	.document("dream/{dreamId}")
+	.onCreate(async (snap, context) => {
+		await client.index({
+			index: "dream",
+			type: "_doc",
+			id: snap.id,
+			body: snap.data(),
+		});
+	});
+
+exports.updateDream = functions.firestore
+	.document("dream/{dreamId}")
+	.onUpdate(async (snap, context) => {
+		await client.index({
+			index: "dream",
+			type: "_doc",
+			id: snap.id,
+			body: snap.after.data(),
+		});
+	});
+
+exports.deleteDream = functions.firestore
+	.document("dream/{dreamId}")
+	.onDelete(async (snap, context) => {
+		await client.delete({
+			index: "dream",
+			type: "_doc",
+			id: snap.id,
+		});
+	});
+
 const { DeviceHelper } = require('./helpers/device/DeviceHelper');
 const { VisionHelper } = require('./helpers/vision/VisionHelper');
-
-
 
 exports.deviceListener = functions.firestore
     .document('user/{userId}/device/listener')
@@ -37,7 +80,7 @@ exports.deviceListener = functions.firestore
 exports.imageToText = functions.https.onCall( async (data, context) => {
 
     const helper = new VisionHelper(data.base64Image);
-    
+
     return await helper.getTextFromImage();
 
     });
