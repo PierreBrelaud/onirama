@@ -2,11 +2,8 @@ const { Client } = require("@elastic/elasticsearch");
 const functions = require("firebase-functions");
 
 class ElasticsearchHelper {
-	constructor(userId) {
-		if(userId) {
-        	this.userId = userId
-		}
-		
+
+	constructor() {		
 		this.client = this.initClient();
 	}
 
@@ -26,7 +23,75 @@ class ElasticsearchHelper {
 
 	async request() {}
 
-	async getEmotionValueCount(type, value) {
+	async getEmotionTypeCount(userId, type) {
+		const result = await this.client.count({
+			index: "dream",
+			body: {
+				query: {
+					bool: {
+						must: [
+							{
+								nested: {
+									path: "emotions",
+									query: {
+										bool: {
+											must: [
+												{ match: { "emotions.type": type } }
+											],
+										},
+									},
+								},
+							},
+							{
+								match: {
+									userId: userId,
+								},
+							},
+						],
+					},
+				},
+			},
+		});
+		return result.body.count
+	}
+
+	async getEmotionByValue(userId, type, value) {
+
+		const result = await this.client.search({
+			index: "dream",
+			body: {
+				query: {
+					bool: {
+						must: [
+							{
+								nested: {
+									path: "emotions",
+									query: {
+										bool: {
+											must: [
+												{ match: { "emotions.type": type } },
+												{ match: { "emotions.value": value } }
+											],
+										},
+									},
+								},
+							},
+							{
+								match: {
+									userId: userId,
+								},
+							},
+						],
+					},
+				},
+			},
+		});
+		console.log(result.body)
+		return result.body
+	}
+
+	async getEmotionValueCount(userId, type, value) {
+		
 		const result = await this.client.count({
 			index: "dream",
 			body: {
@@ -48,7 +113,7 @@ class ElasticsearchHelper {
 							},
 							{
 								match: {
-									userId: this.userId,
+									userId: userId,
 								},
 							},
 						],

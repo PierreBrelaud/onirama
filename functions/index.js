@@ -9,9 +9,46 @@ const { ElasticsearchHelper } = require("./helpers/elasticsearch/ElasticsearchHe
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
+const elasticsearchHelper = new ElasticsearchHelper();
+
+exports.getDreamByEmotion = functions.https.onCall(async (data, context) => {
+	const result = await elasticsearchHelper.
+		getEmotionByValue(data.userId, data.typeId, data.valueId);
+
+	return result;
+});
+
+exports.emotionTypeCount = functions.https.onCall(async (data, context) => {
+	const result = [];
+	const userId = data.userId;
+	/* eslint-disable no-await-in-loop */
+	for(const emotion of data.emotions) {
+		const count = await elasticsearchHelper.getEmotionTypeCount(userId, emotion.id);
+
+		result.push({
+			...emotion,
+			count: count
+		});
+	}
+	/* eslint-enable no-await-in-loop */
+	return result;
+});
+
 exports.emotionValueCount = functions.https.onCall(async (data, context) => {
-	const elasticsearchHelper = new ElasticsearchHelper(data.userId);
-	return elasticsearchHelper.getEmotionValueCount(data.type, data.value)
+	const result = [];
+	const userId = data.userId;
+	const typeId = data.typeId;
+	/* eslint-disable no-await-in-loop */
+	for(const emotion of data.emotions) {
+		const count = await elasticsearchHelper.getEmotionValueCount(userId, typeId, emotion.id);
+		result.push({
+			...emotion,
+			typeId: typeId,
+			count: count
+		});
+	}
+	/* eslint-enable no-await-in-loop */
+	return result;
 });
 
 exports.createDream = functions.firestore
