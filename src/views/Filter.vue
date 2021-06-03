@@ -3,33 +3,29 @@
     <button @click="changeNavigationItem(item.MAP)">map</button>
     <button @click="changeNavigationItem(item.CHRONOLOGIY)">chronology</button>
     <button @click="changeNavigationItem(item.NEBULA)">nebula</button>
+    {{ navigationItem }}
     <br>
     <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
     <button @click="changeNavigationType(type.LIST)">list</button>
-    <!-- list -->
-    <filter-list 
-        v-if="navigationType === type.LIST"
-    />
     <!-- map -->
     <filter-map 
-        v-if="navigationItem === item.MAP
-        && navigationType === type.VISUALISATION"
+        v-if="navigationItem === item.MAP"
+        :navigationType="navigationType"
     />
     <!-- chronology -->
     <filter-chronology 
-        v-if="navigationItem === item.CHRONOLOGIY
-        && navigationType === type.VISUALISATION"
+        v-if="navigationItem === item.CHRONOLOGIY"
+        :navigationType="navigationType"
     />
     <!-- nebula -->
     <filter-nebula 
-        v-if="navigationItem === item.NEBULA
-        && navigationType === type.VISUALISATION"
+        v-if="navigationItem === item.NEBULA"
+        :navigationType="navigationType"
     />
 
 </template>
 
 <script>
-import FilterList from '@/components/filter/FilterList.vue'
 import FilterNebula from '@/components/filter/FilterNebula.vue'
 import FilterChronology from '@/components/filter/FilterChronology.vue'
 import FilterMap from '@/components/filter/FilterMap.vue'
@@ -55,6 +51,9 @@ export default {
         }
     },
     methods: {
+        getData() {
+            
+        },
         changeNavigationItem(item) {
             this.navigationItem = item;
         },
@@ -62,7 +61,7 @@ export default {
             this.navigationType = type;
         }
     },
-    components: { FilterList, FilterNebula, FilterChronology, FilterMap }
+    components: { FilterNebula, FilterChronology, FilterMap }
 }
 </script>
 
