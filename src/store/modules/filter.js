@@ -7,7 +7,10 @@ export const filter = {
             emotionId: null,
             subEmotionId: null,
         },
-        mapData: null,
+        mapData: {
+            step: 0,
+            typeId: null,
+        },
         chronologyData: null,
     },
     getters: {
@@ -31,5 +34,8 @@ export const filter = {
         setNebulaData(state, value) {
             state.nebulaData = value;
         },
+        setMapData(state, value) {
+            state.mapData = value;
+        }
     }
 };
