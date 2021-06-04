@@ -23,6 +23,18 @@ class ElasticsearchHelper {
 
 	async request() {}
 
+	async getDreamsByDate() {
+		const result = await this.client.search({
+			index: "dream",
+			body: {
+				sort: {
+					date: "desc"
+				}
+			}
+		})
+		return result.body;
+	}
+
 	async getDreamsByType(userId, typeId) {
 		const result = await this.client.search({
 			index: "dream",
