@@ -11,10 +11,15 @@ const db = admin.firestore();
 
 const elasticsearchHelper = new ElasticsearchHelper();
 
+exports.getDreamByType = functions.https.onCall(async (data, context) => {
+	const result = await elasticsearchHelper.
+		getDreamsByType(data.userId, data.typeId);
+	return result;
+});
+
 exports.getDreamByEmotion = functions.https.onCall(async (data, context) => {
 	const result = await elasticsearchHelper.
 		getEmotionByValue(data.userId, data.typeId, data.valueId);
-
 	return result;
 });
 

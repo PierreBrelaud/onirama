@@ -23,6 +23,23 @@ class ElasticsearchHelper {
 
 	async request() {}
 
+	async getDreamsByType(userId, typeId) {
+		const result = await this.client.search({
+			index: "dream",
+			body: {
+				query: {
+					bool: {
+						must: [
+							{ match: { "type": typeId } },
+							{ match: { "userId": userId } }
+						]
+					}
+				}
+			}
+		})
+		return result.body;
+	}
+
 	async getEmotionTypeCount(userId, type) {
 		const result = await this.client.count({
 			index: "dream",
@@ -52,7 +69,7 @@ class ElasticsearchHelper {
 				},
 			},
 		});
-		return result.body.count
+		return result.body.count;
 	}
 
 	async getEmotionByValue(userId, type, value) {
@@ -86,7 +103,6 @@ class ElasticsearchHelper {
 				},
 			},
 		});
-		console.log(result.body)
 		return result.body
 	}
 
