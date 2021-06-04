@@ -111,7 +111,7 @@ export default {
 
 .restitution {
     z-index: 1;
-    position: absolute;
+    position: fixed;
     bottom: 8rem;
     width: 100%;
     border-top-left-radius: 1.5rem;
