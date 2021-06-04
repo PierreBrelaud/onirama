@@ -5,7 +5,6 @@ import Test from '@/views/Test.vue'
 import Home from '@/views/Home.vue'
 import Profile from '@/views/Profile.vue'
 import Restitution from '@/views/Restitution.vue'
-import SleepMode from '@/views/SleepMode.vue'
 import Statistics from '@/views/Statistics.vue'
 import Visualisation from '@/views/Visualisation.vue'
 import Authentication from '@/views/Authentication.vue'
@@ -37,13 +36,6 @@ const routes = [
 		path: "/restitution",
 		name: "restitution",
 		component: Restitution,
-		meta:{
-		  requireAuth: true
-		}
-	},
-	{
-		path: "/sommeil",
-		component: SleepMode,
 		meta:{
 		  requireAuth: true
 		}

@@ -3,7 +3,7 @@
         <router-link :to="'/'">
             <div class="navigation__item navigation__item--home"></div>
         </router-link>
-        <router-link :to="'/sommeil'">
+        <router-link :to="'/tri'">
             <div class="navigation__item navigation__item--sleep"></div>
         </router-link>
         <div 
