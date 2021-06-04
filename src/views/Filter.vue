@@ -10,17 +10,14 @@
     <!-- map -->
     <filter-map 
         v-if="navigationItem === item.MAP"
-        :navigationType="navigationType"
     />
     <!-- chronology -->
     <filter-chronology 
         v-if="navigationItem === item.CHRONOLOGIY"
-        :navigationType="navigationType"
     />
     <!-- nebula -->
     <filter-nebula 
         v-if="navigationItem === item.NEBULA"
-        :navigationType="navigationType"
     />
 
 </template>
@@ -31,9 +28,12 @@ import FilterChronology from '@/components/filter/FilterChronology.vue'
 import FilterMap from '@/components/filter/FilterMap.vue'
 
 export default {
+    beforeMount() {
+        this.initFilter();
+    },
     mounted() {
-        this.navigationItem = this.item.CHRONOLOGIY;
-        this.navigationType = this.type.VISUALISATION;
+        // this.navigationItem = this.item.NEBULA;
+        // this.navigationType = this.type.VISUALISATION;
     },
     data() {
         return {
@@ -51,10 +51,18 @@ export default {
         }
     },
     methods: {
-        getData() {
-            
+        initFilter() {
+            //check state to get previous filters
+            const prevNavigationItem = this.$store.getters['filter/navigationItem'];
+            if(prevNavigationItem) {
+                this.navigationItem = prevNavigationItem;
+            }
+            else {
+                this.navigationItem = this.item.CHRONOLOGIY;
+            }
         },
         changeNavigationItem(item) {
+            this.$store.commit('filter/setNavigationItem', item);
             this.navigationItem = item;
         },
         changeNavigationType(type) {

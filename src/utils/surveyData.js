@@ -44,3 +44,35 @@ export const dreamEmotions = [
         { id: 3, value: 'euphoric', display: 'Euphorique' },
     ]},
 ]
+
+export const getAllEmotions = () => {
+    let emotions = [];
+    dreamEmotions.forEach(emotion => {
+        emotions.push({
+            id: emotion.id,
+            value: emotion.value,
+            display: emotion.display,
+        })
+    })
+    return emotions;
+}
+
+export const getAllSubEmotions = (emotionId) => {
+    let subEmotions = [];
+    dreamEmotions[emotionId].data.forEach(subEmotion => {
+        subEmotions.push({
+            id: subEmotion.id,
+            value: subEmotion.value,
+            display: subEmotion.display
+        })
+    })
+    return subEmotions;
+}
+
+export const getEmotion = (emotionId) => {
+    return dreamEmotions[emotionId];
+}
+
+export const getSubEmotion = (emotionId, subEmotionId) => {
+    return dreamEmotions[emotionId].data[subEmotionId];
+} 
