@@ -1,6 +1,8 @@
 <template>
 	<global-loader v-if="loading" />
-	<router-view></router-view>
+	<div class="view">
+		<router-view></router-view>
+	</div>
 	<navigation v-if="isVisible"/>
 </template>
 
@@ -31,5 +33,11 @@ export default {
 <style lang='scss'>
 * {
 	font-family: $F-main;
+}
+
+.view {
+	height: calc(100vh - 8rem);
+	overflow: auto;
+	margin-bottom: 8rem;
 }
 </style>

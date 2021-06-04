@@ -82,7 +82,6 @@ export default {
 
 <style lang="scss" scoped>
 .restitution {
-    height: 100vh;
     background: white;
     overflow: hidden;
 
