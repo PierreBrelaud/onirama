@@ -1,32 +1,36 @@
 <template>
     <h3>List</h3>
-    <div>
-        <p v-for="dream in data.hits.hits" :key="dream._id">
-            {{ dream._source.title }}
+    <div class="list">
+        <div v-for="dream in data.hits.hits" :key="dream._id">
+            <p>
+                {{ displayTimestamp(dream._source.date) }}
+            </p>
+            <p>{{ dream._source.title }}</p>
             <ul>
-                <span 
+                <li 
                     v-for="(emotion, index) in dream._source.emotions"
                     :key="index">
                     {{ getSubEmotion(emotion.type, emotion.value).display }} &nbsp;
-                </span>
+                </li>
             </ul>
-        </p>
+        </div>
     </div>
-    <!-- {{ data }} -->
 </template>
 
 <script>
-import { getSubEmotion } from '@/utils/surveyData.js' 
+import { getSubEmotion } from '@/utils/surveyData.js'
+import { displayTimestamp } from '@/utils/dateHelper.js'
+
 export default {
     data() {
         return {
-
         }
     },
     methods: {
         getSubEmotion(typeId, valueId) {
             return getSubEmotion(typeId, valueId)
-        }
+        },
+        displayTimestamp,
     },
     props: {
         data: {
@@ -37,6 +41,6 @@ export default {
 }
 </script>
 
-<style>
+<style style="scss" scoped>
 
 </style>
