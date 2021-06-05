@@ -1,5 +1,5 @@
 <template>
-    <div class="restitution">
+    <div class="restitution appview">
         <div class="restitution__header">
             <div class="restitution__header__item" @click="leave">Abandonner</div> 
         </div>
@@ -82,7 +82,6 @@ export default {
 
 <style lang="scss" scoped>
 .restitution {
-    background: white;
     overflow: hidden;
 
     &__header, &__content, &__footer {

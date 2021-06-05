@@ -1,29 +1,33 @@
 <template>
     <!-- navigation -->
-    <button @click="changeNavigationItem(item.MAP)">map</button>
-    <button @click="changeNavigationItem(item.CHRONOLOGIY)">chronology</button>
-    <button @click="changeNavigationItem(item.NEBULA)">nebula</button>
-    <button @click="changeNavigationItem(item.SEARCH)">search</button>
-    {{ navigationItem }}
-    <br>
-    <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
-    <button @click="changeNavigationType(type.LIST)">list</button>
-    <!-- map -->
-    <filter-map 
-        v-if="navigationItem === item.MAP"
-    />
-    <!-- chronology -->
-    <filter-chronology 
-        v-if="navigationItem === item.CHRONOLOGIY"
-    />
-    <!-- nebula -->
-    <filter-nebula 
-        v-if="navigationItem === item.NEBULA"
-    />
-    <!-- search -->
-    <filter-search 
-        v-if="navigationItem === item.SEARCH"
-    />
+    <div class="filter appview">
+        <div class="filter__navigation">
+            <button @click="changeNavigationItem(item.MAP)">map</button>
+            <button @click="changeNavigationItem(item.CHRONOLOGIY)">chronology</button>
+            <button @click="changeNavigationItem(item.NEBULA)">nebula</button>
+            <button @click="changeNavigationItem(item.SEARCH)">search</button>
+        </div>
+        {{ navigationItem }}
+        <br>
+        <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
+        <button @click="changeNavigationType(type.LIST)">list</button>
+        <!-- map -->
+        <filter-map 
+            v-if="navigationItem === item.MAP"
+        />
+        <!-- chronology -->
+        <filter-chronology 
+            v-if="navigationItem === item.CHRONOLOGIY"
+        />
+        <!-- nebula -->
+        <filter-nebula 
+            v-if="navigationItem === item.NEBULA"
+        />
+        <!-- search -->
+        <filter-search 
+            v-if="navigationItem === item.SEARCH"
+        />
+    </div>
 
 </template>
 
@@ -80,6 +84,7 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.filter {
+}
 </style>
