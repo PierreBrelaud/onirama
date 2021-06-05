@@ -181,6 +181,7 @@ export default {
             DeviceOrientationEvent.requestPermission()
                 .then(response => {
                     if (response === 'granted') {
+                        const dreamGroup = this.dreamScenes[0].getObjectByName('dream scene');
                         window.addEventListener('deviceorientation', ({absolute, alpha, beta, gamma}) => {
                             this.absolute = absolute;
                             // augmente vers la droite et diminue vers la gauche
@@ -188,7 +189,7 @@ export default {
                             this.beta = Math.round(beta);
                             this.gamma = Math.round(gamma);
                             if(this.isZoom) {
-                              dreamGp.rotation.y = gamma * Math.PI/180;
+                              dreamGroup.rotation.y = gamma * Math.PI/180;
                             }
                         })
                     }

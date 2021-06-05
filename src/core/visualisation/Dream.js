@@ -72,6 +72,8 @@ export default class Dream {
         const portalSize = 5;
         insidePartGroup.position.set(this.position, - portalSize/2, -3);
 
+        insidePartGroup.name = "dream scene";
+
         insidePartScene.add(insidePartGroup);
 
         return insidePartScene;
