@@ -1,12 +1,14 @@
 <template>
-	<h3>Search</h3>
-	<input
-		type="text"
-		placeholder="search"
-		v-model="searchValue"
-		@input="onSearchChanged"
-	/>
-	<filter-list v-if="dreams" :data="dreams" />
+	<div class="search">
+		<input
+			class="search__input"
+			type="text"
+			placeholder="Recherche"
+			v-model="searchValue"
+			@input="onSearchChanged"
+		/>
+		<filter-list v-if="dreams" :data="dreams" />
+	</div>
 </template>
 
 <script>
@@ -85,4 +87,29 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+	.search {
+		&__input {
+			display:block;
+			width: 75%;
+			margin: auto;
+			background: $C-extradark;
+			border: none;
+			border-bottom: solid thin $C-dark;
+			padding: 1rem;
+			text-align: center;
+			color: $C-white;
+			font-family: $F-bellota;
+			font-weight: $FW-normal;
+			font-size: 15pt;
+
+			&::placeholder {
+				color: $C-light;
+				font-family: $F-bellota;
+				font-size: 15pt;
+				font-style: italic;
+				font-weight: $FW-thin;
+			}
+		}
+	}
+</style>
