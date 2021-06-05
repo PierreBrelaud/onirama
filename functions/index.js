@@ -10,10 +10,16 @@ admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
 const elasticsearchHelper = new ElasticsearchHelper();
+ 
+exports.searchDream = functions.https.onCall(async (data, context) => {
+	const result = await elasticsearchHelper
+		.searchDream(data.userId, data.searchValue);
+	return result;
+});
 
 exports.getDreamByDate = functions.https.onCall(async (data, context) => {
 	const result = await elasticsearchHelper.
-		getDreamsByDate();
+		getDreamsByDate(data.userId);
 	return result;
 });
 

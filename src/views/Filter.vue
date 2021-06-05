@@ -3,6 +3,7 @@
     <button @click="changeNavigationItem(item.MAP)">map</button>
     <button @click="changeNavigationItem(item.CHRONOLOGIY)">chronology</button>
     <button @click="changeNavigationItem(item.NEBULA)">nebula</button>
+    <button @click="changeNavigationItem(item.SEARCH)">search</button>
     {{ navigationItem }}
     <br>
     <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
@@ -19,6 +20,10 @@
     <filter-nebula 
         v-if="navigationItem === item.NEBULA"
     />
+    <!-- search -->
+    <filter-search 
+        v-if="navigationItem === item.SEARCH"
+    />
 
 </template>
 
@@ -26,6 +31,7 @@
 import FilterNebula from '@/components/filter/FilterNebula.vue'
 import FilterChronology from '@/components/filter/FilterChronology.vue'
 import FilterMap from '@/components/filter/FilterMap.vue'
+import FilterSearch from '@/components/filter/FilterSearch.vue'
 
 export default {
     beforeMount() {
@@ -46,7 +52,8 @@ export default {
             item: { 
                 CHRONOLOGIY: "chronology", 
                 NEBULA: "nebula", 
-                MAP: "map"
+                MAP: "map",
+                SEARCH: "search"
             }
         }
     },
@@ -69,7 +76,7 @@ export default {
             this.navigationType = type;
         }
     },
-    components: { FilterNebula, FilterChronology, FilterMap }
+    components: { FilterNebula, FilterChronology, FilterMap, FilterSearch }
 }
 </script>
 
