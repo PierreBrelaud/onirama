@@ -3,7 +3,7 @@
         <router-link :to="'/'">
             <div class="navigation__item navigation__item--home"></div>
         </router-link>
-        <router-link :to="'/sommeil'">
+        <router-link :to="'/tri'">
             <div class="navigation__item navigation__item--sleep"></div>
         </router-link>
         <div 
@@ -111,7 +111,7 @@ export default {
 
 .restitution {
     z-index: 1;
-    position: absolute;
+    position: fixed;
     bottom: 8rem;
     width: 100%;
     border-top-left-radius: 1.5rem;

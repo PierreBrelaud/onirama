@@ -5,10 +5,10 @@ import Test from '@/views/Test.vue'
 import Home from '@/views/Home.vue'
 import Profile from '@/views/Profile.vue'
 import Restitution from '@/views/Restitution.vue'
-import SleepMode from '@/views/SleepMode.vue'
 import Statistics from '@/views/Statistics.vue'
 import Visualisation from '@/views/Visualisation.vue'
 import Authentication from '@/views/Authentication.vue'
+import Filter from '@/views/Filter.vue'
 import PortalLab from '@/views/PortalLab.vue'
 
 const routes = [
@@ -42,13 +42,6 @@ const routes = [
 		}
 	},
 	{
-		path: "/sommeil",
-		component: SleepMode,
-		meta:{
-		  requireAuth: true
-		}
-	},
-	{
 		path: "/statistiques",
 		component: Statistics,
 		meta:{
@@ -58,6 +51,13 @@ const routes = [
 	{
 		path: "/profil",
 		component: Profile,
+		meta:{
+		  requireAuth: true
+		}
+	},
+	{
+		path: "/tri",
+		component: Filter,
 		meta:{
 		  requireAuth: true
 		}
