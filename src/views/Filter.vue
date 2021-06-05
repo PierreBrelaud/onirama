@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        {{ navigationItem }}
+        
         <br>
         <!-- <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
         <button @click="changeNavigationType(type.LIST)">list</button> -->

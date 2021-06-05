@@ -92,7 +92,7 @@ export default {
 		&__input {
 			display:block;
 			width: 75%;
-			margin: auto;
+			margin: 0 auto 3rem auto;
 			background: $C-extradark;
 			border: none;
 			border-bottom: solid thin $C-dark;
