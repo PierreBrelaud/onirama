@@ -1,25 +1,74 @@
 * {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 body,
 html {
-  font-size: 10px;
+    font-size: 10px;
 }
 
 .app {
-  font-size: 1.8rem;
+    font-size: 1.8rem;
+}
+
+h1 {
+    font-family: $F-canela;
+    font-weight: $FW-thin;
+    font-size: 30pt;
+}
+
+h2 {
+    font-family: $F-canela;
+    font-weight: $FW-light;
+    font-size: 23pt;
+}
+
+h3 {
+    font-family: $F-bellota;
+    font-weight: $FW-bold;
+    font-size: 18pt;
+}
+
+p {
+    font-family: $F-bellota;
+    font-weight: $FW-normal;
+    font-size: 14pt;
+}
+
+button {
+    font-family: $F-bellota;
+    font-weight: $FW-bold;
+    font-size: 17pt;
+}
+
+q {
+    font-family: $F-canela;
+    font-weight: $FW-light;
+    font-size: 14pt;
+}
+
+label {
+    font-family: $F-bellota;
+    font-weight: $FW-light;
+    font-size: 13pt;
+}
+
+legend {
+    font-family: $F-canela;
+    font-weight: $FW-light;
+    font-style: italic;
+    font-size: 13pt;
 }
 
 // --------------------------------------Ajout de classe globale----------------------------------------
 .boxed {
-  max-width: 113rem;
-  width: calc(100% - #{$G-side} * 2);
-  margin-left: auto;
-  margin-right: auto;
+    max-width: 113rem;
+    width: calc(100% - #{$G-side} * 2);
+    margin-left: auto;
+    margin-right: auto;
 
-  @include phablet(){
-    width: calc(100% - #{$G-side-phablet} * 2);
-  }
+    @include phablet(){
+        width: calc(100% - #{$G-side-phablet} * 2);
+    }
 }
 
