@@ -37,7 +37,8 @@ export default {
 
 .view {
 	height: calc(100vh - 8rem);
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	margin-bottom: 8rem;
 }
 </style>
