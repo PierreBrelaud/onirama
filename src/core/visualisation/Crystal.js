@@ -16,6 +16,9 @@ export default class Crystal {
             crystalHeight: 2,
             crystalWidth: 0.5,
             spikeWidth: 0.15,
+            color: '#FFCCCC',
+            emissive: '#FF0000',
+            opacity: 0.8,
         }
     }
     createCrystal() {
@@ -43,20 +46,28 @@ export default class Crystal {
         );
         crystalGeo.computeVertexNormals();
         
+
         let crystalMat = new THREE.MeshStandardMaterial({
-            color: 0xFFCCCC,
-            emissive: 0xFF0000,
+            color: this.params.color,
+            emissive: this.params.emissive,
             roughness: 0.5, 
             metalness: 0.5,
             side: THREE.DoubleSide, 
             transparent: true,
+            opacity: this.params.opacity,
         })
-        crystalMat = new THREE.MeshNormalMaterial();
+        //crystalMat = new THREE.MeshNormalMaterial();
 
         const crystal = new THREE.Mesh(crystalGeo, crystalMat);
         crystal.name = "crystal";
         crystal.position.y = - this.params.crystalHeight/2;
         crystal.rotation.y = Math.PI / 2;
+        crystal.castShadow = true;
+        
+        const edgeGeo = new THREE.EdgesGeometry( crystal.geometry );
+        const edgeMat = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.6, transparent: true } );
+        const edgeWireframe = new THREE.LineSegments( edgeGeo, edgeMat );
+        crystal.add(edgeWireframe);
 
         return crystal;
     }
@@ -166,6 +177,21 @@ export default class Crystal {
         });
         generalFolder.add(this.params, 'crystalWidth', 0.2, 1.5, 0.01)
         .name('Width')
+        .onChange(() => {
+            document.dispatchEvent(evt);
+        });
+        generalFolder.addColor(this.params, 'color')
+        .name('Color')
+        .onChange(() => {
+            document.dispatchEvent(evt);
+        });
+        generalFolder.addColor(this.params, 'emissive')
+        .name('Emissive')
+        .onChange(() => {
+            document.dispatchEvent(evt);
+        });
+        generalFolder.add(this.params, 'opacity', 0., 1., 0.01)
+        .name('Opacity')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
