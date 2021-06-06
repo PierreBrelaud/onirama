@@ -1,7 +1,7 @@
 <template>
 	<div class="search">
 		<input
-			class="search__input"
+			class="search__input input"
 			type="text"
 			placeholder="Recherche"
 			v-model="searchValue"
@@ -94,27 +94,5 @@ export default {
 
 <style lang="scss" scoped>
 	.search {
-		&__input {
-			display:block;
-			width: 75%;
-			margin: 0 auto 3rem auto;
-			background: $C-extradark;
-			border: none;
-			border-bottom: solid thin $C-dark;
-			padding: 1rem;
-			text-align: center;
-			color: $C-white;
-			font-family: $F-bellota;
-			font-weight: $FW-normal;
-			font-size: 15pt;
-
-			&::placeholder {
-				color: $C-light;
-				font-family: $F-bellota;
-				font-size: 15pt;
-				font-style: italic;
-				font-weight: $FW-thin;
-			}
-		}
 	}
 </style>

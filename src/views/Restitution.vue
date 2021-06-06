@@ -9,7 +9,10 @@
             <restitution-survey v-if="current === 3" :survey="feelingData"/>
             <restitution-survey  v-if="current === 4" :survey="wakeUpData"/>
         </div>
-        <div class="restitution__footer">
+        <div 
+            class="restitution__footer" 
+            :class="{ 'restitution__footer--labeling' : current === 1 || current === 2}"
+        >
             <!-- previous button -->
             <button 
                 class="restitution__footer__button restitution__footer__button--previous" 
@@ -20,7 +23,7 @@
             </button>
             <!-- next button -->
             <button 
-                class="restitution__footer__button restitution__footer__button--next" 
+                class="btn" 
                 @click="next" 
                 v-if="current < elementsCount"
             >
@@ -117,6 +120,11 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        &--labeling {
+            background-color: $C-wheat;
+        }
+
         &__button {
             font-size: 1.4rem;
             background: none;
