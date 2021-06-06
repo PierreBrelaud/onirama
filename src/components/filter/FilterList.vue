@@ -12,15 +12,13 @@
             <div class="list__item__container">
                 <div class="content">
                     <div class="content__header">
-                        <div class="content__header__title">
-                            {{ dream._source.title }}
+                        <div v-html="formatText(dream._source.title, 'title')" class="content__header__title">
                         </div>
                         <div class="content__header__date">
-                            {{ displayTimestamp(dream._source.date) }}
+                            {{ displayTimestamp(dream._source.date)}}
                         </div>
                     </div>
-                    <p class="content__text">
-                        {{ dream._source.text }}
+                    <p class="content__text" v-html="formatText(dream._source.text, 'text')">
                     </p>
                 </div>
                 <!-- <ul>
@@ -40,26 +38,105 @@ import { getSubEmotion } from '@/utils/surveyData.js'
 import { displayTimestamp } from '@/utils/dateHelper.js'
 
 export default {
+    mounted() {
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+        })
+    },
+
+    beforeUnmount() { 
+        window.removeEventListener('resize', this.onResize); 
+    },
     data() {
         return {
+            windowWidth: window.innerWidth,
+            highlightClass: {
+                common: 'background-color: #A9BBCE;border-radius: 3px;',
+                title: 'padding: .2rem 0;',
+                text: "font-family:'Bellota Text', cursive;font-weight: 400;font-size: 1.6rem;padding: .05rem 0;"
+            }
         }
     },
     methods: {
+        onResize() {
+            this.windowWidth = window.innerWidth;
+        },
+        formatText(value, type) {
+            const count = this.getMaxCharToDisplay(value, type)
+            return this.getHighlightedText(value, count, type);
+        },
         getSubEmotion(typeId, valueId) {
             return getSubEmotion(typeId, valueId)
+        },
+        getMaxCharToDisplay(value, type) {
+            const DIVIDERS = { title: 17, text: 5 }
+            const divider = DIVIDERS[type];
+
+            const count = Math.round(this.windowWidth / divider);
+            return count;
+        },
+        getHighlightedText(str, count, type) {
+            const search = this.searchValue.toLowerCase();
+            //not search value
+            if(!search) return;
+
+            const strLength = str.length;
+            const length = search.length;
+            const start = str.toLowerCase().indexOf(search);
+            const end = start + length;
+            let res;
+            const spanStart = `<span style="${this.highlightClass.common + this.highlightClass[type]}">`;
+            const spanEnd = "</span>";
+
+            //nothing found return
+            if( start < 0) {
+                res = (strLength <= count) ? str.substring(0, count) : str.substring(0, count) + '...' ;
+            }
+            else {
+                if(strLength <= count) {
+                    res = str.substring(0, start) + spanStart + str.substring(start, end) + spanEnd + str.substring(end);
+                }
+                else {
+                    //mot au début
+                    if(end <= count) {
+                        res = str.substring(0, start) + spanStart + str.substring(start, end) + spanEnd + str.substring(end, count) + '...';
+                    }
+                    //mot à la fin
+                    else {
+                        //suffisament de caractères
+                        if(start + count <= strLength) {
+                            res = spanStart + str.substring(start, end) + spanEnd + str.substring(end, start + count) + '...';
+                        }
+                        //pas assez de caractères
+                        else {
+                            res = '...' + str.substring(start - (start + count - strLength), start) +  spanStart + str.substring(start, end) + spanEnd + str.substring(end, start + count);
+                        }
+                    }
+                }
+            }
+            return res;
         },
         displayTimestamp,
     },
     props: {
+        type: {
+            type: String,
+            default: 'default',
+        },
+        searchValue: {
+            type: String,
+            required: false,
+        },
         data: {
             type: Object,
             required: true,
         }
-    }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
+
 .list {
     &__item {
         width: 100%;
@@ -87,9 +164,18 @@ export default {
                     display: flex;
                     align-items: center;
                     &__title {
+                        margin-bottom: .5rem;
                         font-family: $F-canela;
                         font-weight: $FW-light;
                         font-size: 2rem;
+
+                        &--highlighted {
+                            font-family: $F-bellota;
+                            font-weight: $FW-normal;
+                            font-size: 1.6rem;
+                            color: red!important;
+                        }
+
                     }
 
                     &__date {
@@ -121,7 +207,8 @@ export default {
                 box-shadow: 0px 0px 5px 0px $C-white;
             }
             .line {
-                width: 1px;
+                width: 1.5px;
+                opacity: .5;
                 height: calc(100% - 2rem);
                 background: $C-light;
                 margin: 1rem auto 0 auto;

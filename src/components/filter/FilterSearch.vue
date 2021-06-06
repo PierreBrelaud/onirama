@@ -7,7 +7,12 @@
 			v-model="searchValue"
 			@input="onSearchChanged"
 		/>
-		<filter-list v-if="dreams" :data="dreams" />
+		<filter-list 
+			v-if="dreams" 
+			:data="dreams" 
+			:type="'search'"
+			:searchValue="searchValue"
+		/>
 	</div>
 </template>
 
