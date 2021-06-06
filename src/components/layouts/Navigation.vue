@@ -35,12 +35,12 @@
         <router-link :to="'/restitution'">
             <div class="restitution__item">
                 <div class="restitution__item__icon restitution__item__icon--write"></div>
-                <div>Ecrire manuellement</div>
+                <p>Ecrire manuellement</p>
             </div>
         </router-link>
         <div class="restitution__item">
             <div class="restitution__item__icon restitution__item__icon--micro"></div>
-            <div>Dicter le rêve</div>
+            <p>Dicter le rêve</p>
         </div>
     </div>
 </template>
@@ -117,30 +117,31 @@ export default {
     width: 100%;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
-    padding: 1.5rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    background: white;
+    background: $C-black;
 
     &__item {
-        color: black;
+        padding: 1rem 0;
+        color: $C-white;
         cursor: pointer;
         font-size: 1.5rem;
         text-align: center;
-        padding: 1rem;
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
+
         &:first-child {
-            border-bottom: solid thin lightgrey;
+            border-bottom: solid thin $C-extradark;
         }
+        
     &__icon {
 
         width: 2rem;
         height: 2rem;
-        background: black;
+        background: $C-white;
         margin-right: 1rem;
 
         &--scan {
