@@ -12,13 +12,22 @@
             <div class="list__item__container">
                 <div class="content">
                     <div class="content__header">
-                        <div v-html="formatText(dream._source.title, 'title')" class="content__header__title">
+                        <!-- title -->
+                        <div v-if="type === 'search'" v-html="formatHighlightedText(dream._source.title, 'title')" class="content__header__title">
                         </div>
+                        <div v-else class="content__header__title">
+                            {{ formatText(dream._source.title, 'title') }}
+                        </div>
+                        <!-- date -->
                         <div class="content__header__date">
                             {{ displayTimestamp(dream._source.date)}}
                         </div>
                     </div>
-                    <p class="content__text" v-html="formatText(dream._source.text, 'text')">
+                    <!-- text -->
+                    <p v-if="type === 'search'" class="content__text" v-html="formatHighlightedText(dream._source.text, 'text')">
+                    </p>
+                    <p v-else class="content__text">
+                        {{ formatText(dream._source.text, 'text') }}
                     </p>
                 </div>
                 <!-- <ul>
@@ -62,13 +71,23 @@ export default {
             this.windowWidth = window.innerWidth;
         },
         formatText(value, type) {
-            const count = this.getMaxCharToDisplay(value, type)
+            const count = this.getMaxCharToDisplay(type);
+            const length = value.length;
+            if(count <= length) {
+                return value.substring(0, count - 3) + '...';
+            }
+            else {
+                return value.substring(0, count);
+            }
+        },
+        formatHighlightedText(value, type) {
+            const count = this.getMaxCharToDisplay(type)
             return this.getHighlightedText(value, count, type);
         },
         getSubEmotion(typeId, valueId) {
             return getSubEmotion(typeId, valueId)
         },
-        getMaxCharToDisplay(value, type) {
+        getMaxCharToDisplay(type) {
             const DIVIDERS = { title: 17, text: 5 }
             const divider = DIVIDERS[type];
 
@@ -90,7 +109,7 @@ export default {
 
             //nothing found return
             if( start < 0) {
-                res = (strLength <= count) ? str.substring(0, count) : str.substring(0, count) + '...' ;
+                res = (strLength <= count) ? str.substring(0, count) : str.substring(0, count - 3) + '...' ;
             }
             else {
                 if(strLength <= count) {
@@ -99,13 +118,13 @@ export default {
                 else {
                     //mot au début
                     if(end <= count) {
-                        res = str.substring(0, start) + spanStart + str.substring(start, end) + spanEnd + str.substring(end, count) + '...';
+                        res = str.substring(0, start) + spanStart + str.substring(start, end) + spanEnd + str.substring(end, count - 3) + '...';
                     }
                     //mot à la fin
                     else {
                         //suffisament de caractères
                         if(start + count <= strLength) {
-                            res = spanStart + str.substring(start, end) + spanEnd + str.substring(end, start + count) + '...';
+                            res = spanStart + str.substring(start, end) + spanEnd + str.substring(end, start + count - 3) + '...';
                         }
                         //pas assez de caractères
                         else {
