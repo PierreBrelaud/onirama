@@ -1,5 +1,6 @@
 
 const initialState = {
+	type: null,
 	title: 'La noyade',
 	date: null,
 	text: '',

@@ -6,8 +6,12 @@
         <div class="restitution__content">
             <restitution-story v-if="current === 1"/>
             <restitution-labeling v-if="current === 2"/>
-            <restitution-survey v-if="current === 3" :survey="feelingData"/>
-            <restitution-survey  v-if="current === 4" :survey="wakeUpData"/>
+            <restitution-type 
+                v-if="current === 3"
+                @onDreamTypeClicked="onDreamTypeClicked"
+            />
+            <restitution-survey v-if="current === 5" :survey="feelingData"/>
+            <restitution-survey  v-if="current === 6" :survey="wakeUpData"/>
         </div>
         <div 
             class="restitution__footer" 
@@ -16,6 +20,10 @@
             <!-- previous button -->
             <button 
                 class="restitution__footer__button restitution__footer__button--previous" 
+                :class="{
+                    'restitution__footer__button--previousDark' : current > 2,
+                    'restitution__footer__button--previousLight' : current > 2,
+                }"
                 @click="previous" 
                 v-if="current > 1"
             >
@@ -24,8 +32,8 @@
             <!-- next button -->
             <button 
                 class="btn" 
-                @click="next" 
-                v-if="current < elementsCount"
+                @click="next"
+                v-if="current < elementsCount && current != 3"
             >
                 Suivant
             </button>
@@ -42,22 +50,31 @@
 </template>
 
 <script>
-import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vue'
-import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import RestitutionStory from '@/components/restitution/RestitutionStory.vue'
+import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vue'
+import RestitutionType from '@/components/restitution/RestitutionType.vue'
+import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import { feeling, wakeUp } from '@/utils/restitutionData.js'
 import DreamController from '@/firebase/db/DreamController.js'
 
 export default {
     data() {
         return {
-            elementsCount: 4,
-            current: 1,
+            elementsCount: 6,
+            current: 3,
             feelingData: feeling,
             wakeUpData: wakeUp
         }
     },
     methods: {
+        onDreamTypeClicked(id) {
+            //store dream type
+            let storeData = this.$store.getters['restitution/data'];
+            storeData.type = id
+		    this.$store.commit('restitution/setData', storeData)
+            //go to emotions
+            
+        },
         leave() {
             this.$router.push('/')
         },
@@ -79,7 +96,7 @@ export default {
             })
         }
     },
-    components: { RestitutionLabeling, RestitutionSurvey, RestitutionStory }
+    components: { RestitutionStory, RestitutionLabeling, RestitutionType, RestitutionSurvey }
 }
 </script>
 
@@ -139,6 +156,14 @@ export default {
                 font-weight: $FW-light;
                 font-size: 1.8rem;
                 border: none;
+            }
+
+            &--previousDark {
+                color: $C-extradark;
+            }
+
+            &--previousLight {
+                color: $C-white;
             }
 
             &--next, &--end {
