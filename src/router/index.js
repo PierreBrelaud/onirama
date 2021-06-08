@@ -29,9 +29,6 @@ const routes = [
 		path: "/visualisation",
 		name: "visualisation",
 		component: Visualisation,
-		meta:{
-		  requireAuth: true
-		}
 	},
 	{
 		path: "/restitution",
