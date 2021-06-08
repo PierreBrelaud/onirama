@@ -1,13 +1,13 @@
 .btn {
     background-color: $C-white;
     color: $C-extradark;
+    font-family: $F-bellota;
+    font-weight: $FW-light;
     border: none;
     outline: none;
     height: 45px;
     padding: 0 40px;
     border-radius: 30px;
     cursor: pointer;
-    font-family: $F-canela;
-    font-weight: $FW-light;
     font-size: 1.8rem;
 }

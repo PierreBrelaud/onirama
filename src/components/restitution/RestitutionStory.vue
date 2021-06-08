@@ -22,9 +22,11 @@
                 v-model="storeData.text"
                 class="story__content__text story__item"
             ></textarea> -->
-            <div contenteditable="true" id="paper"
+            <div
+                ref="text"
+                contenteditable="true" 
+                @input="updateTextValue"
                 class="story__content__text story__item">
-                I am trying to figure out how to add a border-bottom line for every row within a, however I am only able to get the very bottom row's border-bottom to do this.
             </div>
         </div>
     </div>
@@ -32,6 +34,14 @@
 
 <script>
 export default {
+    mounted() {
+        this.$refs.text.innerText = this.storeData.text;
+    },
+    methods: {
+        updateTextValue(ev) {
+            this.storeData.text = ev.target.innerText;
+        }
+    },
     watch: {
         storeData: {
             handler(value) {
@@ -88,9 +98,15 @@ export default {
         width: 100%;
         background-color: $C-wheat;
 
+        &__text, &__text > div {
+            color: $C-black;
+            font-family: $F-bellota;
+            font-weight: $FW-thin;
+            font-size: 1.9rem;
+        }
+
         &__text {
             resize: none;
-            font-size: 1.4rem;
             line-height: 2rem;
             width: 85%;
             height: 100%;
@@ -99,18 +115,14 @@ export default {
             border: none;
             border-radius: 0;
             background-color: $C-wheat;
-            color: $C-black;
-            font-family: $F-bellota;
-            font-weight: $FW-thin;
-            font-size: 1.6rem;
             padding: 0rem .5rem 2rem 0;
             box-sizing: border-box;
             outline: none;
-            background-size: 1px 2.2rem;
-            line-height: 2.2rem;
+            line-height: 3rem;
+            background-size: 1px 3rem;
             background-repeat: repeat;
-            background-position: 0 0;  
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 2.3rem'%3E%3Crect id='background' height='2.3rem' width='1' y='0' x='0' fill='none'/%3E %3Cline id='underline' y2='1rem' x2='0' y1='1rem' x1='1' stroke='%23001733' fill='none'/%3E %3C/svg%3E");
+            background-position: 0 2.1rem;  
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 3rem'%3E%3Crect id='background' height='0' width='1' y='0' x='0' fill='none'/%3E %3Cline id='underline' y2='1' x2='0' y1='1' x1='1' opacity='0.1' stroke='%23001733' fill='none'/%3E %3C/svg%3E");
         }
 
         &__item {

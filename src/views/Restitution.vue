@@ -93,29 +93,29 @@ export default {
     }
 
     &__header {
-        z-index: 2;
         top: 0;
-        height: 10%;
+        height: 8%;
         display: flex;
         align-items: center;
         font-size: 1.2rem;
 
         &__item {
             cursor: pointer;
+            font-family: $F-bellota;
             font-weight: $FW-bold;
+            font-size: 1.6rem;
             margin-left: auto;
             margin-right: 1rem;
         }
     }
     &__content { 
-        top: 10%;
-        height: 75%;
+        top: 8%;
+        height: calc(92% - 8rem);
         overflow-x: scroll;
     }
     &__footer {
-        z-index: 2;
         bottom: 0;
-        height: 15%;
+        height: 8rem;
         left: 0;
         display: flex;
         justify-content: center;
@@ -134,12 +134,15 @@ export default {
             cursor: pointer;
 
             &--previous {
-                color: grey;
+                color: $C-extradark;
+                font-family: $F-bellota;
+                font-weight: $FW-light;
+                font-size: 1.8rem;
                 border: none;
             }
 
             &--next, &--end {
-                color: black;
+                color: $C-dark;
                 border: solid .3rem black;
             }
         }

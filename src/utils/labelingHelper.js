@@ -12,6 +12,7 @@ export default class LabelingHelper {
 		person: { label: "person", canBeLabeled: true },
 		place: { label: "place", canBeLabeled: true },
 		emotion: { label: "emotion", canBeLabeled: true },
+		color: { label: "color", canBeLabeled: true },
 	}
 
 	_finalData = {
@@ -19,6 +20,7 @@ export default class LabelingHelper {
 		person: { label: "person", words: [], count: 0 },
 		place: { label: "place", words: [], count: 0 },
 		emotion: { label: "emotion", words: [], count: 0 },
+		color: { label: "color", words: [], count: 0 },
 	}
 
 	constructor() {
@@ -41,6 +43,7 @@ export default class LabelingHelper {
 			person: { label: "person", words: [], count: 0 },
 			place: { label: "place", words: [], count: 0 },
 			emotion: { label: "emotion", words: [], count: 0 },
+			color: { label: "color", words: [], count: 0 },
 		};
 
 		this._textLabeled.forEach(el => {
@@ -61,7 +64,7 @@ export default class LabelingHelper {
 	_onTextUpdated = () => {
 		if (!this._text) return
 		//split text
-		const splittedText = this._text.split(" ")
+		const splittedText = this._text.replace(/[\n\r]/g,' ').split(' ');
 
 		//store precious values & clear
 		this._previoustextLabeled = this._textLabeled
