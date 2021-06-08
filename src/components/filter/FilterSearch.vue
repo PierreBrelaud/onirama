@@ -1,12 +1,19 @@
 <template>
-	<h3>Search</h3>
-	<input
-		type="text"
-		placeholder="search"
-		v-model="searchValue"
-		@input="onSearchChanged"
-	/>
-	<filter-list v-if="dreams" :data="dreams" />
+	<div class="search">
+		<input
+			class="search__input input"
+			type="text"
+			placeholder="Recherche"
+			v-model="searchValue"
+			@input="onSearchChanged"
+		/>
+		<filter-list 
+			v-if="dreams" 
+			:data="dreams" 
+			:type="'search'"
+			:searchValue="searchValue"
+		/>
+	</div>
 </template>
 
 <script>
@@ -85,4 +92,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+	.search {
+	}
+</style>

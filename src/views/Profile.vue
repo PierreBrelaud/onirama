@@ -1,9 +1,11 @@
 <template>
-    <h1>Profile</h1>
-    <div v-if="user.data" class="infos">
-        <h3>Utilisateur : {{ user.data.email }}</h3>
-        <h3>UID : {{ user.data.uid }}</h3>
-        <button @click="logout">Logout</button>
+    <div class="appview">
+        <h1>Profile</h1>
+        <div v-if="user.data" class="infos">
+            <h3>Utilisateur : {{ user.data.email }}</h3>
+            <h3>UID : {{ user.data.uid }}</h3>
+            <button @click="logout">Logout</button>
+        </div>
     </div>
 </template>
 

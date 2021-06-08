@@ -1,5 +1,5 @@
 <template>
-    <div class="restitution">
+    <div class="restitution appview">
         <div class="restitution__header">
             <div class="restitution__header__item" @click="leave">Abandonner</div> 
         </div>
@@ -9,7 +9,10 @@
             <restitution-survey v-if="current === 3" :survey="feelingData"/>
             <restitution-survey  v-if="current === 4" :survey="wakeUpData"/>
         </div>
-        <div class="restitution__footer">
+        <div 
+            class="restitution__footer" 
+            :class="{ 'restitution__footer--labeling' : current === 1 || current === 2}"
+        >
             <!-- previous button -->
             <button 
                 class="restitution__footer__button restitution__footer__button--previous" 
@@ -20,7 +23,7 @@
             </button>
             <!-- next button -->
             <button 
-                class="restitution__footer__button restitution__footer__button--next" 
+                class="btn" 
                 @click="next" 
                 v-if="current < elementsCount"
             >
@@ -82,7 +85,6 @@ export default {
 
 <style lang="scss" scoped>
 .restitution {
-    background: white;
     overflow: hidden;
 
     &__header, &__content, &__footer {
@@ -91,33 +93,38 @@ export default {
     }
 
     &__header {
-        z-index: 2;
         top: 0;
-        height: 10%;
+        height: 8%;
         display: flex;
         align-items: center;
         font-size: 1.2rem;
 
         &__item {
             cursor: pointer;
+            font-family: $F-bellota;
             font-weight: $FW-bold;
+            font-size: 1.6rem;
             margin-left: auto;
             margin-right: 1rem;
         }
     }
     &__content { 
-        top: 10%;
-        height: 75%;
+        top: 8%;
+        height: calc(92% - 8rem);
         overflow-x: scroll;
     }
     &__footer {
-        z-index: 2;
         bottom: 0;
-        height: 15%;
+        height: 8rem;
         left: 0;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        &--labeling {
+            background-color: $C-wheat;
+        }
+
         &__button {
             font-size: 1.4rem;
             background: none;
@@ -127,12 +134,15 @@ export default {
             cursor: pointer;
 
             &--previous {
-                color: grey;
+                color: $C-extradark;
+                font-family: $F-bellota;
+                font-weight: $FW-light;
+                font-size: 1.8rem;
                 border: none;
             }
 
             &--next, &--end {
-                color: black;
+                color: $C-dark;
                 border: solid .3rem black;
             }
         }

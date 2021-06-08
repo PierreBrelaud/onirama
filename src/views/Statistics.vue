@@ -1,5 +1,7 @@
 <template>
-    <h1>Statistics</h1>
+    <div class="appview">
+        <h1>Statistics</h1>
+    </div>
 </template>
 
 <script>
