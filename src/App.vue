@@ -11,6 +11,11 @@ import auth from '@/firebase/auth'
 import { mapState } from 'vuex'
 
 export default {
+	data() {
+		return {
+			withoutNav: ['restitution', 'visualisation']
+		}
+	},
 	created() {
 		auth.onAuthChanged()
 	},
@@ -18,7 +23,7 @@ export default {
 		...mapState('loader', ['loading']),
 		...mapState('auth', ['user']),
 		isVisible() {
-			return this.$route.name !== 'restitution'
+			return !(this.withoutNav.indexOf(this.$route.name) > 0)
 		}
 	},
 	components: {
