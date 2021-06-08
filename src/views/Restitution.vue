@@ -10,6 +10,10 @@
                 v-if="current === 3"
                 @onDreamTypeClicked="onDreamTypeClicked"
             />
+            <restitution-emotion 
+                v-if="current === 4" 
+                :typeId="$store.getters['restitution/data'].type"
+            />
             <restitution-survey v-if="current === 5" :survey="feelingData"/>
             <restitution-survey  v-if="current === 6" :survey="wakeUpData"/>
         </div>
@@ -53,6 +57,7 @@
 import RestitutionStory from '@/components/restitution/RestitutionStory.vue'
 import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vue'
 import RestitutionType from '@/components/restitution/RestitutionType.vue'
+import RestitutionEmotion from '@/components/restitution/RestitutionEmotion.vue'
 import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import { feeling, wakeUp } from '@/utils/restitutionData.js'
 import DreamController from '@/firebase/db/DreamController.js'
@@ -73,7 +78,7 @@ export default {
             storeData.type = id
 		    this.$store.commit('restitution/setData', storeData)
             //go to emotions
-            
+            this.current = 4;
         },
         leave() {
             this.$router.push('/')
@@ -96,7 +101,7 @@ export default {
             })
         }
     },
-    components: { RestitutionStory, RestitutionLabeling, RestitutionType, RestitutionSurvey }
+    components: { RestitutionStory, RestitutionLabeling, RestitutionType, RestitutionEmotion, RestitutionSurvey }
 }
 </script>
 
