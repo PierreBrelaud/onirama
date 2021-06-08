@@ -31,10 +31,6 @@ export default {
 </script>
 
 <style lang='scss'>
-* {
-	font-family: $F-main;
-}
-
 .view {
 	height: calc(100vh - 8rem);
 	overflow-y: auto;
