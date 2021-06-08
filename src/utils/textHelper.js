@@ -7,6 +7,6 @@ const isSpecialChar = (char) => {
     return SPECIAL_CHAR.includes(char)
 }
 
-const SPECIAL_CHAR = '`!@#$%^&*()_+-=[]{};\\\'/:"|,.<>?~]'
+const SPECIAL_CHAR = '`!@#$%^&*()_+-=[]{};\\\'/:"|,.<>?~]«»'
 
 export { isSpecialChar }
