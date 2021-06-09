@@ -164,7 +164,6 @@ export default {
   position: relative;
   margin: auto;
 
-  background-color: black;
 
   &__circle {
     position: absolute;
