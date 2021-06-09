@@ -49,9 +49,9 @@
 						v-if="data.type === 'checkbox'"
 						class="block__checkbox"
 					>
-						<div class="block__checkbox__title block__title">
+						<h2 class="block__checkbox__title block__title">
 							{{ data.title }}
-						</div>
+						</h2>
 
 						<label class="block__checkbox__switch">
 							<input
@@ -78,6 +78,22 @@
 								{{ option.label }}
 							</option>
 						</select>
+					</div>
+					<!-- slider -->
+					<div v-if="data.type === 'slider'" class="block__slider">
+						<h2 class="block__slider__title block__title">
+							{{ data.title }}
+						</h2>
+						<input
+							class="block__slider__input"
+							v-model="storeData[data.id]"
+							type="range"
+							:min="data.min.value" :max="data.max.value" :step="data.step"
+						/>
+						<div class="block__slider__labels">
+							<label>{{ data.min.label }}</label>
+							<label>{{ data.max.label }}</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -207,10 +223,6 @@ export default {
 			&__input {
 				margin: auto;
 			}
-
-			&__label {
-				color: $C-extralight;
-			}
 		}
 	}
 }
@@ -270,6 +282,24 @@ export default {
 		}
 	}
 }
+.block__slider {
+	&__title {
+		margin-bottom: 1.5rem;
+	}
+
+	&__input {
+		width: 100%;
+		margin-bottom: 2rem;
+	}
+
+	&__labels {
+		margin-top: .4rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}
+
 
 .survey {
 	width: 90%;
