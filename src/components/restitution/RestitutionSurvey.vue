@@ -239,14 +239,13 @@ export default {
 		width: 5rem;
 		height: 3rem;
 
-		input:checked + span {
-			background-color: #888888;
-		}
-
 		input:checked + span:before {
 			-webkit-transform: translateX(2rem);
 			-ms-transform: translateX(2rem);
 			transform: translateX(2rem);
+			background-color: $C-white;
+			-webkit-box-shadow: 0px 0px 5px 0px $C-white; 
+			box-shadow: 0px 0px 5px 0px $C-white;
 		}
 
 		input {
@@ -262,7 +261,7 @@ export default {
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-color: #e5e5ea;
+			background-color: $C-extradark;
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 			border-radius: 2.2rem;
@@ -274,10 +273,10 @@ export default {
 				width: 2.6rem;
 				left: 0.2rem;
 				bottom: 0.2rem;
-				background-color: white;
 				-webkit-transition: 0.4s;
 				transition: 0.4s;
 				border-radius: 50%;
+				background-color: $C-light;
 			}
 		}
 	}
