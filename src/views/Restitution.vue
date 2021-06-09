@@ -11,8 +11,18 @@
                 @onDreamTypeClicked="onDreamTypeClicked"
             />
             <restitution-emotion v-if="current === 4" />
-            <restitution-survey v-if="current === 5" :survey="feelingData"/>
-            <restitution-survey  v-if="current === 6" :survey="wakeUpData"/>
+            <restitution-survey 
+                v-if="current === 5" 
+                :survey="feelingData"
+                :title="'Le souvenir du rêve'"
+                :count="3"
+            />
+            <restitution-survey  
+                v-if="current === 6" 
+                :survey="wakeUpData"
+                :title="'Au réveil'"
+                :count="4"
+            />
         </div>
         <div 
             class="restitution__footer" 
@@ -63,7 +73,7 @@ export default {
     data() {
         return {
             elementsCount: 6,
-            current: 4,
+            current: 5,
             feelingData: feeling,
             wakeUpData: wakeUp
         }
