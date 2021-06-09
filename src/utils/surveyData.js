@@ -1,10 +1,11 @@
 
 export const dreamTypes = [
-    { id: 0, value: 'nightmare', display: 'Cauchemar' },
-    { id: 1, value: 'bad', display: 'Mauvais rêve' },
-    { id: 2, value: 'erotic', display: 'Erotique' },
-    { id: 3, value: 'contemplative', display: 'Contemplatif' },
-    { id: 4, value: 'unclassifiable', display: 'Inclassifiable' },
+    { id: 0, value: 'nightmare', display: 'Cauchemar', description: 'Terrifiant, angoissant, réveil en sursaut' },
+    { id: 1, value: 'bad', display: 'Mauvais rêve', description: 'Tristesse, mélancolie et mauvais souvenir' },
+    { id: 2, value: 'erotic', display: 'Erotique', description: 'Fusionnel, exaltant et plus si affinité' },
+    { id: 3, value: 'contemplative', display: 'Contemplatif', description: 'Apaisant, créatif, joyeux ou nostalgique' },
+    { id: 4, value: 'daily', display: 'Vie quotidienne', description: 'Rêve qui semble encré dans la réalité' },
+    { id: 5, value: 'unclassifiable', display: 'Inclassifiable', description: 'Qui ne ressemble à aucun autre, rêve absurde' },
 ]
 
 export const dreamEmotions = [

@@ -6,8 +6,23 @@
         <div class="restitution__content">
             <restitution-story v-if="current === 1"/>
             <restitution-labeling v-if="current === 2"/>
-            <restitution-survey v-if="current === 3" :survey="feelingData"/>
-            <restitution-survey  v-if="current === 4" :survey="wakeUpData"/>
+            <restitution-type 
+                v-if="current === 3"
+                @onDreamTypeClicked="onDreamTypeClicked"
+            />
+            <restitution-emotion v-if="current === 4" />
+            <restitution-survey 
+                v-if="current === 5" 
+                :survey="memoryData"
+                :title="'Le souvenir du rêve'"
+                :count="3"
+            />
+            <restitution-survey  
+                v-if="current === 6" 
+                :survey="wakeUpData"
+                :title="'Au réveil'"
+                :count="4"
+            />
         </div>
         <div 
             class="restitution__footer" 
@@ -16,6 +31,10 @@
             <!-- previous button -->
             <button 
                 class="restitution__footer__button restitution__footer__button--previous" 
+                :class="{
+                    'restitution__footer__button--previousDark' : current > 2,
+                    'restitution__footer__button--previousLight' : current > 2,
+                }"
                 @click="previous" 
                 v-if="current > 1"
             >
@@ -24,14 +43,14 @@
             <!-- next button -->
             <button 
                 class="btn" 
-                @click="next" 
-                v-if="current < elementsCount"
+                @click="next"
+                v-if="current < elementsCount && current != 3"
             >
                 Suivant
             </button>
             <!-- end button -->
             <button 
-                class="restitution__footer__button restitution__footer__button--end" 
+                class="btn restitution__footer__button" 
                 @click="end"  
                 v-if="current >= elementsCount"
             >
@@ -42,23 +61,34 @@
 </template>
 
 <script>
-import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vue'
-import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import RestitutionStory from '@/components/restitution/RestitutionStory.vue'
-import { feeling, wakeUp } from '@/utils/restitutionData.js'
+import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vue'
+import RestitutionType from '@/components/restitution/RestitutionType.vue'
+import RestitutionEmotion from '@/components/restitution/RestitutionEmotion.vue'
+import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
+import { memory, wakeUp } from '@/utils/restitutionData.js'
 import DreamController from '@/firebase/db/DreamController.js'
 
 export default {
     data() {
         return {
-            elementsCount: 4,
+            elementsCount: 6,
             current: 1,
-            feelingData: feeling,
+            memoryData: memory,
             wakeUpData: wakeUp
         }
     },
     methods: {
+        onDreamTypeClicked(id) {
+            //store dream type
+            let storeData = this.$store.getters['restitution/data'];
+            storeData.type = id;
+		    this.$store.commit('restitution/setData', storeData)
+            //go to emotions
+            this.current = 4;
+        },
         leave() {
+		    this.$store.commit('restitution/resetData')
             this.$router.push('/')
         },
         previous() {
@@ -79,7 +109,7 @@ export default {
             })
         }
     },
-    components: { RestitutionLabeling, RestitutionSurvey, RestitutionStory }
+    components: { RestitutionStory, RestitutionLabeling, RestitutionType, RestitutionEmotion, RestitutionSurvey }
 }
 </script>
 
@@ -126,14 +156,12 @@ export default {
         }
 
         &__button {
-            font-size: 1.4rem;
-            background: none;
             margin: 0 1rem;
             width: 14rem;
-            height: 4rem;
             cursor: pointer;
 
             &--previous {
+                background: none;
                 color: $C-extradark;
                 font-family: $F-bellota;
                 font-weight: $FW-light;
@@ -141,9 +169,12 @@ export default {
                 border: none;
             }
 
-            &--next, &--end {
-                color: $C-dark;
-                border: solid .3rem black;
+            &--previousDark {
+                color: $C-extradark;
+            }
+
+            &--previousLight {
+                color: $C-white;
             }
         }
     }

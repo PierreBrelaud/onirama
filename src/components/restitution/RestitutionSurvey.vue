@@ -1,8 +1,10 @@
 <template>
 	<div class="survey__wrapper">
 		<div class="survey">
-			<div class="survey__title">
-				{{ survey.title }}
+			<!-- header -->
+			<div class="survey__header">
+				<h1>{{ title }}</h1>
+				<restitution-bullet :count="5" :active="count" />
 			</div>
 			<div class="survey__list">
 				<div
@@ -15,9 +17,9 @@
 						v-if="data.type === 'radio'"
 						class="block block__radio"
 					>
-						<div class="block__radio__title block__title">
+						<h2 class="block__radio__title block__title">
 							{{ data.title }}
-						</div>
+						</h2>
 						<div class="block__radio__items">
 							<div
 								class="radio"
@@ -36,9 +38,9 @@
 										class="radio__container__checkmark"
 									></span>
 								</label>
-								<div class="radio__label">
+								<label class="radio__label">
 									{{ radio.label }}
-								</div>
+								</label>
 							</div>
 						</div>
 					</div>
@@ -47,9 +49,9 @@
 						v-if="data.type === 'checkbox'"
 						class="block__checkbox"
 					>
-						<div class="block__checkbox__title block__title">
+						<h2 class="block__checkbox__title block__title">
 							{{ data.title }}
-						</div>
+						</h2>
 
 						<label class="block__checkbox__switch">
 							<input
@@ -77,6 +79,22 @@
 							</option>
 						</select>
 					</div>
+					<!-- slider -->
+					<div v-if="data.type === 'slider'" class="block__slider">
+						<h2 class="block__slider__title block__title">
+							{{ data.title }}
+						</h2>
+						<input
+							class="block__slider__input"
+							v-model.number="storeData[data.id]"
+							type="range"
+							:min="data.min.value" :max="data.max.value" :step="data.step"
+						/>
+						<div class="block__slider__labels">
+							<label>{{ data.min.label }}</label>
+							<label>{{ data.max.label }}</label>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -84,6 +102,8 @@
 </template>
 
 <script>
+import RestitutionBullet from "@/components/restitution/RestitutionBullet.vue";
+
 export default {
 	watch: {
 		storeData: {
@@ -94,6 +114,14 @@ export default {
 		}
 	},
 	props: {
+		title: {
+			type: String,
+			required: true,
+		},
+		count: {
+			type: Number,
+			required: true,
+		},
 		survey: {
 			type: Object,
 			required: true,
@@ -103,7 +131,8 @@ export default {
 		storeData() {
 			return this.$store.getters['restitution/data']
 		}
-	}
+	},	
+	components: { RestitutionBullet }
 };
 </script>
 
@@ -117,8 +146,8 @@ export default {
     height: 2.5rem;
     width: 2.5rem;
     margin: 0 auto .7rem auto;
-    background: white;
-    border: solid thin grey;
+    background: $C-dark;
+    border: solid thin $C-light;
     border-radius: 50%;
 
 	&__input {
@@ -127,7 +156,10 @@ export default {
 		cursor: pointer;
 
         &:checked ~ .radio__container__checkmark {
-            background-color: grey;
+            background-color: $C-white;
+			-webkit-box-shadow: 0px 0px 10px 0px $C-white; 
+			box-shadow: 0px 0px 10px 0px $C-white;
+
             &:after {
                 display: block;
             }
@@ -149,7 +181,6 @@ export default {
 
 .survey__wrapper {
 	min-height: 100%;
-	background: #f1f2f6;
 	width: 100%;
 }
 
@@ -192,10 +223,6 @@ export default {
 			&__input {
 				margin: auto;
 			}
-
-			&__label {
-				color: grey;
-			}
 		}
 	}
 }
@@ -212,14 +239,13 @@ export default {
 		width: 5rem;
 		height: 3rem;
 
-		input:checked + span {
-			background-color: #888888;
-		}
-
 		input:checked + span:before {
 			-webkit-transform: translateX(2rem);
 			-ms-transform: translateX(2rem);
 			transform: translateX(2rem);
+			background-color: $C-white;
+			-webkit-box-shadow: 0px 0px 5px 0px $C-white; 
+			box-shadow: 0px 0px 5px 0px $C-white;
 		}
 
 		input {
@@ -235,7 +261,7 @@ export default {
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-color: #e5e5ea;
+			background-color: $C-extradark;
 			-webkit-transition: 0.4s;
 			transition: 0.4s;
 			border-radius: 2.2rem;
@@ -247,14 +273,32 @@ export default {
 				width: 2.6rem;
 				left: 0.2rem;
 				bottom: 0.2rem;
-				background-color: white;
 				-webkit-transition: 0.4s;
 				transition: 0.4s;
 				border-radius: 50%;
+				background-color: $C-light;
 			}
 		}
 	}
 }
+.block__slider {
+	&__title {
+		margin-bottom: 1.5rem;
+	}
+
+	&__input {
+		width: 100%;
+		margin-bottom: 2rem;
+	}
+
+	&__labels {
+		margin-top: .4rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}
+
 
 .survey {
 	width: 90%;
@@ -263,9 +307,21 @@ export default {
 	padding-top: 2rem;
 	box-sizing: border-box;
 
-	&__title {
-		font-size: 1.6rem;
-		font-weight: $FW-bold;
+	&__header {
+		h1 {
+			text-align: center;
+			width: 80%;
+			margin: auto;
+			font-size: 3rem;
+		}
+
+		p {
+			width: 55%;
+			margin: -1rem auto 2rem auto;
+			text-align: center;
+			font-size: 1.4rem;
+			color: $C-extralight;
+		}
 	}
 
 	&__list {
@@ -275,7 +331,7 @@ export default {
 
 		&__block {
 			width: 100%;
-			background: white;
+			background: $C-dark;
 			border-radius: 0.8rem;
 			margin: 0.7rem 0;
 			padding: 1.6rem;
@@ -283,7 +339,7 @@ export default {
 
 			.block {
 				&__title {
-					font-size: 1.5rem;
+					font-size: 1.9rem;
 				}
 			}
 		}
