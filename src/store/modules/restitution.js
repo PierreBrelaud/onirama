@@ -1,9 +1,12 @@
 
 const initialState = {
-	type: null,
 	title: 'La noyade',
 	date: null,
 	text: '',
+	type: null,
+	emotions: [
+		{emotionId: 1, subEmotionId: 2}, {emotionId: 3, subEmotionId: 2}, {emotionId: 0, subEmotionId: 2}
+	],
 	feeling: -1,
 	memory: -1,
 	credibility: -1,
@@ -38,8 +41,8 @@ export const restitution = {
         },
 	},
 	mutations: {
-		resetState(state) {
-			state = { ...initialState }
+		resetData(state) {
+			state = initialState
 		},
 		setData(state, data) {
 			state = data

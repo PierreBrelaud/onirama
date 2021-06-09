@@ -10,10 +10,7 @@
                 v-if="current === 3"
                 @onDreamTypeClicked="onDreamTypeClicked"
             />
-            <restitution-emotion 
-                v-if="current === 4" 
-                :typeId="$store.getters['restitution/data'].type"
-            />
+            <restitution-emotion v-if="current === 4" />
             <restitution-survey v-if="current === 5" :survey="feelingData"/>
             <restitution-survey  v-if="current === 6" :survey="wakeUpData"/>
         </div>
@@ -66,7 +63,7 @@ export default {
     data() {
         return {
             elementsCount: 6,
-            current: 3,
+            current: 4,
             feelingData: feeling,
             wakeUpData: wakeUp
         }
@@ -81,6 +78,7 @@ export default {
             this.current = 4;
         },
         leave() {
+		    this.$store.commit('restitution/resetData')
             this.$router.push('/')
         },
         previous() {
