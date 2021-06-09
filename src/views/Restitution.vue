@@ -13,7 +13,7 @@
             <restitution-emotion v-if="current === 4" />
             <restitution-survey 
                 v-if="current === 5" 
-                :survey="feelingData"
+                :survey="memoryData"
                 :title="'Le souvenir du rêve'"
                 :count="3"
             />
@@ -50,7 +50,7 @@
             </button>
             <!-- end button -->
             <button 
-                class="restitution__footer__button restitution__footer__button--end" 
+                class="btn restitution__footer__button" 
                 @click="end"  
                 v-if="current >= elementsCount"
             >
@@ -66,15 +66,15 @@ import RestitutionLabeling from '@/components/restitution/RestitutionLabeling.vu
 import RestitutionType from '@/components/restitution/RestitutionType.vue'
 import RestitutionEmotion from '@/components/restitution/RestitutionEmotion.vue'
 import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
-import { feeling, wakeUp } from '@/utils/restitutionData.js'
+import { memory, wakeUp } from '@/utils/restitutionData.js'
 import DreamController from '@/firebase/db/DreamController.js'
 
 export default {
     data() {
         return {
             elementsCount: 6,
-            current: 5,
-            feelingData: feeling,
+            current: 1,
+            memoryData: memory,
             wakeUpData: wakeUp
         }
     },
@@ -82,7 +82,7 @@ export default {
         onDreamTypeClicked(id) {
             //store dream type
             let storeData = this.$store.getters['restitution/data'];
-            storeData.type = id
+            storeData.type = id;
 		    this.$store.commit('restitution/setData', storeData)
             //go to emotions
             this.current = 4;
@@ -156,14 +156,12 @@ export default {
         }
 
         &__button {
-            font-size: 1.4rem;
-            background: none;
             margin: 0 1rem;
             width: 14rem;
-            height: 4rem;
             cursor: pointer;
 
             &--previous {
+                background: none;
                 color: $C-extradark;
                 font-family: $F-bellota;
                 font-weight: $FW-light;
@@ -177,11 +175,6 @@ export default {
 
             &--previousLight {
                 color: $C-white;
-            }
-
-            &--next, &--end {
-                color: $C-dark;
-                border: solid .3rem black;
             }
         }
     }

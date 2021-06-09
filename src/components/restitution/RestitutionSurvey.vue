@@ -86,7 +86,7 @@
 						</h2>
 						<input
 							class="block__slider__input"
-							v-model="storeData[data.id]"
+							v-model.number="storeData[data.id]"
 							type="range"
 							:min="data.min.value" :max="data.max.value" :step="data.step"
 						/>

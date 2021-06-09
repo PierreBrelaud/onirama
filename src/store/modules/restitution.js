@@ -1,34 +1,18 @@
 
 const initialState = {
-	title: 'La noyade',
+	title: '',
 	date: null,
 	text: '',
 	type: null,
-	emotions: [
-		{emotionId: 1, subEmotionId: 2}, {emotionId: 3, subEmotionId: 2}, {emotionId: 0, subEmotionId: 2}
-	],
-	feeling: -1,
-	memory: -1,
-	credibility: -1,
+	emotions: [ {}, {}, {} ],
+	absurd: 0,
+	perception: 0,
 	lucidity: false,
 	recurrence: false,
-	perspective: -1,
+	impact: 0,
+	mood: 0,
 	sleep: -1,
-	mood: -1,
-	impact: -1
 };
-// title: 'Images de voyage',
-// date: '',
-// text: '',
-// feeling: -1,
-// memory: -1,
-// credibility: -1,
-// lucidity: false,
-// recurrence: false,
-// perspective: -1,
-// sleep: -1,
-// mood: -1,
-// impact: -1
 
 export const restitution = {
 	namespaced: true,
@@ -42,7 +26,7 @@ export const restitution = {
 	},
 	mutations: {
 		resetData(state) {
-			state = initialState
+			Object.assign(state, initialState)
 		},
 		setData(state, data) {
 			state = data
