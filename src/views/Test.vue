@@ -1,38 +1,23 @@
 <template>
-  <DreamTimer v-if="isLoadedData" :timeStamp="timeData" />
+  <three-test />
 </template>
 
 <script>
-import DreamTimer from '@/components/DreamTimer.vue'
-import { db } from '@/firebase/index.js';
-
+import ThreeTest from '@/components/test/ThreeTest.vue'
 export default {
-  data() {
-    return {
-      timeData: null,
-      isLoadedData: false,
+  methods: {
+    success(data) {
+      console.log(data)
+    },
+    error(error) {
+      console.log(error.message)
     }
   },
-    beforeCreate() {
-      db.collection('test').doc('test').get().then((res) => {
-        this.timeData = res.data().timestamp.toDate();
-        this.isLoadedData = true
-      }).catch((err) => console.log(err))
-    },
-    methods: {
-        success(data) {
-            console.log(data)
-        },
-        error(error) {
-            console.log(error.message)
-        }
-    },
-    components: {
-      DreamTimer,
-    },
+  components: {
+    ThreeTest,
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
