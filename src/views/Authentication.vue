@@ -1,41 +1,43 @@
 <template>
     <!-- register -->
-    <div v-if="state === 'register'" class="register">
-        <h1>Créer un compte</h1>
-        <input type="text" placeholder="Email" v-model="register.email" />
-        <input
-            type="password"
-            placeholder="Mot de passe"
-            v-model="register.password"
-        />
-        <p class="form-error" v-if="register.error">{{ register.error }}</p>
-        <button @click="onRegister">Valider</button>
-        <p>Déjà un compte ?</p>
-        <button @click="setState('login')">Se connecter</button>
-    </div>
-    <!-- login -->
-    <div v-if="state === 'login'" class="login">
-        <h1>Connexion</h1>
-        <input type="text" placeholder="Email" v-model="login.email" />
-        <input
-            type="password"
-            placeholder="Mot de passe"
-            v-model="login.password"
-        />
-        <p class="form-error" v-if="login.error">{{ login.error }}</p>
-        <button @click="onLogin">Valider</button>
-        <p>Vous n'avez pas de compte ?</p>
-        <button @click="setState('register')">Créer un compte</button>
-        <button @click="setState('reset')">Mot de passe oublié ?</button>
-    </div>
-    <!-- reset password -->
-    <div v-if="state === 'reset'" class="reset">
-        <h1>Mot de passe oublié</h1>
-        <input type="text" placeholder="Email" v-model="reset.email" />
-        <p class="form-error" v-if="reset.error">{{ reset.error }}</p>
-        <button @click="onReset">Réinitialiser le mot de passe</button>
-        <p>Vérifiez votre adresse mail</p>
-        <button @click="setState('login')">Retour</button>
+    <div class="appview">
+        <div v-if="state === 'register'" class="register">
+            <h1>Créer un compte</h1>
+            <input type="text" placeholder="Email" v-model="register.email" />
+            <input
+                type="password"
+                placeholder="Mot de passe"
+                v-model="register.password"
+            />
+            <p class="form-error" v-if="register.error">{{ register.error }}</p>
+            <button @click="onRegister">Valider</button>
+            <p>Déjà un compte ?</p>
+            <button @click="setState('login')">Se connecter</button>
+        </div>
+        <!-- login -->
+        <div v-if="state === 'login'" class="login">
+            <h1>Connexion</h1>
+            <input type="text" placeholder="Email" v-model="login.email" />
+            <input
+                type="password"
+                placeholder="Mot de passe"
+                v-model="login.password"
+            />
+            <p class="form-error" v-if="login.error">{{ login.error }}</p>
+            <button @click="onLogin">Valider</button>
+            <p>Vous n'avez pas de compte ?</p>
+            <button @click="setState('register')">Créer un compte</button>
+            <button @click="setState('reset')">Mot de passe oublié ?</button>
+        </div>
+        <!-- reset password -->
+        <div v-if="state === 'reset'" class="reset">
+            <h1>Mot de passe oublié</h1>
+            <input type="text" placeholder="Email" v-model="reset.email" />
+            <p class="form-error" v-if="reset.error">{{ reset.error }}</p>
+            <button @click="onReset">Réinitialiser le mot de passe</button>
+            <p>Vérifiez votre adresse mail</p>
+            <button @click="setState('login')">Retour</button>
+        </div>
     </div>
 </template>
 

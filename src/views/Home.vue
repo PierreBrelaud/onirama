@@ -1,23 +1,7 @@
 <template>
-    <div class="home">
+    <div class="home appview">
         
     </div>
-    <!-- <h1>Home</h1>
-
-    <div class="home__buttons">
-        <base-home-button
-            :icon="'1'" 
-            :action="btn1Clicked"
-        />
-        <base-home-button
-            :icon="'2'" 
-            :action="btn2Clicked"
-        />
-        <base-home-button
-            :icon="'3'" 
-            :action="btn3Clicked"
-        />
-    </div> -->
 </template>
 
 <script>
@@ -53,7 +37,6 @@ export default {
     -o-background-size: cover;
     background-size: cover;
     width: 100%;
-    height: calc(100vh - 8rem);
 }
 .home__buttons {
     display: flex;

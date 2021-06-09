@@ -4,6 +4,9 @@
 @import "mixins/breakpoints";
 @import "fonts";
 
+// ------------------------------------------------------------------ Components
+@import "components/_components-dir";
+
 // ------------------------------------------------------------------ Main
 @import "globals";
 

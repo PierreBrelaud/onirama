@@ -8,7 +8,6 @@ import * as dat from "dat.gui";
 import { OrbitControls } from "@three-ts/orbit-controls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
-import Dream from "../core/visualisation/Dream.js";
 import Crystal from "../core/visualisation/Crystal.js";
 import Background from "../core/visualisation/Background.js";
 import Floor from "../core/visualisation/Floor.js";
@@ -28,7 +27,7 @@ export default {
       const height = window.innerHeight;
 
       this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-      this.camera.position.z = 10;
+      this.camera.position.z = 4;
 
       this.controls = new OrbitControls(this.camera, this.canvas);
 
@@ -89,7 +88,7 @@ export default {
       this.stats.end();
     },
     createPortal() {
-      const planeGeo = new THREE.PlaneGeometry(4, 6.5);
+      const planeGeo = new THREE.PlaneGeometry(0.6, 1.2);
       const planeMat = new THREE.MeshBasicMaterial();
       const planeMesh = new THREE.Mesh(planeGeo, planeMat);
       planeMesh.position.z = 1.8;
@@ -120,8 +119,8 @@ export default {
       const depth = bbox.max.y - bbox.min.y;
       const width = bbox.max.x - bbox.min.x;
       flGp.position.x = -(width / 2) + 0.2;
-      flGp.position.z = -depth + 0.2;
-      flGp.position.y = -5;
+      flGp.position.z = 0;
+      flGp.position.y = -2;
       this.dreamScene.add(flGp);
       floor.animateFloor();
 

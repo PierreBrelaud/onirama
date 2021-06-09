@@ -1,7 +1,24 @@
 // Couleurs
+$C-black:  #131627;
+$C-extradark: #122131;
+$C-dark: #2A3745;
+$C-regular: #4D5864;
+$C-light: #889098;
+$C-extralight: #C4C7CB;
+$C-wheat: #F7F5EE;
+$C-white: #FFFFFF;
+
+//Labeling colors
+$C-action: #FFCEAA;
+$C-person: #A9BBCE;
+$C-place: #EFE6B6;
+$C-emotion: #EBD2DA;
+$C-color: #AED3D3;
+
 
 // les différents fonts utilisées
 $F-canela: "Canela", sans-serif;
+$F-bellota: 'Bellota Text', cursive;
 $F-main: $F-canela;
 
 // Font weight
@@ -17,5 +34,3 @@ $FW-black: 900;
 // Goutierre
 $G-side: 4rem;
 $G-side-phablet: 3rem;
-
-// z-index
