@@ -34,6 +34,16 @@
 
 <script>
 export default {
+    beforeMount() {
+        const today = new Date()
+        const localDateString = today.toLocaleString().substring(0, 10)
+        const todayFormattedDate = 
+            localDateString.substring(6, 10) + '-' + 
+            localDateString.substring(3, 5) + '-' + 
+            localDateString.substring(0, 2)
+
+        this.storeData.date = todayFormattedDate;
+    },
     mounted() {
         this.$refs.text.innerText = this.storeData.text;
     },
