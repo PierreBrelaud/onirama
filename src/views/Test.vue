@@ -1,9 +1,12 @@
 <template>
-    <three-test />
+  <DreamTimer :startDay="'2021-06-08'"
+              :startDate="'23:00:00'"
+              :endDay="'2021-06-09'"
+              :endDate="'02:59:40'" />
 </template>
 
 <script>
-import ThreeTest from '@/components/test/ThreeTest.vue'
+import DreamTimer from '@/components/DreamTimer.vue'
 
 export default {
     methods: {
@@ -15,7 +18,7 @@ export default {
         }
     },
     components: {
-        ThreeTest,
+      DreamTimer,
     },
 }
 </script>
