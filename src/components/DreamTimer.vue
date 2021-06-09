@@ -1,21 +1,21 @@
 <template>
   <div class="dreamTimer">
     <div class="dreamTimer__circle">
-      <svg class="dreamTimer__circle__empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-        <circle r="400" fill="none" cx="500" cy="500" stroke="white" stroke-width="50"/>
+      <svg class="dreamTimer__circle__empty" width="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"  overflow="visible">
+        <circle r="45%" fill="none" cx="500" cy="500" stroke="white" stroke-width="50"/>
       </svg>
     </div>
     <div class="dreamTimer__circle">
-      <svg class="dreamTimer__circle__fill" ref="svgCircle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-        <circle r="400"  ref="circleFill" fill="none" cx="500" cy="500" stroke="white" stroke-width="50"/>
+      <svg class="dreamTimer__circle__fill" width="100%" ref="svgCircle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"  overflow="visible">
+        <circle r="45%"  ref="circleFill" fill="none" cx="500" cy="500" stroke="white" stroke-width="50"/>
       </svg>
     </div>
     <div class="dreamTimer__container">
       <div class="dreamTimer__container__title">
-        Visualisation disponible dans
+        Visualisation <br/> disponible dans
       </div>
       <div class="dreamTimer__container__timer">
-        {{diffDate}}
+        {{dateLabel}}
       </div>
     </div>
   </div>
@@ -24,76 +24,42 @@
 <script>
 import gsap from 'gsap'
 import DrawSVGPlugin from '@/utils/DrawSVGPlugin'
+import { timeDiffCalc, dhmsToSeconds, formatDateAsString } from '@/utils/dateHelper.js'
 
 export default {
   props: {
-    startDay: {
-      type: String,
-      required: true,
+    timeStamp: {
+      type: Date,
+      required: true
     },
-    endDay: {
-      type: String,
-      required: true,
-    },
-    startDate: {
-      type: String,
-      required: true,
-    },
-    endDate: {
-      type: String,
-      required: true,
-    }
   },
   data() {
     return {
-      diffDate: '00:00:00',
+      dateLabel: '00:00:00',
       circleFill: null,
       secondLeft: null,
       maxSecond: null,
-      counterInterval: null
+      counterInterval: null,
+      endInHours: 4
     }
   },
   methods: {
-    timeDiffCalc(dateFuture, dateNow) {
-      function z(n){return (n<10?'0':'') + n;}
-      let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-      // calculate days
-      let days = Math.floor(diffInMilliSeconds / 86400);
-      diffInMilliSeconds -= days * 86400;
-
-      // calculate hours
-      let hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-      diffInMilliSeconds -= hours * 3600;
-      // calculate minutes
-      let minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-      diffInMilliSeconds -= minutes * 60;
-
-      let seconds = diffInMilliSeconds
-
-      return days  + ':' + z(hours) + ':' + z(minutes) + ':' + z(seconds);
-    },
-    dhmsToSeconds(s) {
-      let b = s.split(':');
-      return b[0]*86400 + b[1]*3600 + b[2]*60 + (+b[3] || 0);
-    },
     counterAnimation() {
       this.$data.counterInterval = setInterval(this.intervalAnimation, 1000)
     },
     intervalAnimation() {
 
-      let days        = Math.floor( this.$data.maxSecond/24/60/60);
-      let hoursLeft   = Math.floor(( this.$data.maxSecond) - (days*86400));
+      let days        = Math.floor( this.$data.secondLeft/24/60/60);
+      let hoursLeft   = Math.floor(( this.$data.secondLeft) - (days*86400));
       let hours       = Math.floor(hoursLeft/3600);
       let minutesLeft = Math.floor((hoursLeft) - (hours*3600));
       let minutes     = Math.floor(minutesLeft/60);
-      let remainingSeconds =  this.$data.maxSecond % 60
+      let remainingSeconds =  this.$data.secondLeft % 60
       function pad(n) {
         return (n < 10 ? "0" + n : n);
       }
-      this.$data.diffDate = pad(hours) + ":" + pad(minutes) + ":" + pad(remainingSeconds)
+      this.$data.dateLabel = pad(hours) + ":" + pad(minutes) + ":" + pad(remainingSeconds)
       if ( this.$data.secondLeft !== 0) {
-        this.$data.maxSecond--
         this.$data.secondLeft--;
         let progressValue =  (100 * this.$data.secondLeft) / this.$data.maxSecond
         gsap.to(this.$data.circleFill, {
@@ -124,30 +90,34 @@ export default {
         + dateNow.getMinutes() + ':'
         + dateNow.getSeconds()
 
-    let timeStart = new Date(this.$props.startDay+ ' ' + this.$props.startDate)
-    let timeEnd = new Date(this.$props.endDay+ ' ' + this.$props.endDate)
+    let timeStart = this.$props.timeStamp
+    let timeEnd = new Date(timeStart);
+
+    timeEnd.setHours(timeEnd.getHours() + this.$data.endInHours);
+
     let currentDate = new Date(stringCurrentDate)
 
     console.log(timeEnd - currentDate)
     if(Math.sign(currentDate - timeEnd) < 0) {
-      let diffDateStart = this.timeDiffCalc(timeStart, timeEnd)
-      let diffDateFromNow =  this.timeDiffCalc(currentDate, timeEnd)
-      this.$data.diffDate =  '00:00:00'
 
-      let crossProduct = (100 * this.dhmsToSeconds(diffDateFromNow))/ this.dhmsToSeconds(diffDateStart)
+      let diffDateStart =  formatDateAsString(timeDiffCalc(timeStart, timeEnd), true)
+      let diffDateFromNow = formatDateAsString(timeDiffCalc(currentDate, timeEnd), true)
+      this.$data.dateLabel =  '00:00:00'
+
+      let crossProduct = (100 * dhmsToSeconds(diffDateFromNow))/ dhmsToSeconds(diffDateStart)
 
       gsap.to(this.$data.circleFill, {
         drawSVG: 100 - Math.round(crossProduct)+"%",
         duration: 1.5,
       })
 
-      this.$data.secondLeft = this.dhmsToSeconds(diffDateFromNow)
-      this.$data.maxSecond = this.dhmsToSeconds(diffDateStart)
+      this.$data.secondLeft = dhmsToSeconds(diffDateFromNow)
+      this.$data.maxSecond = dhmsToSeconds(diffDateStart)
 
       this.counterAnimation()
 
     } else {
-      this.$data.diffDate = '00:00:00'
+      this.$data.dateLabel = '00:00:00'
       gsap.set(this.$data.circleFill, {drawSVG: "100%"})
     }
 
@@ -158,11 +128,10 @@ export default {
 <style lang="scss" scoped>
 
 .dreamTimer {
-  padding: 3rem;
-  width: 15rem;
-  height: 15rem;
+  width: 100%;
+  height: 100%;
   position: relative;
-  margin: auto;
+  font-family: $F-canela;
 
 
   &__circle {
@@ -170,16 +139,19 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
+    width: 100%;
 
     &__fill {
-      width: 25rem;
+      width: 100%;
       circle {
+        width: 100%;
         stroke-dasharray: 0, 999999px;
       }
     }
     &__empty {
-      width: 25rem;
+      width: 100%;
       circle {
+        width: 100%;
         stroke-opacity: 0.5;
 
       }

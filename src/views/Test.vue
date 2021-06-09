@@ -1,14 +1,24 @@
 <template>
-  <DreamTimer :startDay="'2021-06-08'"
-              :startDate="'23:00:00'"
-              :endDay="'2021-06-09'"
-              :endDate="'02:59:40'" />
+  <DreamTimer v-if="isLoadedData" :timeStamp="timeData" />
 </template>
 
 <script>
 import DreamTimer from '@/components/DreamTimer.vue'
+import { db } from '@/firebase/index.js';
 
 export default {
+  data() {
+    return {
+      timeData: null,
+      isLoadedData: false,
+    }
+  },
+    beforeCreate() {
+      db.collection('test').doc('test').get().then((res) => {
+        this.timeData = res.data().timestamp.toDate();
+        this.isLoadedData = true
+      }).catch((err) => console.log(err))
+    },
     methods: {
         success(data) {
             console.log(data)
