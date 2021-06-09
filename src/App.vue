@@ -1,6 +1,8 @@
 <template>
 	<global-loader v-if="loading" />
-	<div class="view">
+	<div 
+		class="view"
+		:class="{ 'view--full': !isVisible }">
 		<router-view></router-view>
 	</div>
 	<navigation v-if="isVisible"/>
@@ -15,7 +17,7 @@ import { mapState } from 'vuex'
 export default {
 	data() {
 		return {
-			withoutNav: ['restitution', 'visualisation']
+			withoutNav: ['restitution', 'visualisation', 'authentification']
 		}
 	},
 	created() {
@@ -25,7 +27,7 @@ export default {
 		...mapState('loader', ['loading']),
 		...mapState('auth', ['user']),
 		isVisible() {
-			return !(this.withoutNav.indexOf(this.$route.name) > 0)
+			return !this.withoutNav.includes(this.$route.name)
 		}
 	},
 	components: {
@@ -41,5 +43,10 @@ export default {
 	overflow-y: auto;
 	overflow-x: hidden;
 	margin-bottom: 8rem;
+
+	&--full {
+		height: 100vh;
+		margin-bottom: 0;
+	}
 }
 </style>
