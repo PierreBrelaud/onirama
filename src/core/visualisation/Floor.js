@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export default class Floor {
     constructor(params){
@@ -13,12 +14,13 @@ export default class Floor {
             cyParams: {
                 rdTop: 0.08,
                 rdBottom: 0.08,
-                height: 2,
+                height: 1,
                 rdSeg: 6
             }
         }
     }
-    createFloor() {
+    createFloor(pillarModel) {
+        /*
         const tileGeo = new THREE.CylinderGeometry(
             this.params.cyParams.rdTop,
             this.params.cyParams.rdBottom,
@@ -28,13 +30,13 @@ export default class Floor {
         );
         const tileMat = new THREE.MeshLambertMaterial({
             emissive: 0x444444,
-        });
+        });*/
         
         const radius = this.params.cyParams.rdTop * Math.cos(Math.PI/this.params.cyParams.rdSeg);
         let y = 0;
         for (let i = 0; i < radius * 2 * this.params.width - radius * 2; i += radius * 2) {
             for (let j = 0; j < this.params.height; j++) {
-                const tile = new THREE.Mesh(tileGeo, tileMat);
+                const tile = pillarModel.clone();
                 tile.position.x = j%2 === 0 ? i : i + radius;
                 tile.position.z = y;
                 const height = this.params.cyParams.height

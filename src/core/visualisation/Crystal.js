@@ -1,22 +1,25 @@
 import * as THREE from 'three';
+import { degreeToRad, drawPoint } from '@/utils/threejsUtils';
+import gsap from 'gsap';
 
 export default class Crystal {
     constructor(params){
         this.params = params ? params : this.getDefaultParams();
+        this.crystalGroup = new THREE.Group();
     }
     getDefaultParams() {
         return {
             nbFace: 8,
-            topSpikeHeight: 0.2,
-            bottomSpikeHeight: -0.2,
+            topSpikeHeight: 0.1,
+            bottomSpikeHeight: -0.1,
             angleTop: 90,
             angleLittleTop: 90,
             angleBottom: 90,
             angleLittleBottom: 90,
             crystalHeight: 0.4,
-            crystalWidth: 0.1,
-            spikeWidth: 0.02,
-            color: '#FFCCCC',
+            crystalWidth: 0.08,
+            spikeWidth: 0.01,
+            color: '#FF0000',
             emissive: '#FF0000',
             opacity: 0.8,
         }
@@ -46,30 +49,43 @@ export default class Crystal {
         );
         crystalGeo.computeVertexNormals();
         
+        /*
+        const textureCube = new THREE.CubeTextureLoader()
+        .setPath( '../../src/assets/textures/cubemap/Park/' )
+        .load( [
+            'px.png',
+            'nx.png',
+            'py.png',
+            'ny.png',
+            'pz.png',
+            'nz.png'
+        ] );
+        textureCube.mapping = THREE.CubeRefractionMapping;*/
 
         let crystalMat = new THREE.MeshStandardMaterial({
-            color: this.params.color,
-            emissive: this.params.emissive,
-            roughness: 0.5, 
-            metalness: 0.5,
+            color: 0xFFADAD,
+            emissive: 0xFF0000,
+            emissiveIntensity: 0.4,
+            roughness: 0.4, 
+            //metalness: 0.5,
             side: THREE.DoubleSide, 
             transparent: true,
-            opacity: this.params.opacity,
+            opacity: 0.95,
         })
-        //crystalMat = new THREE.MeshNormalMaterial();
 
         const crystal = new THREE.Mesh(crystalGeo, crystalMat);
         crystal.name = "crystal";
         crystal.position.y = - this.params.crystalHeight/2;
-        crystal.rotation.y = Math.PI / 2;
-        crystal.castShadow = true;
+        crystal.rotation.z += degreeToRad(10);
         
         const edgeGeo = new THREE.EdgesGeometry( crystal.geometry );
-        const edgeMat = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.6, transparent: true } );
+        const edgeMat = new THREE.LineBasicMaterial( { color: 0xFF5C5C, opacity: 0.6, transparent: true } );
         const edgeWireframe = new THREE.LineSegments( edgeGeo, edgeMat );
         crystal.add(edgeWireframe);
 
-        return crystal;
+        this.crystalGroup.add(crystal)
+
+        return this.crystalGroup;
     }
     createGuideline(width, angle, height = 0) {
         const geometry = new THREE.CircleGeometry(width, this.params.nbFace);
@@ -160,6 +176,14 @@ export default class Crystal {
                 bottom[i + 1].x, bottom[i + 1].y, bottom[i + 1].z,
             );
         }
+    }
+    animateCrystal(){
+        const tl = gsap.timeline({repeat: -1, repeatDelay: 0});
+        tl.to(this.crystalGroup.rotation, {
+            duration: 15,
+            ease:'none',
+            y: `${degreeToRad(360)}`
+        })
     }
     initGui(gui) {
         const evt = new Event("crystalChanged");

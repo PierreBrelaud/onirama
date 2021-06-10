@@ -1,24 +1,38 @@
 import * as THREE from 'three';
 import vertexShader from '../../assets/shaders/fbm/vertex.glsl';
 import fragmentShader from '../../assets/shaders/fbm/fragment.glsl'; 
+import { PointLight } from 'three';
 
 export default class Background {
-    constructor(width = 1.0, height = 1.0, params){
+    /**
+     * 
+     * @param {Number} width 
+     * @param {Number} height 
+     * @param {Number} posX 
+     * @param {Object} params 
+     * @constructor
+     */
+    constructor(width = 1.0, height = 1.0, posX, params){
         this.width = width;
         this.height = height;
+        this.posX = posX
         this.params = params ? params : this.getDefaultParams();
     }
     getDefaultParams() {
         return {
-            color1: [0, 0, 255],
-            color2: [255, 0, 0],
-            cl1Prop: 0.,
-            cl2Prop: 1.,
-            zoom: this.width,
+            color1: [248, 186, 43],
+            color2: [255, 238, 0],
+            color3: [246, 150, 37],
+            cl1Prop: 0.35,
+            cl2Prop: 0.4,
+            cl3Prop: 0.9,
+            zoom: this.width * 3,
             speed: 1.,
         }
     }
     createBackground() {
+        const background = new THREE.Group();
+
         const geometry = new THREE.PlaneGeometry(
             this.width,
             this.height,
@@ -38,13 +52,20 @@ export default class Background {
                 },
                 uColor1: {value: this.params.color1},
                 uColor2: {value: this.params.color2},
+                uColor3: {value: this.params.color3},
                 uCl1Prop: {value: this.params.cl1Prop},
                 uCl2Prop: {value: this.params.cl2Prop},
+                uCl3Prop: {value: this.params.cl3Prop},
                 uZoom: {value: this.params.zoom},
                 uSpeed: {value: this.params.speed},
+                uPosX: {value: this.posX}
             }
         })
-        return new THREE.Mesh(geometry, material);
+        const bgMesh = new THREE.Mesh(geometry, material);
+        bgMesh.name = "background";
+        background.add(bgMesh);
+
+        return background;
     }
     initGui(gui, material) {
         const bgFolder = gui.addFolder("Background");

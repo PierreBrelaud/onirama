@@ -10,39 +10,39 @@ export const dreamTypes = [
 
 export const dreamEmotions = [
     { id: 0, value: 'fear', display: 'Peur', data: [
-        { id: 0, value: 'anguish', display: 'Angoissé' },
-        { id: 1, value: 'scared', display: 'Effrayé' },
-        { id: 2, value: 'terrified', display: 'Craintif' },
-        { id: 3, value: 'fearful', display: 'Terrifié' },
+        { id: 0, value: 'anguish', display: 'Angoissé', color: '#5E9EA4' },
+        { id: 1, value: 'scared', display: 'Effrayé', color: '#0F749A' },
+        { id: 2, value: 'terrified', display: 'Craintif', color: '#033257' },
+        { id: 3, value: 'fearful', display: 'Terrifié', color: '#BAC39B' },
     ]},
     { id: 1, value: 'anger', display: 'Colère', data: [
-        { id: 0, value: 'annoyed', display: 'Agacé' },
-        { id: 1, value: 'aggressive', display: 'Agressif' },
-        { id: 2, value: 'exasperated', display: 'Exaspéré' },
-        { id: 3, value: 'furious', display: 'Furieux' },
+        { id: 0, value: 'annoyed', display: 'Agacé', color: '#FFC6C6' },
+        { id: 1, value: 'aggressive', display: 'Agressif', color: '#C93737' },
+        { id: 2, value: 'exasperated', display: 'Exaspéré', color: '#FF7B7B' },
+        { id: 3, value: 'furious', display: 'Furieux', color: '#FF0000' },
     ]},
     { id: 2, value: 'surprise', display: 'Surprise', data: [
-        { id: 0, value: 'shocked', display: 'Choqué' },
-        { id: 1, value: 'perplexed', display: 'Perplexe' },
-        { id: 2, value: 'amazed', display: 'Emerveillé' },
-        { id: 3, value: 'astonished', display: 'Etonné' },
+        { id: 0, value: 'shocked', display: 'Choqué', color: '#FFFFFF' },
+        { id: 1, value: 'perplexed', display: 'Perplexe', color: '#FFFFFF' },
+        { id: 2, value: 'amazed', display: 'Emerveillé', color: '#FFEE00' },
+        { id: 3, value: 'astonished', display: 'Etonné', color: '#FFFFFF' },
     ]},
     { id: 3, value: 'disgust', display: 'Dégout', data: [
-        { id: 0, value: 'judged', display: 'Jugé' },
-        { id: 1, value: 'ashamed', display: 'Honteux' },
-        { id: 2, value: 'disgusted', display: 'Dégouté' },
+        { id: 0, value: 'judged', display: 'Jugé', color: '#C4E67E' },
+        { id: 1, value: 'ashamed', display: 'Honteux', color: '#CDB95C' },
+        { id: 2, value: 'disgusted', display: 'Dégouté', color: '#8FA554' },
     ]},
     { id: 4, value: 'sadness', display: 'Tristesse', data: [
-        { id: 0, value: 'grieved', display: 'Chagriné' },
-        { id: 1, value: 'disappointed', display: 'Déçu' },
-        { id: 2, value: 'depressed', display: 'Déprimé' },
-        { id: 3, value: 'desperate', display: 'Désespéré' },
+        { id: 0, value: 'grieved', display: 'Chagriné', color: '#C5EBD3' },
+        { id: 1, value: 'disappointed', display: 'Déçu', color: '#ACD6BC' },
+        { id: 2, value: 'depressed', display: 'Déprimé', color: '#9FACE3' },
+        { id: 3, value: 'desperate', display: 'Désespéré', color: '#393F70' },
     ]},
     { id: 5, value: 'joy', display: 'Joie', data: [
-        { id: 0, value: 'joyful', display: 'Joyeux' },
-        { id: 1, value: 'excited', display: 'Excité' },
-        { id: 2, value: 'lover', display: 'Amoureux' },
-        { id: 3, value: 'euphoric', display: 'Euphorique' },
+        { id: 0, value: 'joyful', display: 'Joyeux', color: '#F8BA2B' },
+        { id: 1, value: 'excited', display: 'Excité', color: '#C903AA' },
+        { id: 2, value: 'lover', display: 'Amoureux', color: '#FC3E44' },
+        { id: 3, value: 'euphoric', display: 'Euphorique', color: '#F69625' },
     ]},
 ]
 
@@ -76,4 +76,8 @@ export const getEmotion = (emotionId) => {
 
 export const getSubEmotion = (emotionId, subEmotionId) => {
     return dreamEmotions[emotionId].data[subEmotionId];
-} 
+}
+
+export const getColorBySubEmotion = (emotionId, subEmotionId) => {
+    return dreamEmotions[emotionId].data[subEmotionId].color;
+}
