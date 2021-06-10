@@ -6,17 +6,18 @@ import Background from "@/core/visualisation/Background";
 import Floor from "@/core/visualisation/Floor";
 import Crystal from "@/core/visualisation/Crystal";
 import { drawPoint, degreeToRad } from '../../utils/threejsUtils';
+import {getColorBySubEmotion} from "@/utils/surveyData"
 
 
 export default class Dream {
     /**
-     * @param {Number} position 
-     * @param {Number} index 
+     * @param {Number} position
+     * @param {Object} dreamData 
      * @constructor
      */
-    constructor(position, index){
+    constructor(position, dreamData){
         this.position = position;
-        this.index = index;
+        this.dreamData = dreamData;
         this.insidePartScene = new THREE.Scene();
         this.lights = [];
         this.scene = this.createDream();
@@ -86,6 +87,11 @@ export default class Dream {
      * @returns {THREE.Group}
      */
     createBackground(){
+        const colors = [];
+        this.dreamData.emotions.forEach(emotion => {
+            colors.push(getColorBySubEmotion(emotion.emotionId, emotion.subEmotionId))
+        });
+        console.log(colors);
         const background = new Background(20, 20, this.position);
         const bgGp = background.createBackground();
         bgGp.position.z = -20;
@@ -122,13 +128,13 @@ export default class Dream {
         //this.insidePartScene.add(drawPoint(pivot.position.x, pivot.position.y, pivot.position.z));
         this.insidePartScene.add(pivot);
 
-        const ptLight1 = new THREE.PointLight(0xC93737, 1, 0.8, 0.8);
+        const ptLight1 = new THREE.PointLight(0xC93737, 1, 1., 0.8);
         ptLight1.position.set(0, 0, 0.3);
         const ptH1 = new THREE.PointLightHelper(ptLight1, 0.1);
         pivot.add(ptLight1);
         //this.insidePartScene.add(ptH1);
 
-        const ptLight2 = new THREE.PointLight(0x23C9FF, 1, 0.8, 0.8);
+        const ptLight2 = new THREE.PointLight(0x23C9FF, 1, 1., 0.8);
         ptLight2.position.set(0, 0, -0.5);
         const ptH2 = new THREE.PointLightHelper(ptLight2, 0.1);
         pivot.add(ptLight2);

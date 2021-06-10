@@ -33,13 +33,6 @@ export default class Background {
     createBackground() {
         const background = new THREE.Group();
 
-        const pointLight = new THREE.PointLight(0xffffff, 0);
-		pointLight.position.set(0, 0, 10)
-        background.add(pointLight);
-        const sphereSize = 1;
-        const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
-        background.add( pointLightHelper );
-
         const geometry = new THREE.PlaneGeometry(
             this.width,
             this.height,

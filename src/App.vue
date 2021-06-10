@@ -25,7 +25,7 @@ export default {
 		...mapState('loader', ['loading']),
 		...mapState('auth', ['user']),
 		isVisible() {
-			return !(this.withoutNav.indexOf(this.$route.name) > 0)
+			return !(this.withoutNav.indexOf(this.$route.name) !== -1)
 		}
 	},
 	components: {
@@ -37,9 +37,9 @@ export default {
 
 <style lang='scss'>
 .view {
-	height: calc(100vh - 8rem);
+	//height: calc(100vh - 8rem);
 	overflow-y: auto;
 	overflow-x: hidden;
-	margin-bottom: 8rem;
+	//margin-bottom: 8rem;
 }
 </style>

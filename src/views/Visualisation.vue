@@ -28,7 +28,7 @@ export default {
       document.body.appendChild(this.stats.dom);
       // =====================================================================
 
-      const quality = configurations.high;
+      const quality = configurations.medium;
       const size = {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -101,17 +101,35 @@ export default {
         snapshot.docs.forEach((doc) => {
           data.push(doc.data());
         });
-        this.initOutsideWorldScene();
+        this.initOutsideWorldScene(data);
       });
     },
-    initOutsideWorldScene() {
+    /**
+     * @param {[Object]} dreamsData
+     */
+    initOutsideWorldScene(dreamsData) {
       const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
       this.outsideWorldScene.add(hemisphereLight);
+
+      
+      const textureCube = new THREE.CubeTextureLoader()
+      .setPath( '../../src/assets/textures/cubemap/NightSky/' )
+      .load( [
+          'px.png',
+          'nx.png',
+          'py.png',
+          'ny.png',
+          'pz.png',
+          'nz.png'
+      ] );
+      textureCube.mapping = THREE.CubeRefractionMapping;
+      this.outsideWorldScene.background = textureCube;
 
       this.outsideWorld = new OutsideWorld(
         this.outsideWorldScene,
         this.portalScenes,
-        this.dreamScenes
+        this.dreamScenes,
+        dreamsData
       );
     },
     initListeners() {
