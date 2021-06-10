@@ -7,15 +7,15 @@ export default class Crystal {
     getDefaultParams() {
         return {
             nbFace: 8,
-            topSpikeHeight: 0.7,
-            bottomSpikeHeight: -0.7,
+            topSpikeHeight: 0.2,
+            bottomSpikeHeight: -0.2,
             angleTop: 90,
             angleLittleTop: 90,
             angleBottom: 90,
             angleLittleBottom: 90,
-            crystalHeight: 2,
-            crystalWidth: 0.5,
-            spikeWidth: 0.15,
+            crystalHeight: 0.4,
+            crystalWidth: 0.1,
+            spikeWidth: 0.02,
             color: '#FFCCCC',
             emissive: '#FF0000',
             opacity: 0.8,
@@ -170,12 +170,12 @@ export default class Crystal {
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        generalFolder.add(this.params, 'crystalHeight', 1, 4, 0.1)
+        generalFolder.add(this.params, 'crystalHeight', 0.01, 4, 0.01)
         .name('Height')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        generalFolder.add(this.params, 'crystalWidth', 0.2, 1.5, 0.01)
+        generalFolder.add(this.params, 'crystalWidth', 0.01, 1.5, 0.01)
         .name('Width')
         .onChange(() => {
             document.dispatchEvent(evt);
@@ -202,12 +202,12 @@ export default class Crystal {
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        spikeFolder.add(this.params, 'topSpikeHeight', 0.2, 1.5, 0.05)
+        spikeFolder.add(this.params, 'topSpikeHeight', 0.01, 1.5, 0.01)
         .name('Top height')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        spikeFolder.add(this.params, 'bottomSpikeHeight', -1.5, -0.2, -0.05)
+        spikeFolder.add(this.params, 'bottomSpikeHeight', -1.5, -0.01, -0.01)
         .name('Bottom height')
         .onChange(() => {
             document.dispatchEvent(evt);

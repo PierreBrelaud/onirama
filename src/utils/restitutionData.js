@@ -1,40 +1,21 @@
-export const feeling = {
+export const memory = {
     title: 'Ressenti du rêve',
     data: [
         { 
-            id: 'feeling',
-            title: 'Ressenti général du rêve',
-            type: 'radio',
-            items: [
-                { value: 0, label: 'Très négatifs', icon: '' },
-                { value: 1, label: 'Négatifs', icon: '' },
-                { value: 2, label: 'Normal', icon: '' },
-                { value: 3, label: 'Bien', icon: '' },
-                { value: 4, label: 'Très bien', icon: '' },
-            ]
+            id: 'absurd',
+            title: 'Souvenir de votre rêve',
+            type: 'slider',
+            min: { value: -1, label: 'Absurde' },
+            max: { value: 1, label: 'Censé' },
+            step: 0.05
         },
         { 
-            id: 'memory',
-            title: 'Comment est le souvenir de ton rêve ?',
-            type: 'radio',
-            items: [
-                { value: 0, label: 'Très flou', icon: null },
-                { value: 1, label: 'Flou', icon: null },
-                { value: 2, label: 'Normal', icon: null },
-                { value: 3, label: 'Clair', icon: null },
-                { value: 4, label: 'Limpide', icon: null },
-            ]
-        },
-        { 
-            id: 'credibility',
-            title: 'Niveau de crédibilité du rêve',
-            type: 'radio',
-            items: [
-                { value: 0, label: 'Très peu crédible', icon: null },
-                { value: 1, label: 'Peu crédible', icon: null },
-                { value: 2, label: 'Crédible', icon: null },
-                { value: 3, label: 'Très crédible', icon: null },
-            ]
+            id: 'perception',
+            title: 'Perception du rêve',
+            type: 'slider',
+            min: { value: -1, label: 'Flou' },
+            max: { value: 1, label: 'Net' },
+            step: 0.05
         },
         {
             id: 'lucidity',
@@ -46,16 +27,6 @@ export const feeling = {
             title: 'Récurrent',
             type: 'checkbox',
         },
-        { 
-            id: 'perspective',
-            title: 'Perspective',
-            type: 'radio',
-            items: [
-                { value: 0, label: '1ère personne', icon: null },
-                { value: 1, label: '3ème personne', icon: null },
-                { value: 2, label: 'Les deux', icon: null },
-            ]
-        },
     ]
 }
 
@@ -63,40 +34,31 @@ export const wakeUp = {
     title: 'Au réveil',
     data: [
         { 
-            id: 'sleep',
-            title: 'As-tu bien dormis ?',
-            type: 'radio',
-            items: [
-                { value: 0, label: 'Pas du tout', icon: '' },
-                { value: 1, label: 'Pas vraiment', icon: '' },
-                { value: 2, label: 'Oui', icon: '' },
-                { value: 3, label: 'Très bien', icon: '' },
-                { value: 4, label: 'Très très bien', icon: '' },
-            ]
+            id: 'impact',
+            title: 'Impact du rêve',
+            type: 'slider',
+            min: { value: -1, label: 'Nul' },
+            max: { value: 1, label: 'Très fort' },
+            step: 0.05
         },
         { 
             id: 'mood',
             title: 'Humeur au réveil',
-            type: 'select',
-            items: [
-                { value: -1, label: 'Choisir', icon: null },
-                { value: 0, label: 'Joyeux' },
-                { value: 1, label: 'Calme' },
-                { value: 2, label: 'Enervé' },
-                { value: 3, label: 'Peur' },
-            ]
+            type: 'slider',
+            min: { value: -1, label: 'Très mauvaise' },
+            max: { value: 1, label: 'Très bonne' },
+            step: 0.05
         },
         { 
-            id: 'impact',
-            title: 'Impact du rêve',
+            id: 'sleep',
+            title: 'Qualité du sommeil',
             type: 'radio',
             items: [
-                { value: 0, label: 'Aucun', icon: null },
-                { value: 0, label: 'Aucun', icon: null },
-                { value: 1, label: 'Faible', icon: null },
-                { value: 2, label: 'Modéré', icon: null },
-                { value: 3, label: 'Fort', icon: null },
-                { value: 4, label: 'Intense', icon: null },
+                { value: 0, label: 'Mauvais' },
+                { value: 1, label: 'Faible' },
+                { value: 2, label: 'Modéré' },
+                { value: 3, label: 'Reposant' },
+                { value: 4, label: 'Très reposant' },
             ]
         },
     ]

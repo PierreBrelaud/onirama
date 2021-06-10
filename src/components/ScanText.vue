@@ -1,11 +1,11 @@
 <template>
     <div class="scantext">
-        <div 
+        <p 
             @click="$refs.inputFile.click()"
             class="scantext__label"
         >
             Scanner le texte
-        </div>
+        </p>
         <input 
             ref="inputFile"
             class="scantext__file" 
@@ -69,6 +69,9 @@ export default {
 
 <style lang="scss" scoped>
 .scantext {
+    &__label {
+        color: $C-white;
+    }
     &__file {
         display: none;
     }

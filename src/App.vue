@@ -1,6 +1,8 @@
 <template>
 	<global-loader v-if="loading" />
-	<div class="view">
+	<div 
+		class="view"
+		:class="{ 'view--full': !isVisible }">
 		<router-view></router-view>
 	</div>
 	<navigation v-if="isVisible"/>
@@ -13,6 +15,11 @@ import auth from '@/firebase/auth'
 import { mapState } from 'vuex'
 
 export default {
+	data() {
+		return {
+			withoutNav: ['restitution', 'visualisation', 'authentification']
+		}
+	},
 	created() {
 		auth.onAuthChanged()
 	},
@@ -20,7 +27,7 @@ export default {
 		...mapState('loader', ['loading']),
 		...mapState('auth', ['user']),
 		isVisible() {
-			return this.$route.name !== 'restitution'
+			return !this.withoutNav.includes(this.$route.name)
 		}
 	},
 	components: {
@@ -31,13 +38,15 @@ export default {
 </script>
 
 <style lang='scss'>
-* {
-	font-family: $F-main;
-}
-
 .view {
 	height: calc(100vh - 8rem);
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	margin-bottom: 8rem;
+
+	&--full {
+		height: 100vh;
+		margin-bottom: 0;
+	}
 }
 </style>

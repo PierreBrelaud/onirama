@@ -21,7 +21,7 @@
             <div class="navigation__item navigation__item--profile"></div>
         </router-link>
     </div>
-    <div 
+    <div
         class="restitution" 
         :class="{'restitution--active' : showRestitutionMenu }"
     >
@@ -35,12 +35,12 @@
         <router-link :to="'/restitution'">
             <div class="restitution__item">
                 <div class="restitution__item__icon restitution__item__icon--write"></div>
-                <div>Ecrire manuellement</div>
+                <p>Ecrire manuellement</p>
             </div>
         </router-link>
         <div class="restitution__item">
             <div class="restitution__item__icon restitution__item__icon--micro"></div>
-            <div>Dicter le rêve</div>
+            <p>Dicter le rêve</p>
         </div>
     </div>
 </template>
@@ -89,6 +89,7 @@ export default {
     }
 }
 
+//animations
 .navigation {
     .navigation__item:not(.navigation__item--more) {
         opacity: 1;
@@ -116,30 +117,31 @@ export default {
     width: 100%;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
-    padding: 1.5rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    background: white;
+    background: $C-black;
 
     &__item {
-        color: black;
+        padding: 2rem 0;
+        color: $C-white;
         cursor: pointer;
         font-size: 1.5rem;
         text-align: center;
-        padding: 1rem;
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
+
         &:first-child {
-            border-bottom: solid thin lightgrey;
+            border-bottom: solid thin $C-extradark;
         }
+        
     &__icon {
 
         width: 2rem;
         height: 2rem;
-        background: black;
+        background: $C-white;
         margin-right: 1rem;
 
         &--scan {
@@ -162,7 +164,7 @@ export default {
 
 .router-link-active {
     .navigation__item {
-        background: black;
+        background: $C-white;
     }
 }
 
@@ -177,13 +179,14 @@ export default {
     padding: 0 1rem;
     height: 8rem;
     box-sizing: border-box;
-    background-color: white;
-    
+    background-color: $C-black;
+    border-top: solid thin $C-white;
+
     &__item {
         cursor: pointer;
-        width: 2.2rem;
-        height: 2.2rem;
-        background: lightgray;
+        width: 2.7rem;
+        height: 2.7rem;
+        background: $C-light;
 
         &--home {
             -webkit-mask: url('@/assets/images/icons/home.svg') no-repeat center;
@@ -208,7 +211,7 @@ export default {
         &__more {
             -webkit-mask: url('@/assets/images/icons/add.svg') no-repeat center;
             mask: url('@/assets/images/icons/add.svg') no-repeat center;
-            background: black;
+            background: $C-black;
             width: 1.8rem;
             height: 1.8rem;
             position: absolute;
@@ -217,10 +220,24 @@ export default {
         }
 
         &--more {
-            width: 5rem;
-            height: 5rem;
+            width: 6rem;
+            height: 6rem;
             border-radius: 50%;
             position: relative;
+            background-color: $C-white;
+            -webkit-box-shadow: 0px 0px 20px 0px #FFFFFF; 
+            box-shadow: 0px 0px 20px 0px #FFFFFF;
+            &:before {
+                content: '';
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                border: solid thin $C-white;
+                width: 6.8rem;
+                height: 6.8rem;
+            }
         }
     }
 }
