@@ -22,6 +22,24 @@ export default class CameraController {
             },
         })
     }
+    zoomIn(callback){
+        gsap.to(this.camera.position, {
+            y: 0,
+            z: 1.7,
+            onComplete: () => {
+                callback();
+            }
+        })
+    }
+    zoomOut(callback){
+        gsap.to(this.camera.position, {
+            y: 0.1,
+            z: 5,
+            onComplete: () => {
+                callback();
+            }
+        })
+    }
     get canInteract() {
         return this.enableInteraction; 
     }

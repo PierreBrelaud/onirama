@@ -53,12 +53,6 @@ export default class OutsideWorld {
                 gltf.scene.children.push(pointLight);
 
                 this.outsideWorldScene.add(gltf.scene);
-				
-				/*
-				const dream = new Dream(posX);
-                this.portalScenes.push(dream.scene.portal);
-                this.dreamScenes.push(dream.scene.insidePart);
-				*/
             });
         });
     }
@@ -103,7 +97,6 @@ export default class OutsideWorld {
     }
 	initDream(){
 		const data = this.dreams.data[this.currentDream];
-		//console.log(this.currentDream);
 		const dream = new Dream(this.currentPos, 1);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);

@@ -7,12 +7,16 @@ uniform vec2 uResolution;
 uniform float uTime;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
+uniform vec3 uColor3;
 uniform float uCl1Prop;
 uniform float uCl2Prop;
+uniform float uCl3Prop;
 uniform float uZoom;
 uniform float uSpeed;
+uniform float uPosX;
 
 varying vec2 vUv;
+varying vec3 vGlobalPosition;
 
 float random (in vec2 _st) {
     return fract(sin(dot(_st.xy,
@@ -87,22 +91,23 @@ void main()
         map(uColor2.g, 0., 255., 0., 1.),
         map(uColor2.b, 0., 255., 0., 1.)
     );
+    vec3 color3 = vec3(
+        map(uColor3.r, 0., 255., 0., 1.),
+        map(uColor3.g, 0., 255., 0., 1.),
+        map(uColor3.b, 0., 255., 0., 1.)
+    );
 
     color = mix(color1,
                 color2,
-                smoothstep(uCl1Prop, uCl2Prop, f));
+                smoothstep(uCl1Prop, 0.5, f));
 	
-    /*
     color = mix(color,
-                vec3(1.,1.,0.),
-                smoothstep(0.5, 1., f));
-    
-    
-    color = mix(color,
-                vec3(0.666667,1,1),
-                clamp(length(r.x),0.0,1.0));
-	*/
+                color3,
+                smoothstep(uCl2Prop, uCl3Prop, f));
 
-    // gl_FragColor = vec4((f*f*f+.6*f*f+.5*f)*color,1.);
+    vec3 pointLightPos = vec3(uPosX,0,-15);
+    float diffuseCoefficient = 1.0 - distance(pointLightPos,vGlobalPosition) / 6.;
+    color.rgb += diffuseCoefficient * vec3(1, 1, 1);
+
     gl_FragColor = vec4(color,1.);
 }
