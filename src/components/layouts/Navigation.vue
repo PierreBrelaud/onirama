@@ -123,7 +123,7 @@ export default {
     background: $C-black;
 
     &__item {
-        padding: 1rem 0;
+        padding: 2rem 0;
         color: $C-white;
         cursor: pointer;
         font-size: 1.5rem;
