@@ -77,10 +77,3 @@ legend {
 		width: calc(100% - #{$G-side-phablet} * 2);
 	}
 }
-
-.appview {
-	min-height: 100%;
-	background-color: $C-extradark;
-	box-sizing: border-box;
-	color: $C-white;
-}
