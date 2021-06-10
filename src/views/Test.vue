@@ -1,9 +1,9 @@
 <template>
-    <three-test />
+    <curve-history />
 </template>
 
 <script>
-import ThreeTest from '@/components/test/ThreeTest.vue'
+import CurveHistory from '@/components/curveHistory.vue'
 
 export default {
     methods: {
@@ -15,7 +15,7 @@ export default {
         }
     },
     components: {
-        ThreeTest,
+      CurveHistory,
     },
 }
 </script>
