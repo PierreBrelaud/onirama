@@ -36,7 +36,7 @@ export default class LabelingHelper {
 		return this._textLabeled
 	}
 
-	getFinalData() {
+	get getFinalData() {
 		//clear
 		this._finalData = {
 			action: { label: "action", words: [], count: 0 },
@@ -45,15 +45,27 @@ export default class LabelingHelper {
 			emotion: { label: "emotion", words: [], count: 0 },
 			color: { label: "color", words: [], count: 0 },
 		};
-
+		
+		let labelsCount = 0;
 		this._textLabeled.forEach(el => {
 			let dataLabel = this._finalData[el.label]
 			if (dataLabel) {
 				dataLabel.words.push(el.value)
 				dataLabel.count = dataLabel.count + 1
+				labelsCount = labelsCount + 1;
 			}
 		})
-		return this._finalData
+
+		const textLength = this._text.replace(/[\n\r]/g,' ').split(' ').length;
+		
+		return {
+			total: { textCount: textLength, labelsCount: labelsCount },
+			action: this._finalData.action.count,
+			person: this._finalData.person.count,
+			place: this._finalData.place.count,
+			emotion: this._finalData.emotion.count,
+			color: this._finalData.color.count,
+		}
 	}
 
 	labelWord(wordData, label) {

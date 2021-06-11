@@ -99,10 +99,13 @@ export default {
         },
         end() {
             this.$store.dispatch('loader/pending')
-            DreamController.addDream(this.$store.getters['restitution/data'], 
+            DreamController.addDream({
+                userId: this.$store.getters["auth/user"].data.uid,
+                labelingData: this.$store.getters["labeling/instance"].getFinalData,
+                ...this.$store.getters['restitution/data']
+            }, 
             (result) => {
                 this.$store.dispatch('loader/done')
-                this.$router.push('/generation_pending')
             }, 
             (error) => {
                 this.$store.dispatch('loader/done')
