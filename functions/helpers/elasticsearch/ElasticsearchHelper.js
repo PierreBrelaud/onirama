@@ -59,14 +59,14 @@ class ElasticsearchHelper {
 		return result.body;
 	}
 
-	async getDreamsByType(userId, typeId) {
+	async getDreamsByType(userId, emotionId) {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
 				query: {
 					bool: {
 						must: [
-							{ match: { type: typeId } },
+							{ match: { emotionId: emotionId } },
 							{ match: { userId: userId } },
 						],
 					},
@@ -76,7 +76,7 @@ class ElasticsearchHelper {
 		return result.body;
 	}
 
-	async getEmotionTypeCount(userId, type) {
+	async getEmotionCount(userId, emotionId) {
 		const result = await this.client.count({
 			index: "dream",
 			body: {
@@ -91,7 +91,7 @@ class ElasticsearchHelper {
 											must: [
 												{
 													match: {
-														"emotions.type": type,
+														"emotions.emotionId": emotionId,
 													},
 												},
 											],
@@ -112,7 +112,7 @@ class ElasticsearchHelper {
 		return result.body.count;
 	}
 
-	async getEmotionByValue(userId, type, value) {
+	async getEmotionByValue(userId, emotionId, subEmotionId) {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
@@ -127,12 +127,12 @@ class ElasticsearchHelper {
 											must: [
 												{
 													match: {
-														"emotions.type": type,
+														"emotions.emotionId": emotionId,
 													},
 												},
 												{
 													match: {
-														"emotions.value": value,
+														"emotions.subEmotionId": subEmotionId,
 													},
 												},
 											],
@@ -153,7 +153,7 @@ class ElasticsearchHelper {
 		return result.body;
 	}
 
-	async getEmotionValueCount(userId, type, value) {
+	async getSubEmotionCount(userId, emotionId, subEmotionId) {
 		const result = await this.client.count({
 			index: "dream",
 			body: {
@@ -168,12 +168,12 @@ class ElasticsearchHelper {
 											must: [
 												{
 													match: {
-														"emotions.type": type,
+														"emotions.emotionId": emotionId,
 													},
 												},
 												{
 													match: {
-														"emotions.value": value,
+														"emotions.subEmotionId": subEmotionId,
 													},
 												},
 											],
