@@ -31,16 +31,16 @@ exports.getDreamByType = functions.https.onCall(async (data, context) => {
 
 exports.getDreamByEmotion = functions.https.onCall(async (data, context) => {
 	const result = await elasticsearchHelper.
-		getEmotionByValue(data.userId, data.typeId, data.valueId);
+		getEmotionByValue(data.userId, data.emotionId, data.subEmotionId);
 	return result;
 });
 
-exports.emotionTypeCount = functions.https.onCall(async (data, context) => {
+exports.emotionCount = functions.https.onCall(async (data, context) => {
 	const result = [];
 	const userId = data.userId;
 	/* eslint-disable no-await-in-loop */
 	for(const emotion of data.emotions) {
-		const count = await elasticsearchHelper.getEmotionTypeCount(userId, emotion.id);
+		const count = await elasticsearchHelper.getEmotionCount(userId, emotion.id);
 
 		result.push({
 			...emotion,
@@ -51,16 +51,17 @@ exports.emotionTypeCount = functions.https.onCall(async (data, context) => {
 	return result;
 });
 
-exports.emotionValueCount = functions.https.onCall(async (data, context) => {
+exports.subEmotionCount = functions.https.onCall(async (data, context) => {
 	const result = [];
 	const userId = data.userId;
-	const typeId = data.typeId;
+	const emotionId = data.emotionId;
+
 	/* eslint-disable no-await-in-loop */
-	for(const emotion of data.emotions) {
-		const count = await elasticsearchHelper.getEmotionValueCount(userId, typeId, emotion.id);
+	for(const subEmotion of data.subEmotions) {
+		const count = await elasticsearchHelper.getSubEmotionCount(userId, emotionId, subEmotion.id);
 		result.push({
-			...emotion,
-			typeId: typeId,
+			...subEmotion,
+			emotionId: emotionId,
 			count: count
 		});
 	}

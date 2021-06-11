@@ -1,6 +1,8 @@
 <template>
     <!-- navigation -->
     <div class="filter appview">
+        <!-- gap for header -->
+        <div class="header"></div>
         <div class="nav">
             <div class="nav__slider" :class="'nav__slider--' + navigationItem">
                 <!-- map -->
@@ -44,10 +46,6 @@
                 </div>
             </div>
         </div>
-        
-        <br>
-        <!-- <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
-        <button @click="changeNavigationType(type.LIST)">list</button> -->
         <!-- map -->
         <filter-map 
             v-if="navigationItem === item.MAP"
@@ -123,6 +121,9 @@ export default {
 
 <style lang="scss" scoped>
 .filter {
+    .header {
+        height: 4rem;
+    }
     .nav {
         height: 13rem;
         width: 100%;

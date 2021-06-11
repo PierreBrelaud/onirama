@@ -10,7 +10,4 @@ app
     .use(router)
     .mount('#app')
 
-
-app.config.globalProperties.$api = 'https://us-central1-gobelins-onirama.cloudfunctions.net/api'
-    
     
