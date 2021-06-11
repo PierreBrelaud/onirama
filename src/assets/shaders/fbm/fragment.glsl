@@ -1,6 +1,5 @@
 // Author @patriciogv - 2015
 // http://patriciogonzalezvivo.com
-
 precision highp float;
 
 uniform vec2 uResolution;
@@ -80,7 +79,7 @@ void main()
     r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*speed);
 
     float f = fbm(st+r);
-
+    
     vec3 color1 = vec3(
         map(uColor1.r, 0., 255., 0., 1.),
         map(uColor1.g, 0., 255., 0., 1.),
@@ -97,17 +96,22 @@ void main()
         map(uColor3.b, 0., 255., 0., 1.)
     );
 
-    color = mix(color1,
+    if(uColor3.r == 0. && uColor3.g == 255. && uColor3.b == 33.) {
+        color = mix(color1,
                 color2,
-                smoothstep(uCl1Prop, 0.5, f));
-	
-    color = mix(color,
+                smoothstep(0., 1., f));
+    } else {
+        color = mix(color1,
+                color2,
+                smoothstep(0.35, 0.4, f));
+        color = mix(color,
                 color3,
-                smoothstep(uCl2Prop, uCl3Prop, f));
+                smoothstep(0.4, 0.9, f));
+    }
 
     vec3 pointLightPos = vec3(uPosX,0,-15);
-    float diffuseCoefficient = 1.0 - distance(pointLightPos,vGlobalPosition) / 6.;
-    color.rgb += diffuseCoefficient * vec3(1, 1, 1);
-
-    gl_FragColor = vec4(color,1.);
+    float diffuseCoefficient = 1.0 - distance(pointLightPos,vGlobalPosition) / 7.;
+    color.rgb += diffuseCoefficient * vec3(1, 1, 1) / 0.4;
+    
+    gl_FragColor = vec4(color.rgb ,1.);
 }

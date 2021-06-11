@@ -26,3 +26,35 @@ export function drawPoint(x, y, z, color = 0x0000FF) {
 export function degreeToRad(degree) {
     return degree * Math.PI / 180;
 }
+
+ /**
+ * @param {String} color 
+ * @returns {[Number]}
+ */
+export function hexaToRgb(color) {
+    const aRgbHex = color.match(/.{1,2}/g);
+    const aRgb = [
+        parseInt(aRgbHex[0], 16),
+        parseInt(aRgbHex[1], 16),
+        parseInt(aRgbHex[2], 16)
+    ];
+    return aRgb;
+}
+
+export function rgbToHex(color) {
+    return "#" + componentToHex(color[0]) + componentToHex(color[1]) + componentToHex(color[2]);
+}
+
+export function componentToHex(c) {
+    const hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+export function fillArrayWith(filler, array, size) {
+    const tempArray = [...array];
+    const nb = size - array.length;
+    for (let i = 0; i < nb; i++) {
+        tempArray.push(filler);
+    }
+    return tempArray;
+}

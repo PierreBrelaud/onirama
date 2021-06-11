@@ -9,7 +9,7 @@ export default class Floor {
     }
     getDefaultParams() {
         return {
-            width: 20,
+            width: 14,
             height: 20,
             cyParams: {
                 rdTop: 0.08,

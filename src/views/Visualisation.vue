@@ -1,6 +1,5 @@
 <template>
   <canvas id="visuCanvas" />
-
 </template>
 
 <script>
@@ -109,7 +108,7 @@ export default {
      */
     initOutsideWorldScene(dreamsData) {
       const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-      this.outsideWorldScene.add(hemisphereLight);
+      //this.outsideWorldScene.add(hemisphereLight);
 
       
       const textureCube = new THREE.CubeTextureLoader()
@@ -136,7 +135,7 @@ export default {
       window.addEventListener("resize", () => this.onResize());
 
       window.addEventListener("keydown", ({ key }) => this.onKeyPress(key));
-
+      
       window.addEventListener("click", (
         {clientX, clientY}) => this.onClick(clientX, clientY)
       );
@@ -204,6 +203,7 @@ export default {
       this.outsideWorld.loadNextLandscape(dir);
       this.outsideWorld.loadNextDream(dir);
       this.cameraController.moveToDirection(dir, () => {
+        this.outsideWorldScene.remove(this.outsideWorld.getOutsideParts[0]);
         this.portalScenes.shift();
         this.dreamScenes.shift();
       });
@@ -218,6 +218,7 @@ export default {
         this.outsideWorld.loadNextLandscape(1);
         this.outsideWorld.loadNextDream(1);
         this.cameraController.moveToDirection(1, () => {
+          this.outsideWorldScene.remove(this.outsideWorld.getOutsideParts[0]);
           this.portalScenes.shift();
           this.dreamScenes.shift();
         });
@@ -226,6 +227,7 @@ export default {
         this.outsideWorld.loadNextLandscape(-1);
         this.outsideWorld.loadNextDream(-1);
         this.cameraController.moveToDirection(-1, () => {
+          this.outsideWorldScene.remove(this.outsideWorld.getOutsideParts[0]);
           this.portalScenes.shift();
           this.dreamScenes.shift();
         });

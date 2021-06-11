@@ -30,7 +30,10 @@ export default class Background {
             speed: 1.,
         }
     }
-    createBackground() {
+    /**
+     * @param {[String]} colors - size can range from 0 to 3 elements
+     */
+    createBackground(rgbColors) {
         const background = new THREE.Group();
 
         const geometry = new THREE.PlaneGeometry(
@@ -50,9 +53,9 @@ export default class Background {
                         this.height
                     )
                 },
-                uColor1: {value: this.params.color1},
-                uColor2: {value: this.params.color2},
-                uColor3: {value: this.params.color3},
+                uColor1: {value: rgbColors[0]},
+                uColor2: {value: rgbColors[1]},
+                uColor3: {value: rgbColors[2]},
                 uCl1Prop: {value: this.params.cl1Prop},
                 uCl2Prop: {value: this.params.cl2Prop},
                 uCl3Prop: {value: this.params.cl3Prop},

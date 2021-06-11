@@ -1,6 +1,8 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from 'three';
+
 import Dream from '@/core/visualisation/Dream'
+import {drawPoint} from '@/utils/threejsUtils'
 
 export default class OutsideWorld {
     /**
@@ -29,7 +31,7 @@ export default class OutsideWorld {
 				{text: "dream 4"},
 			]
 		};
-        this.displayedLandscape = [14, 15, 0, 1, 2];
+        this.displayedLandscape = [3, 4, 0, 1, 2];
         this.loader = new GLTFLoader().setPath(
             "../../src/assets/models/landscapes/"
         );
@@ -38,19 +40,20 @@ export default class OutsideWorld {
 		
 		this.currentDream = this.dreams.current;
 		this.lastDream = this.dreams.current;
+        this.outsideParts = [];
         
 		this.initLandscapes();
 		this.initDream();
     }
     initLandscapes() {
         this.displayedLandscape.forEach((id, index) => {
-            this.loader.load(`landscape_${id}.gltf`, (gltf) => {
+            this.loader.load(`map_${id}.gltf`, (gltf) => {
                 const posX = this.landscapeSize * (index - 2)
                 gltf.scene.position.x = posX;
                 gltf.scene.name = `landscape_${id}`;
                 // TODO Replace material by a cheapest one
 
-                const pointLight = new THREE.PointLight( 0xffffff, 0.4, 0);
+                const pointLight = new THREE.PointLight( 0xD01119, 1);
                 pointLight.position.x = posX;
                 gltf.scene.children.push(pointLight);
 
@@ -67,16 +70,16 @@ export default class OutsideWorld {
         
         let next = null;
         if(dir === -1) {
-            next = first === 0 ? 15 : first - 1;
+            next = first === 0 ? 4 : first - 1;
             this.displayedLandscape.unshift(next)
             this.displayedLandscape.pop();
         } else {
-            next = last === 15 ? 0 : last + 1;
+            next = last === 4 ? 0 : last + 1;
             this.displayedLandscape.push(next);
             this.displayedLandscape.shift();
         }
 
-        this.loader.load(`landscape_${next}.gltf`, (gltf) => {
+        this.loader.load(`map_${next}.gltf`, (gltf) => {
             const posX = dir === -1 ? 
                 this.currentPos - this.landscapeSize * 2 :
                 this.currentPos + this.landscapeSize * 2;
@@ -101,6 +104,9 @@ export default class OutsideWorld {
 		//const data = this.dreams.data[this.currentDream];
         const dreamData = this.dreamsData[0]
 		const dream = new Dream(this.currentPos, dreamData);
+
+        this.outsideWorldScene.add(dream.scene.outsidePart);
+        this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
 	}
@@ -112,6 +118,8 @@ export default class OutsideWorld {
 		this.currentDream += dir;
         const dreamData = this.dreamsData[0]
 		const dream = new Dream(this.currentPos, dreamData);
+        this.outsideWorldScene.add(dream.scene.outsidePart);
+        this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
 	}
@@ -128,4 +136,7 @@ export default class OutsideWorld {
 		}
 		return true;
 	}
+    get getOutsideParts() {
+        return this.outsideParts;
+    }
 }
