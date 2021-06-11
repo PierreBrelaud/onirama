@@ -24,7 +24,7 @@ export default {
         }
     },
     methods: {
-        initParticleJS(count = 0) {
+        initParticleJS(count) {
             particlesJS(this.id, {
                 particles: {
                     number: {
@@ -40,7 +40,7 @@ export default {
                         type: "circle",
                     },
                     size: {
-                        value: 4,
+                        value: 5,
                         random: true,
                         anim: {
                             enable: true,
@@ -58,7 +58,7 @@ export default {
                         random: true,
                         straight: false,
                         out_mode: "bounce",
-                        bounce: false,
+                        bounce: true,
                     },
                 },
                 interactivity: {
