@@ -78,7 +78,7 @@ import Particles from "@/components/filter/FilterNebulaParticles.vue";
 export default {
 	methods: {
         getParticlesFont(type, currentCount, totalCount) {
-            const [min, max] = (type === 'title') ? [1.4, 4] : [1, 2];
+            const [min, max] = (type === 'title') ? [1.4, 3] : [1, 2];
 			//case no data
 			if (currentCount === 0) return `font-size:${min}rem;`;
             const percent = (currentCount * 100) / totalCount; 

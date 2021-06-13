@@ -1,5 +1,4 @@
 <template>
-    <h3>Chronology</h3>
     <filter-list 
         v-if="dreams"
         :data="dreams"
@@ -23,7 +22,9 @@ export default {
     },
     methods: {
         async getDreams() {
-            const dreams = await this.cfGetDremByDate();
+            const dreams = await this.cfGetDremByDate({
+				userId: this.$store.getters["auth/user"].data.uid
+			});
             this.dreams = dreams.data;
         }
     },
