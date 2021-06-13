@@ -17,12 +17,12 @@ export default class OutsideWorld {
         this.portalScenes = portalScenes;
         this.dreamScenes = dreamScenes;
         this.dreamsData = dreamsData;
+        
         this.landscapeSize = 9.37;
-
         this.dreams = {
 			current: 1,
 			min: 0,
-			max: 4, 
+			max: this.dreamsData.length, 
 			data: [
 				{text: "dream 0"},
 				{text: "dream 1"},
@@ -90,8 +90,6 @@ export default class OutsideWorld {
             pointLight.position.x = posX;
             gltf.scene.children.push(pointLight);
 
-            // TODO Charger un rêve
-
             this.outsideWorldScene.add(gltf.scene);
         });
         
@@ -101,11 +99,10 @@ export default class OutsideWorld {
         this.currentPos += this.landscapeSize * dir;
     }
 	initDream(){
-		//const data = this.dreams.data[this.currentDream];
-        const dreamData = this.dreamsData[0]
+        const dreamData = this.dreamsData[this.currentDream];
 		const dream = new Dream(this.currentPos, dreamData);
 
-        this.outsideWorldScene.add(dream.scene.outsidePart);
+        //this.outsideWorldScene.add(dream.scene.outsidePart);
         this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
@@ -116,10 +113,10 @@ export default class OutsideWorld {
 	loadNextDream(dir){
 		this.lastDream = this.currentDream;
 		this.currentDream += dir;
-        const dreamData = this.dreamsData[0]
+        const dreamData = this.dreamsData[this.currentDream];
 		const dream = new Dream(this.currentPos, dreamData);
-        this.outsideWorldScene.add(dream.scene.outsidePart);
-        this.outsideParts.push(dream.scene.outsidePart);
+        //this.outsideWorldScene.add(dream.scene.outsidePart);
+        //this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
 	}
@@ -129,13 +126,18 @@ export default class OutsideWorld {
 	 * @returns {Boolean} 
 	 */
 	canMoveTo(dir) {
+        console.log(this.currentDream);
 		if(dir === -1 && this.currentDream <= this.dreams.min) {
 			return false;
-		} else if(dir === 1 && this.currentDream >= this.dreams.max) {
+		} else if(dir === 1 && this.currentDream + 1 >= this.dreams.max) {
 			return false;
 		}
 		return true;
 	}
+    /**
+     * 🚧 Work in progress
+     * @returns {[THREE.Mesh]}
+     */
     get getOutsideParts() {
         return this.outsideParts;
     }

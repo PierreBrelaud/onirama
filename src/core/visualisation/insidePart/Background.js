@@ -1,11 +1,10 @@
 import * as THREE from 'three';
-import vertexShader from '../../assets/shaders/fbm/vertex.glsl';
-import fragmentShader from '../../assets/shaders/fbm/fragment.glsl'; 
+import vertexShader from '@/assets/shaders/fbm/vertex.glsl';
+import fragmentShader from '@/assets/shaders/fbm/fragment.glsl'; 
 import { PointLight } from 'three';
 
 export default class Background {
     /**
-     * 
      * @param {Number} width 
      * @param {Number} height 
      * @param {Number} posX 
@@ -42,7 +41,7 @@ export default class Background {
             32,
             32
         );
-        const material = new THREE.RawShaderMaterial({
+        this.material = new THREE.RawShaderMaterial({
             vertexShader,
             fragmentShader,
             uniforms: {
@@ -56,27 +55,26 @@ export default class Background {
                 uColor1: {value: rgbColors[0]},
                 uColor2: {value: rgbColors[1]},
                 uColor3: {value: rgbColors[2]},
-                uCl1Prop: {value: this.params.cl1Prop},
-                uCl2Prop: {value: this.params.cl2Prop},
-                uCl3Prop: {value: this.params.cl3Prop},
                 uZoom: {value: this.params.zoom},
                 uSpeed: {value: this.params.speed},
                 uPosX: {value: this.posX}
             }
         })
-        const bgMesh = new THREE.Mesh(geometry, material);
+        const bgMesh = new THREE.Mesh(geometry, this.material);
         bgMesh.name = "background";
         background.add(bgMesh);
 
         return background;
     }
-    initGui(gui, material) {
+    /**
+     * @param {Object} gui 
+     */
+    initGui(gui) {
         const bgFolder = gui.addFolder("Background");
-        bgFolder.addColor(material.uniforms.uColor1, 'value').name('Color1');
-        bgFolder.add(material.uniforms.uCl1Prop, 'value', 0., 1., 0.001).name('Prop color1');
-        bgFolder.addColor(material.uniforms.uColor2, 'value').name('Color2');
-        bgFolder.add(material.uniforms.uCl2Prop, 'value', 0., 1., 0.001).name('Prop color2');
-        bgFolder.add(material.uniforms.uZoom, 'value', 0.5, 10., 0.01).name('zoom');
-        bgFolder.add(material.uniforms.uSpeed, 'value', 0.1, 10., 0.001).name('speed');
+        bgFolder.addColor(this.material.uniforms.uColor1, 'value').name('Color1');
+        bgFolder.addColor(this.material.uniforms.uColor2, 'value').name('Color2');
+        bgFolder.addColor(this.material.uniforms.uColor3, 'value').name('Color3');
+        bgFolder.add(this.material.uniforms.uZoom, 'value', 0.5, 10., 0.01).name('zoom');
+        bgFolder.add(this.material.uniforms.uSpeed, 'value', 0.1, 10., 0.001).name('speed');
     }
 }

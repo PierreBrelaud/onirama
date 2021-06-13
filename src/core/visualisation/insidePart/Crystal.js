@@ -3,10 +3,16 @@ import { degreeToRad, drawPoint } from '@/utils/threejsUtils';
 import gsap from 'gsap';
 
 export default class Crystal {
+    /**
+     * @param {Object} params 
+     * @constructor
+     */
     constructor(params){
         this.params = params ? params : this.getDefaultParams();
-        this.crystalGroup = new THREE.Group();
     }
+    /**
+     * @returns {Object}
+     */
     getDefaultParams() {
         return {
             nbFace: 8,
@@ -21,9 +27,13 @@ export default class Crystal {
             spikeWidth: 0.01,
             color: '#FF0000',
             emissive: '#FF0000',
+            lineColor: '#FF9999',
             opacity: 0.8,
         }
     }
+    /**
+     * @returns {THREE.Mesh}
+     */
     createCrystal() {
         const guidelines = this.getGuidelines();
 
@@ -48,23 +58,10 @@ export default class Crystal {
             new THREE.BufferAttribute(new Float32Array(vertices), 3),
         );
         crystalGeo.computeVertexNormals();
-        
-        /*
-        const textureCube = new THREE.CubeTextureLoader()
-        .setPath( '../../src/assets/textures/cubemap/Park/' )
-        .load( [
-            'px.png',
-            'nx.png',
-            'py.png',
-            'ny.png',
-            'pz.png',
-            'nz.png'
-        ] );
-        textureCube.mapping = THREE.CubeRefractionMapping;*/
 
         let crystalMat = new THREE.MeshStandardMaterial({
-            color: 0xFFADAD,
-            emissive: 0xFF0000,
+            color: this.params.color,
+            emissive: this.params.color,
             emissiveIntensity: 0.4,
             roughness: 0.4, 
             //metalness: 0.5,
@@ -79,26 +76,17 @@ export default class Crystal {
         crystal.rotation.z += degreeToRad(10);
         
         const edgeGeo = new THREE.EdgesGeometry( crystal.geometry );
-        const edgeMat = new THREE.LineBasicMaterial( { color: 0xFF5C5C, opacity: 0.6, transparent: true } );
+        const edgeMat = new THREE.LineBasicMaterial( { color: this.params.lineColor, opacity: 0.6, transparent: true } );
         const edgeWireframe = new THREE.LineSegments( edgeGeo, edgeMat );
         crystal.add(edgeWireframe);
-
-        this.crystalGroup.add(crystal)
-
-        return this.crystalGroup;
+        
+        this.crystal = crystal;
+        
+        return crystal;
     }
-    createGuideline(width, angle, height = 0) {
-        const geometry = new THREE.CircleGeometry(width, this.params.nbFace);
-        const material = new THREE.MeshBasicMaterial({visible: false});
-        const guideline = new THREE.Mesh(geometry, material);
-        guideline.rotation.set(
-            angle * Math.PI / 180,
-            0,
-            Math.PI / 2
-        );
-        guideline.position.y = height;
-        guideline.updateMatrix();
-    }
+    /**
+     * @returns {Object}
+     */
     getGuidelines() {
         const bottom1 = this.createGuideline(
             this.params.crystalWidth,
@@ -121,6 +109,10 @@ export default class Crystal {
         );
         return {bottom1, bottom2, top1, top2};
     }
+    /**
+     * @param {THREE.Mesh} mesh 
+     * @returns {[Object]}
+     */
     getVertices(mesh) {
         const meshGeo = mesh.geometry.clone();
         meshGeo.applyMatrix4(mesh.matrix);
@@ -137,6 +129,13 @@ export default class Crystal {
 
         return meshVert;
     }
+    /**
+     * 
+     * @param {Number} width 
+     * @param {Number} angle 
+     * @param {Number} height 
+     * @returns {THREE.Mesh} 
+     */
     createGuideline(width, angle, height = 0) {
         const geometry = new THREE.CircleGeometry(width, this.params.nbFace);
         const material = new THREE.MeshBasicMaterial({visible: false});
@@ -151,6 +150,11 @@ export default class Crystal {
 
         return guideline;
     }
+    /**
+     * @param {[Object]} vertices 
+     * @param {[Object]} bottom 
+     * @param {[Object]} top 
+     */
     createPart(vertices, bottom, top) {
         for (let i = 1; i <= this.params.nbFace; i++) {
             vertices.push(
@@ -164,6 +168,12 @@ export default class Crystal {
             );
         }
     }
+    /**
+     * 
+     * @param {[Object]} vertices 
+     * @param {[Object]} bottom 
+     * @param {[Object]} top 
+     */
     createFlatPart(vertices, bottom, top) {
         for (let i = 1; i <= this.params.nbFace; i++) {
             vertices.push(
@@ -179,12 +189,15 @@ export default class Crystal {
     }
     animateCrystal(){
         const tl = gsap.timeline({repeat: -1, repeatDelay: 0});
-        tl.to(this.crystalGroup.rotation, {
+        tl.to(this.crystal.rotation, {
             duration: 15,
             ease:'none',
             y: `${degreeToRad(360)}`
         })
     }
+    /**
+     * @param {Object} gui 
+     */
     initGui(gui) {
         const evt = new Event("crystalChanged");
         const crystalFolder = gui.addFolder("Crystal")
@@ -194,12 +207,12 @@ export default class Crystal {
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        generalFolder.add(this.params, 'crystalHeight', 0.01, 4, 0.01)
+        generalFolder.add(this.params, 'crystalHeight', 0.1, 0.6, 0.001)
         .name('Height')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        generalFolder.add(this.params, 'crystalWidth', 0.01, 1.5, 0.01)
+        generalFolder.add(this.params, 'crystalWidth', 0.05, 0.2, 0.001)
         .name('Width')
         .onChange(() => {
             document.dispatchEvent(evt);
@@ -209,29 +222,24 @@ export default class Crystal {
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        generalFolder.addColor(this.params, 'emissive')
-        .name('Emissive')
-        .onChange(() => {
-            document.dispatchEvent(evt);
-        });
-        generalFolder.add(this.params, 'opacity', 0., 1., 0.01)
-        .name('Opacity')
+        generalFolder.addColor(this.params, 'lineColor')
+        .name('Line color')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
 
         const spikeFolder = crystalFolder.addFolder("Spike");
-        spikeFolder.add(this.params, 'spikeWidth', 0., 0.8, 0.01)
+        spikeFolder.add(this.params, 'spikeWidth', 0., 0.05, 0.001)
         .name('Width')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        spikeFolder.add(this.params, 'topSpikeHeight', 0.01, 1.5, 0.01)
+        spikeFolder.add(this.params, 'topSpikeHeight', 0.06, 0.13, 0.001)
         .name('Top height')
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        spikeFolder.add(this.params, 'bottomSpikeHeight', -1.5, -0.01, -0.01)
+        spikeFolder.add(this.params, 'bottomSpikeHeight', -0.13, -0.06, -0.001)
         .name('Bottom height')
         .onChange(() => {
             document.dispatchEvent(evt);

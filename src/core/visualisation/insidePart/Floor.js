@@ -1,12 +1,17 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-
 export default class Floor {
+    /**
+     * @param {Object} params
+     * @constructor 
+     */
     constructor(params){
         this.params = params ? params : this.getDefaultParams();
         this.floor = new THREE.Group();
     }
+    /**
+     * @returns {Object}
+     */
     getDefaultParams() {
         return {
             width: 14,
@@ -19,19 +24,11 @@ export default class Floor {
             }
         }
     }
+    /**
+     * @param {THREE.Scene} pillarModel 
+     * @returns {THREE.Group}
+     */
     createFloor(pillarModel) {
-        /*
-        const tileGeo = new THREE.CylinderGeometry(
-            this.params.cyParams.rdTop,
-            this.params.cyParams.rdBottom,
-            this.params.cyParams.height,
-            this.params.cyParams.rdSeg,
-            1
-        );
-        const tileMat = new THREE.MeshLambertMaterial({
-            emissive: 0x444444,
-        });*/
-        
         const radius = this.params.cyParams.rdTop * Math.cos(Math.PI/this.params.cyParams.rdSeg);
         let y = 0;
         for (let i = 0; i < radius * 2 * this.params.width - radius * 2; i += radius * 2) {

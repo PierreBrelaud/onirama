@@ -17,7 +17,7 @@ import { mapState } from 'vuex'
 export default {
 	data() {
 		return {
-			withoutNav: ['restitution', 'visualisation', 'authentification']
+			withoutNav: ['restitution', 'visualisation', 'authentification', 'portal-lab']
 		}
 	},
 	created() {

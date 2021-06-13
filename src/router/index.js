@@ -65,6 +65,7 @@ const routes = [
 	},
 	{
 		path: "/portal-lab",
+		name: "portal-lab",
 		component: PortalLab,
 	}
 ];

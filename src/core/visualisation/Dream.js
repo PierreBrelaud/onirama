@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from 'gsap';
 
-import Background from "@/core/visualisation/Background";
-import Floor from "@/core/visualisation/Floor";
-import Crystal from "@/core/visualisation/Crystal";
+import Background from "@/core/visualisation/insidePart/Background";
+import Floor from "@/core/visualisation/insidePart/Floor";
+import Crystal from "@/core/visualisation/insidePart/Crystal";
 import { drawPoint, degreeToRad, hexaToRgb, rgbToHex, fillArrayWith } from '@/utils/threejsUtils';
 import {getColorBySubEmotion} from "@/utils/surveyData"
 
@@ -69,6 +69,7 @@ export default class Dream {
      */
     createInsidePart(){
         const insidePartGroup = new THREE.Group();
+        insidePartGroup.name = "insidePartGroup";
 
         this.createLight();
 
@@ -87,8 +88,9 @@ export default class Dream {
         });
 
         //insidePartGroup.add(drawPoint(0, 0, 0));
+        const type = this.dreamData.type ? this.dreamData.type : 1;
         const basementLoader = new GLTFLoader();
-        basementLoader.load('/basement_3.gltf', (gltf) => {
+        basementLoader.load(`/basement_${type}.gltf`, (gltf) => {
             gltf.scene.position.set(0, -0.8, 1);
             //gltf.scene.position.set(0, 0, 0);
             insidePartGroup.add(gltf.scene);
@@ -113,13 +115,14 @@ export default class Dream {
      * @returns {THREE.Group}
      */
     createBackground(){
-        const background = new Background(20, 20, this.position);
-        const bgGp = background.createBackground(this.getColorsForBackground());
+        this.background = new Background(20, 20, this.position);
+        const bgGp = this.background.createBackground(this.getColorsForBackground());
         bgGp.position.z = -20;
         
         return bgGp;
     }
     /**
+     * @param {THREE.Scene} pillarModel
      * @returns {THREE.Group}
      */
     createFloor(pillarModel){
@@ -132,15 +135,16 @@ export default class Dream {
         return flGp
     }
     /**
-     * @returns {THREE.Group}
+     * @returns {THREE.Mesh}
      */
     createCrystal(){
-        const crystal = new Crystal();
-        const crystalGroup = crystal.createCrystal();
-        crystal.animateCrystal();
-        crystalGroup.position.y = 0.2;
-        crystalGroup.position.z = 1;
-        return crystalGroup;
+        this.crystal = new Crystal();
+        const crystal = this.crystal.createCrystal();
+        crystal.name = "crystal";
+        this.crystal.animateCrystal();
+        crystal.position.y = 0.01;
+        crystal.position.z = 1;
+        return crystal;
     } 
     createLight() {
         const sphere = new THREE.SphereGeometry( 0.01, 16, 8 );
@@ -150,7 +154,6 @@ export default class Dream {
         const pivot1 = new THREE.Group();
         pivot1.position.set(this.position, 0.2, -1);
         pivot1.rotation.x = degreeToRad(-30);
-        //this.insidePartScene.add(drawPoint(pivot.position.x, pivot.position.y, pivot.position.z));
         this.insidePartScene.add(pivot1);
 
         const ptLight1 = new THREE.PointLight(lightColors[0], 0.8, 0.5);
@@ -169,7 +172,6 @@ export default class Dream {
 
         const pivot2 = new THREE.Group();
         pivot2.position.set(this.position, -0.4, -1);
-        //this.insidePartScene.add(drawPoint(pivot2.position.x, pivot2.position.y, pivot2.position.z));
         this.insidePartScene.add(pivot2)
         const ptLight3 = new THREE.PointLight(lightColors[2], 0.2, 0.8, 1);
         ptLight3.position.set(0, 0, 0.3);
@@ -191,8 +193,10 @@ export default class Dream {
         this.insidePartScene.add(ptLight4);
         const ptH4 = new THREE.PointLightHelper(ptLight4, 0.1);
         //this.insidePartScene.add(ptH4);
-
     }
+    /**
+     * @param {THREE.Group} pivot 
+     */
     animateLight(pivot) {
         const tl = gsap.timeline({repeat: -1});
         tl.to(pivot.rotation, {
@@ -203,18 +207,31 @@ export default class Dream {
     }
     /**
      * 
-     * @returns {[]}
+     * @returns {[String]}
      */
     getColors(){
         let colors = [];
-        this.dreamData.emotions.forEach(emotion => {
-            colors.push(getColorBySubEmotion(emotion.emotionId, emotion.subEmotionId))
-        });
+        const emotions = [];
+        if(this.dreamData.emotions){
+            this.dreamData.emotions.forEach(emotion => {
+                if(Object.entries(emotion).length !== 0){
+                    emotions.push(emotion);
+                }
+            })
+        }
 
-        //colors = ['#0F749A', '#ACD6BC', '#C717AC'];
-        colors = [];
+        if(emotions.length !== 0) {
+            this.dreamData.emotions.forEach(emotion => {
+                colors.push(getColorBySubEmotion(emotion.emotionId, emotion.subEmotionId))
+            });
+        } else {
+            colors = [];
+        }
         return colors;
     }
+    /**
+     * @returns {[[Number]]}
+     */
     getColorsForBackground(){
         const noneColor = [0, 255, 33];
         const rgbWhite = [255, 255, 255];
@@ -241,6 +258,9 @@ export default class Dream {
         }
         return rgbColors;
     }
+    /**
+     * @returns {Number} - pillar's id
+     */
     getPillar(){
         const lucidity = this.dreamData.lucidity;
         const recurrence = this.dreamData.recurrence;
