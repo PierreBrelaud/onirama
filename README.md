@@ -2,8 +2,6 @@
 
 ## Wiki disponible [ici](https://github.com/PierreBrelaud/onirama/wiki)
 
-<br>
-
 ## Project setup
 
 ```
