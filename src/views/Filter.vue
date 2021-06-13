@@ -39,7 +39,7 @@
                 <div 
                     class="nav__slider__item" 
                     :class="{'nav__slider__item--selected' : navigationItem === 'chronology' }"
-                    @click="changeNavigationItem(item.CHRONOLOGIY)">
+                    @click="changeNavigationItem(item.CHRONOLOIY)">
                     <h1>
                         Chronologie
                     </h1>
@@ -52,7 +52,7 @@
         />
         <!-- chronology -->
         <filter-chronology 
-            v-if="navigationItem === item.CHRONOLOGIY"
+            v-if="navigationItem === item.CHRONOLOGY"
         />
         <!-- nebula -->
         <filter-nebula 
@@ -89,7 +89,7 @@ export default {
                 LIST: "list", 
             },
             item: { 
-                CHRONOLOGIY: "chronology", 
+                CHRONOLOGY: "chronology", 
                 NEBULA: "nebula", 
                 MAP: "map",
                 SEARCH: "search"
@@ -104,7 +104,7 @@ export default {
                 this.navigationItem = prevNavigationItem;
             }
             else {
-                this.navigationItem = this.item.CHRONOLOGIY;
+                this.navigationItem = this.item.CHRONOLOGY;
             }
         },
         changeNavigationItem(item) {
