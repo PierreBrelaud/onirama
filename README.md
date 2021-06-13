@@ -1,44 +1,28 @@
 # onirama
 
-## (Code of conduct)[https://v3.vuejs.org/style-guide]
-## (Methodo BEM)[https://www.alticreation.com/blog/bem-pour-le-css/]
-## Github
+## Wiki disponible [ici](https://github.com/PierreBrelaud/onirama/wiki)
 
-### Branches : 
-- prodution
-- development
-- feat/branch-name
-- style/branch-name
-- fix/branch-name
+<br>
 
 ## Project setup
+
 ```
 npm install
 yarn
 ```
+
 ##### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run dev
 yarn dev
 ```
 
 ##### Compiles and minifies for production
 ```
 npm run build
-```
-
-##### Lints and fixes files
-```
-npm run lint
+yarn build
 ```
 
 ## Firebase
 
-##### Deploy for development
-```
-firebase deploy
-```
-or
-```
-firebase deploy --only hosting
-```
+[Liste des commandes Firebase](https://github.com/PierreBrelaud/onirama/wiki/6.-Firebase-CLI)
