@@ -1,6 +1,5 @@
 <template>
   <canvas id="visuCanvas" />
-
 </template>
 
 <script>
@@ -13,7 +12,6 @@ import { configurations } from "@/utils/settingsConfig";
 import CameraController from "@/core/visualisation/CameraController";
 import OutsideWorld from "@/core/visualisation/OutsideWorld";
 import DreamController from "@/firebase/db/DreamController";
-import {drawPoint} from "@/utils/threejsUtils";
 
 export default {
   mounted() {
@@ -48,10 +46,9 @@ export default {
         1000
       );
       this.camera.position.set(0, 0.1, 5);
-      //this.camera.position.set(0, 0.1, 2);
 
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      //this.controls.enabled = false;
+      this.controls.enabled = false;
 
       this.cameraController = new CameraController(this.camera, this.controls);
 
@@ -73,6 +70,8 @@ export default {
       this.initListeners();
     },
     /**
+     * Setup the renderer
+     * 
      * @param {Object} quality
      * @param {Object} size
      * @param {HTMLCanvasElement} canvas
@@ -86,7 +85,7 @@ export default {
 
       renderer.setSize(size.width, size.height);
       if (quality.pixelRatio) renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setClearColor(0xfff0ea);
+      renderer.setClearColor(0x001a33);
       renderer.autoClear = false;
       renderer.autoClearStencil = false;
       renderer.autoClearDepth = false;
@@ -108,10 +107,6 @@ export default {
      * @param {[Object]} dreamsData
      */
     initOutsideWorldScene(dreamsData) {
-      const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-      this.outsideWorldScene.add(hemisphereLight);
-
-      
       const textureCube = new THREE.CubeTextureLoader()
       .setPath( '../../src/assets/textures/cubemap/NightSky/' )
       .load( [
@@ -123,7 +118,7 @@ export default {
           'nz.png'
       ] );
       textureCube.mapping = THREE.CubeRefractionMapping;
-      this.outsideWorldScene.background = textureCube;
+      //this.outsideWorldScene.background = textureCube;
 
       this.outsideWorld = new OutsideWorld(
         this.outsideWorldScene,
@@ -136,15 +131,12 @@ export default {
       window.addEventListener("resize", () => this.onResize());
 
       window.addEventListener("keydown", ({ key }) => this.onKeyPress(key));
-
+      
       window.addEventListener("click", (
         {clientX, clientY}) => this.onClick(clientX, clientY)
       );
 
       swipeDetect(this.renderer.domElement, (dir) => this.onSwipe(dir), 10);
-    },
-    getBackground(scene) {
-      return scene.getObjectByName("background");
     },
     animate() {
       this.stats.begin();
@@ -175,7 +167,7 @@ export default {
           this.renderer.render(this.dreamScenes[i], this.camera);
 
           // BACKGROUND ANIMATION
-          const background = this.getBackground(this.dreamScenes[i]);
+          const background = this.dreamScenes[i].getObjectByName("background");
           background.material.uniforms.uTime.value =
             this.clock.getElapsedTime();
         }
@@ -189,6 +181,19 @@ export default {
       }
       requestAnimationFrame(this.animate);
     },
+    /**
+     * @param {String} dir - direction
+     */
+    moveTo(dir){
+      if (!this.outsideWorld.canMoveTo(dir)) return;
+        this.outsideWorld.loadNextLandscape(dir);
+        this.outsideWorld.loadNextDream(dir);
+        this.cameraController.moveToDirection(dir, () => {
+          this.outsideWorldScene.remove(this.outsideWorld.getOutsideParts[0]);
+          this.portalScenes.shift();
+          this.dreamScenes.shift();
+        });
+    },
     onResize() {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -200,13 +205,7 @@ export default {
     onSwipe(dir) {
       dir = dir === "left" ? 1 : -1;
       if (!this.cameraController.canInteract || this.isZoomed) return;
-      if (!this.outsideWorld.canMoveTo(dir)) return;
-      this.outsideWorld.loadNextLandscape(dir);
-      this.outsideWorld.loadNextDream(dir);
-      this.cameraController.moveToDirection(dir, () => {
-        this.portalScenes.shift();
-        this.dreamScenes.shift();
-      });
+      this.moveTo(dir);
     },
     /**
      * @param {String} key
@@ -214,24 +213,15 @@ export default {
     onKeyPress(key) {
       if (!this.cameraController.canInteract || this.isZoomed) return;
       if (key === "ArrowRight") {
-        if (!this.outsideWorld.canMoveTo(1)) return;
-        this.outsideWorld.loadNextLandscape(1);
-        this.outsideWorld.loadNextDream(1);
-        this.cameraController.moveToDirection(1, () => {
-          this.portalScenes.shift();
-          this.dreamScenes.shift();
-        });
+        this.moveTo(1);
       } else if (key === "ArrowLeft") {
-        if (!this.outsideWorld.canMoveTo(-1)) return;
-        this.outsideWorld.loadNextLandscape(-1);
-        this.outsideWorld.loadNextDream(-1);
-        this.cameraController.moveToDirection(-1, () => {
-          this.portalScenes.shift();
-          this.dreamScenes.shift();
-        });
-        
+        this.moveTo(-1);
       }
     },
+    /**
+     * @param {Number} clientX
+     * @param {Number} clientY
+     */
     onClick(clientX, clientY){
       if(!this.cameraController.canInteract) return;
       if(this.isZoomed === true){
