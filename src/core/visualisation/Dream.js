@@ -135,16 +135,17 @@ export default class Dream {
         return flGp
     }
     /**
-     * @returns {THREE.Mesh}
+     * @returns {THREE.Group}
      */
     createCrystal(){
         this.crystal = new Crystal();
-        const crystal = this.crystal.createCrystal();
-        crystal.name = "crystal";
+        const crystalGp = this.crystal.createCrystal();
+        crystalGp.name = "crystal";
         this.crystal.animateCrystal();
-        crystal.position.y = 0.01;
-        crystal.position.z = 1;
-        return crystal;
+        crystalGp.position.y = 0.15;
+        crystalGp.position.z = 1;
+        crystalGp.rotation.z = degreeToRad(20);
+        return crystalGp;
     } 
     createLight() {
         const sphere = new THREE.SphereGeometry( 0.01, 16, 8 );

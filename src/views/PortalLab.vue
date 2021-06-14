@@ -94,17 +94,16 @@ export default {
       this.dreamScene = dream.scene.insidePart;
       dream.crystal.initGui(this.gui);
       dream.background.initGui(this.gui);
-      console.log(dream);
 
       document.addEventListener("crystalChanged", () => {
         const insidePartGroup = this.dreamScene.getObjectByName("insidePartGroup");
-        const crystal = insidePartGroup.getObjectByName("crystal");
-        insidePartGroup.remove(crystal);
-        //console.log(dream.crystal);
+        const crystalGroup = insidePartGroup.getObjectByName("crystal");
+        crystalGroup.remove(crystalGroup.children[0]);
+        //console.log(crystal);
         insidePartGroup.add(dream.crystal.createCrystal());
-        dream.crystal.crystal.position.y = 0.01;
-        dream.crystal.crystal.position.z = 1;
-        dream.crystal.animateCrystal();
+        //dream.crystal.crystal.position.y = 0.01;
+        //dream.crystal.crystal.position.z = 1;
+        //dream.crystal.animateCrystal();
       });
     },
     getBackground(scene) {

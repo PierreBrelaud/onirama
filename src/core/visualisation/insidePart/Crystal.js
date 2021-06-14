@@ -9,6 +9,7 @@ export default class Crystal {
      */
     constructor(params){
         this.params = params ? params : this.getDefaultParams();
+        this.crystalGp = new THREE.Group();
     }
     /**
      * @returns {Object}
@@ -73,16 +74,14 @@ export default class Crystal {
         const crystal = new THREE.Mesh(crystalGeo, crystalMat);
         crystal.name = "crystal";
         crystal.position.y = - this.params.crystalHeight/2;
-        crystal.rotation.z += degreeToRad(10);
         
         const edgeGeo = new THREE.EdgesGeometry( crystal.geometry );
         const edgeMat = new THREE.LineBasicMaterial( { color: this.params.lineColor, opacity: 0.6, transparent: true } );
         const edgeWireframe = new THREE.LineSegments( edgeGeo, edgeMat );
         crystal.add(edgeWireframe);
-        
-        this.crystal = crystal;
-        
-        return crystal;
+
+        this.crystalGp.add(crystal);
+        return this.crystalGp;
     }
     /**
      * @returns {Object}
@@ -189,7 +188,7 @@ export default class Crystal {
     }
     animateCrystal(){
         const tl = gsap.timeline({repeat: -1, repeatDelay: 0});
-        tl.to(this.crystal.rotation, {
+        tl.to(this.crystalGp.rotation, {
             duration: 15,
             ease:'none',
             y: `${degreeToRad(360)}`
@@ -207,7 +206,7 @@ export default class Crystal {
         .onChange(() => {
             document.dispatchEvent(evt);
         });
-        generalFolder.add(this.params, 'crystalHeight', 0.1, 0.6, 0.001)
+        generalFolder.add(this.params, 'crystalHeight', 0.1, 0.45, 0.001)
         .name('Height')
         .onChange(() => {
             document.dispatchEvent(evt);
