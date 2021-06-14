@@ -1,6 +1,8 @@
 <template>
     <!-- navigation -->
     <div class="filter appview">
+        <!-- gap for header -->
+        <div class="header"></div>
         <div class="nav">
             <div class="nav__slider" :class="'nav__slider--' + navigationItem">
                 <!-- map -->
@@ -37,24 +39,20 @@
                 <div 
                     class="nav__slider__item" 
                     :class="{'nav__slider__item--selected' : navigationItem === 'chronology' }"
-                    @click="changeNavigationItem(item.CHRONOLOGIY)">
+                    @click="changeNavigationItem(item.CHRONOLOIY)">
                     <h1>
                         Chronologie
                     </h1>
                 </div>
             </div>
         </div>
-        
-        <br>
-        <!-- <button @click="changeNavigationType(type.VISUALISATION)">visu</button>
-        <button @click="changeNavigationType(type.LIST)">list</button> -->
         <!-- map -->
         <filter-map 
             v-if="navigationItem === item.MAP"
         />
         <!-- chronology -->
         <filter-chronology 
-            v-if="navigationItem === item.CHRONOLOGIY"
+            v-if="navigationItem === item.CHRONOLOGY"
         />
         <!-- nebula -->
         <filter-nebula 
@@ -91,7 +89,7 @@ export default {
                 LIST: "list", 
             },
             item: { 
-                CHRONOLOGIY: "chronology", 
+                CHRONOLOGY: "chronology", 
                 NEBULA: "nebula", 
                 MAP: "map",
                 SEARCH: "search"
@@ -106,7 +104,7 @@ export default {
                 this.navigationItem = prevNavigationItem;
             }
             else {
-                this.navigationItem = this.item.CHRONOLOGIY;
+                this.navigationItem = this.item.CHRONOLOGY;
             }
         },
         changeNavigationItem(item) {
@@ -123,6 +121,9 @@ export default {
 
 <style lang="scss" scoped>
 .filter {
+    .header {
+        height: 4rem;
+    }
     .nav {
         height: 13rem;
         width: 100%;

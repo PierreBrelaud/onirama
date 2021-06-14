@@ -84,8 +84,8 @@ export default {
             const count = this.getMaxCharToDisplay(type)
             return this.getHighlightedText(value, count, type);
         },
-        getSubEmotion(typeId, valueId) {
-            return getSubEmotion(typeId, valueId)
+        getSubEmotion(emotionId, subEmotionId) {
+            return getSubEmotion(emotionId, subEmotionId)
         },
         getMaxCharToDisplay(type) {
             const DIVIDERS = { title: 17, text: 5 }

@@ -47,6 +47,16 @@ export default {
 	&--full {
 		height: 100vh;
 		margin-bottom: 0;
+		.appview {
+			height: 100vh;
+		}
+	}
+
+	.appview {
+		height: calc(100vh - 8rem);
+		background-color: $C-extradark;
+		box-sizing: border-box;
+		color: $C-white;
 	}
 }
 </style>

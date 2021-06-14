@@ -6,8 +6,14 @@ class ElasticsearchHelper {
 		this.client = this.initClient();
 	}
 
+	/**
+	 * Init elastic search client
+	 * @returns Client
+	 */
 	initClient() {
+
 		const env = functions.config();
+
 		const node = env.elasticsearch.url;
 		const auth = {
 			username: env.elasticsearch.username,
@@ -20,8 +26,12 @@ class ElasticsearchHelper {
 		});
 	}
 
-	async request() {}
-
+	/**
+	 * Search in dream text & title
+	 * @param {String} userId 
+	 * @param {String} search value
+	 * @returns {Promise}
+	 */
 	async searchDream(userId, value) {
 		const result = await this.client.search({
 			index: "dream",
@@ -47,10 +57,21 @@ class ElasticsearchHelper {
 		});
 		return result.body;
 	}
-	async getDreamsByDate() {
+
+	/**
+	 * Get dream by date desc
+	 * @param {String} userId  
+	 * @returns {Promise}
+	 */
+	async getDreamsByDate(userId) {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
+				query: {
+					match: {
+						userId: userId,
+					},
+				},
 				sort: {
 					date: "desc",
 				},
@@ -59,14 +80,20 @@ class ElasticsearchHelper {
 		return result.body;
 	}
 
-	async getDreamsByType(userId, typeId) {
+	/**
+	 * Get dream by type
+	 * @param {String} userId 
+	 * @param {Number} emotionId 
+	 * @returns {Promise}
+	 */
+	async getDreamsByType(userId, emotionId) {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
 				query: {
 					bool: {
 						must: [
-							{ match: { type: typeId } },
+							{ match: { emotionId: emotionId } },
 							{ match: { userId: userId } },
 						],
 					},
@@ -76,7 +103,13 @@ class ElasticsearchHelper {
 		return result.body;
 	}
 
-	async getEmotionTypeCount(userId, type) {
+	/**
+	 * Get emotion count
+	 * @param {String} userId 
+	 * @param {Number} emotionId 
+	 * @returns {Promise}
+	 */
+	async getEmotionCount(userId, emotionId) {
 		const result = await this.client.count({
 			index: "dream",
 			body: {
@@ -91,7 +124,7 @@ class ElasticsearchHelper {
 											must: [
 												{
 													match: {
-														"emotions.type": type,
+														"emotions.emotionId": emotionId,
 													},
 												},
 											],
@@ -112,7 +145,14 @@ class ElasticsearchHelper {
 		return result.body.count;
 	}
 
-	async getEmotionByValue(userId, type, value) {
+	/**
+	 * Get dream by sub emotion
+	 * @param {String} userId 
+	 * @param {Number} emotionId 
+	 * @param {Number} subEmotionId 
+	 * @returns {Promise}
+	 */
+	async getEmotionByValue(userId, emotionId, subEmotionId) {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
@@ -127,12 +167,12 @@ class ElasticsearchHelper {
 											must: [
 												{
 													match: {
-														"emotions.type": type,
+														"emotions.emotionId": emotionId,
 													},
 												},
 												{
 													match: {
-														"emotions.value": value,
+														"emotions.subEmotionId": subEmotionId,
 													},
 												},
 											],
@@ -153,7 +193,14 @@ class ElasticsearchHelper {
 		return result.body;
 	}
 
-	async getEmotionValueCount(userId, type, value) {
+	/**
+	 * Get sub emotion count
+	 * @param {String} userId 
+	 * @param {Number} emotionId 
+	 * @param {Number} subEmotionId 
+	 * @returns {Promise}
+	 */
+	async getSubEmotionCount(userId, emotionId, subEmotionId) {
 		const result = await this.client.count({
 			index: "dream",
 			body: {
@@ -168,12 +215,12 @@ class ElasticsearchHelper {
 											must: [
 												{
 													match: {
-														"emotions.type": type,
+														"emotions.emotionId": emotionId,
 													},
 												},
 												{
 													match: {
-														"emotions.value": value,
+														"emotions.subEmotionId": subEmotionId,
 													},
 												},
 											],
@@ -194,6 +241,11 @@ class ElasticsearchHelper {
 		return result.body.count;
 	}
 
+	/**
+	 * Create dream index
+	 * @param {Object} snap 
+	 * @param {Object} context 
+	 */
 	async createDreamIndex(snap, context) {
 		await this.client.index({
 			index: "dream",
@@ -203,6 +255,11 @@ class ElasticsearchHelper {
 		});
 	}
 
+	/**
+	 * Update dream index
+	 * @param {Object} snap 
+	 * @param {Object} context 
+	 */
 	async updateDreamIndex(snap, context) {
 		await this.client.update({
 			index: "dream",
@@ -213,6 +270,11 @@ class ElasticsearchHelper {
 		});
 	}
 
+	/**
+	 * Delete dream index
+	 * @param {Object} snap 
+	 * @param {Object} context 
+	 */
 	async deleteDreamIndex(snap, context) {
 		await this.client.delete({
 			index: "dream",
