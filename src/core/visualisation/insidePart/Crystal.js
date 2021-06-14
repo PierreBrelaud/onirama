@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { degreeToRad, drawPoint } from '@/utils/threejsUtils';
+import { degreeToRad, drawPoint, map } from '@/utils/threejsUtils';
 import gsap from 'gsap';
 
 export default class Crystal {
@@ -10,6 +10,17 @@ export default class Crystal {
     constructor(params){
         this.params = params ? params : this.getDefaultParams();
         this.crystalGp = new THREE.Group();
+        this.wordCount = {
+            category : {
+                nbWdPeople: 0,
+                nbWdPlace: 0,
+                nbWdEmotion: 0,
+                nbWdColor: 0,
+                nbWdAction: 0,
+                nbWdTitle: 0,
+            },
+            total : 256
+        }
     }
     /**
      * @returns {Object}
@@ -23,7 +34,7 @@ export default class Crystal {
             angleLittleTop: 90,
             angleBottom: 90,
             angleLittleBottom: 90,
-            crystalHeight: 0.4,
+            crystalHeight: 0.1,
             crystalWidth: 0.08,
             spikeWidth: 0.01,
             color: '#FF0000',
@@ -44,15 +55,16 @@ export default class Crystal {
         const top2Vert = this.getVertices(guidelines.top2);
 
         const vertices = [];
+        const nbFaces = this.getNbFace(this.wordCount);
         // MIDDLE PART
-        this.createPart(vertices, bottom1Vert, top1Vert);
+        this.createPart(vertices, bottom1Vert, top1Vert, nbFaces);
         // BOTTOM PART
-        this.createPart(vertices, bottom2Vert, bottom1Vert);
+        this.createPart(vertices, bottom2Vert, bottom1Vert, nbFaces);
         // TOP PART
-        this.createPart(vertices, top1Vert, top2Vert);
+        this.createPart(vertices, top1Vert, top2Vert, nbFaces);
         // TOP & BOTTOM SPIKE
-        this.createFlatPart(vertices, bottom2Vert, top2Vert);
-        
+        this.createFlatPart(vertices, bottom2Vert, top2Vert, nbFaces);
+
         const crystalGeo = new THREE.BufferGeometry();
         crystalGeo.setAttribute(
             'position',
@@ -136,7 +148,10 @@ export default class Crystal {
      * @returns {THREE.Mesh} 
      */
     createGuideline(width, angle, height = 0) {
-        const geometry = new THREE.CircleGeometry(width, this.params.nbFace);
+        // ici je dois mettre la shape
+        //const geometry = new THREE.CircleGeometry(width, this.params.nbFace);
+        const geometry = this.getCrystalShape(this.wordCount, width);
+
         const material = new THREE.MeshBasicMaterial({visible: false});
         const guideline = new THREE.Mesh(geometry, material);
         guideline.rotation.set(
@@ -149,13 +164,54 @@ export default class Crystal {
 
         return guideline;
     }
+    getCrystalShape(wordsCount, size) {
+        const finalPts = [];
+        const rawPts = []
+        const nbFaces = this.getNbFace(wordsCount);
+
+        Object.values(wordsCount.category).forEach(val => {
+            if (val <= 0) return; 
+            rawPts.push(val)
+        });
+
+        const angle = degreeToRad(360 / nbFaces);
+
+        for (let i = 1; i <= nbFaces; i++) {
+            let value = map(rawPts[i - 1], 0, wordsCount.total, 0.2, 1);
+            //Valeur par défaut si non labelisé
+            value = value ? value : 0.1;
+            const coord = {
+                x: Math.cos(angle * i) * value * 3 * size,
+                y: Math.sin(angle * i) * value * 3 * size,
+            }
+            finalPts.push(coord);
+        }
+
+        const crystalShape = new THREE.Shape();
+
+        for (let i = 0; i < finalPts.length; i++) {
+            crystalShape.lineTo(finalPts[i].x, finalPts[i].y);
+        }
+        // close the shape
+        crystalShape.lineTo(finalPts[0].x, finalPts[0].y);
+
+        return new THREE.ShapeGeometry(crystalShape);
+    }
+    getNbFace(wordsCount) {
+        const rawPts = [];
+        Object.values(wordsCount.category).forEach(val => {
+            if (val <= 0) return; 
+            rawPts.push(val)
+        });
+        return rawPts.length < 3 ? 3 : rawPts.length;
+    }
     /**
      * @param {[Object]} vertices 
      * @param {[Object]} bottom 
      * @param {[Object]} top 
      */
-    createPart(vertices, bottom, top) {
-        for (let i = 1; i <= this.params.nbFace; i++) {
+    createPart(vertices, bottom, top, nbFaces) {
+        for (let i = 0; i < nbFaces; i++) {
             vertices.push(
                 bottom[i].x, bottom[i].y, bottom[i].z,
                 top[i + 1].x, top[i + 1].y, top[i + 1].z,
@@ -173,8 +229,8 @@ export default class Crystal {
      * @param {[Object]} bottom 
      * @param {[Object]} top 
      */
-    createFlatPart(vertices, bottom, top) {
-        for (let i = 1; i <= this.params.nbFace; i++) {
+    createFlatPart(vertices, bottom, top, nbFaces) {
+        for (let i = 0; i < nbFaces; i++) {
             vertices.push(
                 top[i].x, top[i].y, top[i].z,
                 top[0].x, top[0].y, top[0].z,

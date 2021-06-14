@@ -20,7 +20,7 @@ export default class OutsideWorld {
         
         this.landscapeSize = 9.37;
         this.dreams = {
-			current: 1,
+			current: 0,
 			min: 0,
 			max: this.dreamsData.length, 
 			data: [
@@ -126,7 +126,6 @@ export default class OutsideWorld {
 	 * @returns {Boolean} 
 	 */
 	canMoveTo(dir) {
-        console.log(this.currentDream);
 		if(dir === -1 && this.currentDream <= this.dreams.min) {
 			return false;
 		} else if(dir === 1 && this.currentDream + 1 >= this.dreams.max) {

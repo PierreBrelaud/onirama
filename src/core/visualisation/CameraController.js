@@ -38,7 +38,7 @@ export default class CameraController {
     zoomIn(callback){
         gsap.to(this.camera.position, {
             y: 0,
-            z: 1.7,
+            z: 1.2,
             onComplete: () => {
                 callback();
             }

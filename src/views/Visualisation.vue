@@ -40,7 +40,7 @@ export default {
 
       // CAMERA ==============================================================
       this.camera = new THREE.PerspectiveCamera(
-        40,
+        54,
         size.width / size.height,
         0.1,
         1000
