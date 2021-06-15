@@ -12,25 +12,26 @@ export const dreamEmotions = [
     { id: 0, value: 'fear', display: 'Peur', data: [
         { id: 0, value: 'anguish', display: 'Angoissé', color: '#5E9EA4' },
         { id: 1, value: 'scared', display: 'Effrayé', color: '#0F749A' },
-        { id: 2, value: 'terrified', display: 'Craintif', color: '#033257' },
-        { id: 3, value: 'fearful', display: 'Terrifié', color: '#BAC39B' },
+        { id: 2, value: 'terrified', display: 'Craintif', color: '#BAC39B' },
+        { id: 3, value: 'fearful', display: 'Terrifié', color: '#033257' },
     ]},
     { id: 1, value: 'anger', display: 'Colère', data: [
-        { id: 0, value: 'annoyed', display: 'Agacé', color: '#FFC6C6' },
-        { id: 1, value: 'aggressive', display: 'Agressif', color: '#C93737' },
-        { id: 2, value: 'exasperated', display: 'Exaspéré', color: '#FF7B7B' },
-        { id: 3, value: 'furious', display: 'Furieux', color: '#FF0000' },
+        { id: 0, value: 'annoyed', display: 'Agacé', color: '#E05252' },
+        { id: 1, value: 'aggressive', display: 'Agressif', color: '#FF0000' },
+        { id: 2, value: 'exasperated', display: 'Exaspéré', color: '#C40000' },
+        { id: 3, value: 'furious', display: 'Furieux', color: '#882626' },
     ]},
     { id: 2, value: 'surprise', display: 'Surprise', data: [
-        { id: 0, value: 'shocked', display: 'Choqué', color: '#FFFFFF' },
-        { id: 1, value: 'perplexed', display: 'Perplexe', color: '#FFFFFF' },
-        { id: 2, value: 'amazed', display: 'Emerveillé', color: '#FFEE00' },
-        { id: 3, value: 'astonished', display: 'Etonné', color: '#FFFFFF' },
+        { id: 0, value: 'shocked', display: 'Choqué', color: '#CB2614' },
+        { id: 1, value: 'perplexed', display: 'Perplexe', color: '#C477B8' },
+        { id: 2, value: 'amazed', display: 'Emerveillé', color: '#FFE200' },
+        { id: 3, value: 'astonished', display: 'Etonné', color: '#FDEB88' },
     ]},
     { id: 3, value: 'disgust', display: 'Dégout', data: [
-        { id: 0, value: 'judged', display: 'Jugé', color: '#C4E67E' },
+        { id: 0, value: 'judged', display: 'Jugé', color: '#A4C364' },
         { id: 1, value: 'ashamed', display: 'Honteux', color: '#CDB95C' },
-        { id: 2, value: 'disgusted', display: 'Dégouté', color: '#8FA554' },
+        { id: 2, value: 'horrified', display: 'Horrifié', color: '#305762' },
+        { id: 3, value: 'sicken', display: 'Écoeuré', color: '#56833B' },
     ]},
     { id: 4, value: 'sadness', display: 'Tristesse', data: [
         { id: 0, value: 'grieved', display: 'Chagriné', color: '#C5EBD3' },
@@ -39,10 +40,15 @@ export const dreamEmotions = [
         { id: 3, value: 'desperate', display: 'Désespéré', color: '#393F70' },
     ]},
     { id: 5, value: 'joy', display: 'Joie', data: [
-        { id: 0, value: 'joyful', display: 'Joyeux', color: '#F8BA2B' },
-        { id: 1, value: 'excited', display: 'Excité', color: '#C903AA' },
+        { id: 0, value: 'joyful', display: 'Joyeux', color: '#FAC60A' },
+        { id: 1, value: 'excited', display: 'Excité', color: '#C717AC' },
         { id: 2, value: 'lover', display: 'Amoureux', color: '#FC3E44' },
-        { id: 3, value: 'euphoric', display: 'Euphorique', color: '#F69625' },
+        { id: 3, value: 'euphoric', display: 'Euphorique', color: '#FBDB2B' },
+    ]},
+    { id: 6, value: 'calm', display: 'Calme', data: [
+        { id: 0, value: 'appeased', display: 'Apaisé', color: '#DEC3CF' },
+        { id: 1, value: 'contemplative', display: 'Contemplatif', color: '#FFB73C' },
+        { id: 2, value: 'nostalgic', display: 'Nostalgique', color: '#F68D25' },
     ]},
 ]
 

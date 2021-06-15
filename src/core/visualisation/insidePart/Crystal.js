@@ -1,31 +1,60 @@
 import * as THREE from 'three';
-import { degreeToRad, drawPoint, map } from '@/utils/threejsUtils';
+import { degreeToRad, drawPoint, map, randomValueInArray } from '@/utils/threejsUtils';
 import gsap from 'gsap';
+import * as rainbow from 'rainbowvis.js';
 
 export default class Crystal {
     /**
      * @param {Object} params 
      * @constructor
      */
-    constructor(params){
-        this.params = params ? params : this.getDefaultParams();
-        this.crystalGp = new THREE.Group();
-        this.wordCount = {
+    constructor(colors, wordCount, params){
+        /*this.wordCount = {
             category : {
                 nbWdPeople: 0,
                 nbWdPlace: 0,
                 nbWdEmotion: 0,
-                nbWdColor: 0,
+                nbWdColor: 5,
                 nbWdAction: 0,
-                nbWdTitle: 0,
+                nbWdTitle: 5,
             },
-            total : 256
-        }
+            total : 120, 
+        }*/
+        this.wordCount = wordCount;
+        this.colors = colors;
+        this.params = params ? params : this.getDefaultParams();
+        this.crystalGp = new THREE.Group();
     }
     /**
      * @returns {Object}
      */
     getDefaultParams() {
+        // TODO Calculer ici la hauteur et la largeur du crystal et des piques
+        // Estimation du nombre maximum de mot : 250
+        // Estimation du nombre maximum de mot labelisé : 250 / 3
+        const total = this.wordCount.total;
+        
+        const maxTotalWord = 250;
+        const totalWord = total.textCount > maxTotalWord ? maxTotalWord : total.textCount; 
+        const height = map(totalWord, 0, maxTotalWord, 0.1, 0.45);
+
+        const maxTotalLabelWord = maxTotalWord / 3;
+        const totalLabelWord = total.labelsCount > maxTotalLabelWord ? maxTotalLabelWord : total.labelsCount;
+        const width = map(totalLabelWord, 0, maxTotalLabelWord, 0.05, 0.2);
+          
+        // TODO angleBottom et angleTop random
+        // TODO spikeWidth = 1/4 de la width
+        let crystalColor = "";
+        if(this.colors.length !== 0){
+            crystalColor = this.colors[0];
+        } else {
+            crystalColor = '#FFFFFF';
+        }
+
+        const crystalLineGradient = new rainbow();
+        crystalLineGradient.setSpectrum('#FFFFFF', crystalColor);
+        const lineColor = crystalLineGradient.colourAt(80);
+
         return {
             nbFace: 8,
             topSpikeHeight: 0.1,
@@ -34,12 +63,12 @@ export default class Crystal {
             angleLittleTop: 90,
             angleBottom: 90,
             angleLittleBottom: 90,
-            crystalHeight: 0.1,
-            crystalWidth: 0.08,
+            crystalHeight: height,// 0.2
+            crystalWidth: width, //0.08
             spikeWidth: 0.01,
-            color: '#FF0000',
-            emissive: '#FF0000',
-            lineColor: '#FF9999',
+            color: crystalColor,
+            emissive: crystalColor,
+            lineColor: `#${lineColor}`,//'#FF9999'
             opacity: 0.8,
         }
     }
@@ -164,9 +193,14 @@ export default class Crystal {
 
         return guideline;
     }
+    /**
+     * @param {Object} wordsCount 
+     * @param {Number} size 
+     * @returns {THREE.ShapeGeometry}
+     */
     getCrystalShape(wordsCount, size) {
         const finalPts = [];
-        const rawPts = []
+        const rawPts = [];
         const nbFaces = this.getNbFace(wordsCount);
 
         Object.values(wordsCount.category).forEach(val => {
@@ -177,9 +211,9 @@ export default class Crystal {
         const angle = degreeToRad(360 / nbFaces);
 
         for (let i = 1; i <= nbFaces; i++) {
-            let value = map(rawPts[i - 1], 0, wordsCount.total, 0.2, 1);
+            let value = map(rawPts[i - 1], 0, wordsCount.total.textCount, 0.2, 1.4);
             //Valeur par défaut si non labelisé
-            value = value ? value : 0.1;
+            value = value ? value : 0.5;
             const coord = {
                 x: Math.cos(angle * i) * value * 3 * size,
                 y: Math.sin(angle * i) * value * 3 * size,
@@ -197,6 +231,10 @@ export default class Crystal {
 
         return new THREE.ShapeGeometry(crystalShape);
     }
+    /**
+     * @param {Object} wordsCount 
+     * @returns {Number}
+     */
     getNbFace(wordsCount) {
         const rawPts = [];
         Object.values(wordsCount.category).forEach(val => {

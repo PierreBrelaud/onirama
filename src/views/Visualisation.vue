@@ -48,7 +48,7 @@ export default {
       this.camera.position.set(0, 0.1, 5);
 
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      this.controls.enabled = false;
+      //this.controls.enabled = false;
 
       this.cameraController = new CameraController(this.camera, this.controls);
 

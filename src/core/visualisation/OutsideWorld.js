@@ -17,10 +17,9 @@ export default class OutsideWorld {
         this.portalScenes = portalScenes;
         this.dreamScenes = dreamScenes;
         this.dreamsData = dreamsData;
-        
         this.landscapeSize = 9.37;
         this.dreams = {
-			current: 0,
+			current: 8,
 			min: 0,
 			max: this.dreamsData.length, 
 			data: [
@@ -102,8 +101,8 @@ export default class OutsideWorld {
         const dreamData = this.dreamsData[this.currentDream];
 		const dream = new Dream(this.currentPos, dreamData);
 
-        //this.outsideWorldScene.add(dream.scene.outsidePart);
-        this.outsideParts.push(dream.scene.outsidePart);
+        this.outsideWorldScene.add(dream.scene.outsidePart);
+        //this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
 	}
@@ -115,7 +114,7 @@ export default class OutsideWorld {
 		this.currentDream += dir;
         const dreamData = this.dreamsData[this.currentDream];
 		const dream = new Dream(this.currentPos, dreamData);
-        //this.outsideWorldScene.add(dream.scene.outsidePart);
+        this.outsideWorldScene.add(dream.scene.outsidePart);
         //this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);

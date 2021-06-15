@@ -40,16 +40,27 @@ export function hexaToRgb(color) {
     ];
     return aRgb;
 }
-
+/**
+ * @param {[Number]} color 
+ * @returns {String}
+ */
 export function rgbToHex(color) {
     return "#" + componentToHex(color[0]) + componentToHex(color[1]) + componentToHex(color[2]);
 }
-
+/**
+ * @param {Number} c 
+ * @returns {String}
+ */
 export function componentToHex(c) {
     const hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
 }
-
+/**
+ * @param {String | Number} filler 
+ * @param {[String | Number]} array 
+ * @param {Number} size 
+ * @returns {[String | Number]}
+ */
 export function fillArrayWith(filler, array, size) {
     const tempArray = [...array];
     const nb = size - array.length;
@@ -58,7 +69,22 @@ export function fillArrayWith(filler, array, size) {
     }
     return tempArray;
 }
-
+/**
+ * 
+ * @param {Number} value 
+ * @param {Number} in_min 
+ * @param {Number} in_max 
+ * @param {Number} out_min 
+ * @param {Number} out_max 
+ * @returns {Number}
+ */
 export function map(value, in_min, in_max, out_min, out_max) {
   return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+/**
+ * @param {[String | Number]} array 
+ * @returns {String | Number}
+ */
+export function randomValueInArray(array) {
+    return array[Math.floor(Math.random() * array.length)];
+};

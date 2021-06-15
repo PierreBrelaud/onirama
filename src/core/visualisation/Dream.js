@@ -38,13 +38,22 @@ export default class Dream {
      */
     createOutsidePart(){
         const outsidePartGroup = new THREE.Group();
+        const type = this.dreamData.type;
+        const outsideLoader = new GLTFLoader()
+            .setPath('../../src/assets/models/outsidePart/');
+        outsideLoader.load(`outsidePart_${type}.gltf`, (gltf) => {
+            outsidePartGroup.add(gltf.scene);
+        });
+        const ptLight = new THREE.PointLight(0xFFFFFF, 1, 1.2, 1);
+        outsidePartGroup.add(ptLight);
+        /*
         outsidePartGroup.name = "OutsidePart";
         const extPortalMesh = new THREE.Mesh(
             new THREE.PlaneBufferGeometry(0.6, 1.2),
             new THREE.MeshBasicMaterial({color: 0xFFFFFF})
         )
         extPortalMesh.position.set(0, 0, 0.01)
-        outsidePartGroup.add(extPortalMesh);
+        outsidePartGroup.add(extPortalMesh);*/
         outsidePartGroup.position.set(this.position, 0, 0);
         return outsidePartGroup;
     }
@@ -107,6 +116,7 @@ export default class Dream {
                 side: THREE.DoubleSide,
             })
         )
+        dreamSkybox.position.x = this.position;
         this.insidePartScene.add(dreamSkybox);
 
         return this.insidePartScene;
@@ -138,7 +148,35 @@ export default class Dream {
      * @returns {THREE.Group}
      */
     createCrystal(){
-        this.crystal = new Crystal();
+        let wordsCount = {};
+        if(this.dreamData.labelingData) {
+            const category = {}
+            Object.entries(this.dreamData.labelingData).forEach(([key, value]) => {
+                if(key !== 'total'){
+                    category[key] = value
+                } else {
+                    wordsCount[key] = value
+                }
+            });
+            wordsCount['category'] = category;
+        } else {
+            wordsCount = {
+                category : {
+                    nbWdPeople: 5,
+                    nbWdPlace: 5,
+                    nbWdEmotion: 5,
+                    nbWdColor: 5,
+                    nbWdAction: 5,
+                    nbWdTitle: 5,
+                },
+                total : {
+                    textCount: 100,
+                    labelsCount: 30,
+                } 
+            }
+        }
+
+        this.crystal = new Crystal(this.colors, wordsCount);
         const crystalGp = this.crystal.createCrystal();
         crystalGp.name = "crystal";
         this.crystal.animateCrystal();
@@ -222,12 +260,13 @@ export default class Dream {
         }
 
         if(emotions.length !== 0) {
-            this.dreamData.emotions.forEach(emotion => {
+            emotions.forEach(emotion => {
                 colors.push(getColorBySubEmotion(emotion.emotionId, emotion.subEmotionId))
             });
         } else {
             colors = [];
         }
+
         return colors;
     }
     /**
