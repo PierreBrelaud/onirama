@@ -10,10 +10,9 @@
                 </p>
             </div>
             <div class="container__footer">
-                <button class="container__footer__action btn">
-                    Ajouter un rêve
-                </button>
-                <button class="container__footer__action btn btn--back">
+                <button 
+                    @click="$emit('showRestitution')"
+                    class="container__footer__action btn">
                     Ajouter un rêve
                 </button>
             </div>
@@ -30,9 +29,11 @@
                 <p class="container__content__subtitle">
                     L’exploration démarre dans
                 </p>
-                <h1 class="container__content__title">
-                    5:59:34
-                </h1>
+                <dream-timer 
+                    v-on:endTimer="onTimerEnded"
+                    v-if="publishDate" 
+                    :timeStamp="publishDate"
+                />
             </div>
             <div class="container__footer">
                 <button class="container__footer__action btn">
@@ -49,7 +50,9 @@
                 </p>
             </div>
             <div class="container__footer">
-                <button class="container__footer__action btn">
+                <button 
+                    @click="generateDream"
+                    class="container__footer__action btn">
                     Découvrir mon rêve
                 </button>
             </div>
@@ -58,16 +61,50 @@
 </template>
 
 <script>
+import DreamController from '@/firebase/db/DreamController.js'
+import DreamTimer from '@/components/DreamTimer.vue'
 
 export default {
+    components: { DreamTimer },
+    mounted() {
+        this.$store.dispatch('loader/pending')
+        DreamController.getNotGeneratedDream((res) => {
+            console.log(res.docs.length)
+            if(res.docs.length === 0) {
+                this.state = 0;
+            }
+            else {
+                const dream = res.docs[0].data();
+                this.dreamId = res.docs[0].id;
+                const delay = 6;
+                const now = new Date();
+                now.setHours(now.getHours() + delay);
+                this.publishDate = dream.publishDate.toDate()
+                this.state = 1;
+            }
+            this.$store.dispatch('loader/done')
+        }, (err) => {
+            this.state = 0;
+            this.$store.dispatch('loader/done')
+        })
+    },
     data() {
         return {
-            state: 1
+            state: null,
+            publishDate: null,
+            dreamId: null,
         }
     },
-    components: {
-    },
     methods: {
+        onTimerEnded() {
+            this.state = 2;
+        },
+        generateDream() {
+            DreamController.generateDream(this.dreamId, 
+            (res) => {
+            }, 
+            (err) => console.log(err));
+        }
     }
 }
 </script>
@@ -126,6 +163,5 @@ export default {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    width: 100%;
 }
 </style>
