@@ -32,7 +32,7 @@ export default class OutsideWorld {
 		};
         this.displayedLandscape = [3, 4, 0, 1, 2];
         this.loader = new GLTFLoader().setPath(
-            "../../src/assets/models/landscapes/"
+            "/landscapes/"
         );
         
 		this.currentPos = 0;
@@ -51,10 +51,6 @@ export default class OutsideWorld {
                 gltf.scene.position.x = posX;
                 gltf.scene.name = `landscape_${id}`;
                 // TODO Replace material by a cheapest one
-
-                const pointLight = new THREE.PointLight( 0xD01119, 1);
-                pointLight.position.x = posX;
-                gltf.scene.children.push(pointLight);
 
                 this.outsideWorldScene.add(gltf.scene);
             });
@@ -84,10 +80,6 @@ export default class OutsideWorld {
                 this.currentPos + this.landscapeSize * 2;
             gltf.scene.position.x = posX;
             gltf.scene.name = `landscape_${next}`;
-            
-            const pointLight = new THREE.PointLight( 0xffffff, 0.4, 0);
-            pointLight.position.x = posX;
-            gltf.scene.children.push(pointLight);
 
             this.outsideWorldScene.add(gltf.scene);
         });
@@ -102,7 +94,7 @@ export default class OutsideWorld {
 		const dream = new Dream(this.currentPos, dreamData);
 
         this.outsideWorldScene.add(dream.scene.outsidePart);
-        //this.outsideParts.push(dream.scene.outsidePart);
+        this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
 	}
@@ -115,7 +107,7 @@ export default class OutsideWorld {
         const dreamData = this.dreamsData[this.currentDream];
 		const dream = new Dream(this.currentPos, dreamData);
         this.outsideWorldScene.add(dream.scene.outsidePart);
-        //this.outsideParts.push(dream.scene.outsidePart);
+        this.outsideParts.push(dream.scene.outsidePart);
 		this.portalScenes.push(dream.scene.portal);
         this.dreamScenes.push(dream.scene.insidePart);
 	}
@@ -138,5 +130,8 @@ export default class OutsideWorld {
      */
     get getOutsideParts() {
         return this.outsideParts;
+    }
+    clearOutsideParts() {
+        this.outsideParts = [];
     }
 }

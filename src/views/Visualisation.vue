@@ -12,6 +12,7 @@ import { configurations } from "@/utils/settingsConfig";
 import CameraController from "@/core/visualisation/CameraController";
 import OutsideWorld from "@/core/visualisation/OutsideWorld";
 import DreamController from "@/firebase/db/DreamController";
+import LoaderManager from '@/core/visualisation/LoaderManager';
 
 export default {
   mounted() {
@@ -48,7 +49,7 @@ export default {
       this.camera.position.set(0, 0.1, 5);
 
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      //this.controls.enabled = false;
+      this.controls.enabled = false;
 
       this.cameraController = new CameraController(this.camera, this.controls);
 
@@ -100,7 +101,9 @@ export default {
         snapshot.docs.forEach((doc) => {
           data.push(doc.data());
         });
-        this.initOutsideWorldScene(data);
+        LoaderManager.loadOutsideModels(() => {
+          this.initOutsideWorldScene(data);
+        });
       });
     },
     /**
@@ -188,8 +191,10 @@ export default {
       if (!this.outsideWorld.canMoveTo(dir)) return;
         this.outsideWorld.loadNextLandscape(dir);
         this.outsideWorld.loadNextDream(dir);
+
         this.cameraController.moveToDirection(dir, () => {
           this.outsideWorldScene.remove(this.outsideWorld.getOutsideParts[0]);
+          this.outsideWorld.getOutsideParts.shift();
           this.portalScenes.shift();
           this.dreamScenes.shift();
         });
@@ -224,8 +229,9 @@ export default {
      */
     onClick(clientX, clientY){
       if(!this.cameraController.canInteract) return;
+      const extPortal = this.dreamScenes[0].getObjectByName("extPortalMesh");
       if(this.isZoomed === true){
-        this.cameraController.zoomOut(() => {
+        this.cameraController.zoomOut(extPortal, () => {
           this.isZoomed = false;
         })
       } else {
@@ -237,7 +243,7 @@ export default {
         this.portalScenes.forEach(scene => {
           const intersects = raycaster.intersectObjects(scene.children);
           if(intersects.length > 0){
-            this.cameraController.zoomIn(() => {this.isZoomed = true});
+            this.cameraController.zoomIn(extPortal, () => {this.isZoomed = true});
           }
         })
       }

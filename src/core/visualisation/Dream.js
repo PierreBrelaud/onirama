@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from 'gsap';
+//import * as rainbow from 'rainbowvis.js';
 
 import Background from "@/core/visualisation/insidePart/Background";
 import Floor from "@/core/visualisation/insidePart/Floor";
 import Crystal from "@/core/visualisation/insidePart/Crystal";
-import { drawPoint, degreeToRad, hexaToRgb, rgbToHex, fillArrayWith } from '@/utils/threejsUtils';
-import {getColorBySubEmotion} from "@/utils/surveyData"
+import { drawPoint, degreeToRad, hexaToRgb, rgbToHex, fillArrayWith, map } from '@/utils/threejsUtils';
+import {getColorBySubEmotion, getColorsByDreamType} from "@/utils/surveyData"
+import LoaderManager from '@/core/visualisation/LoaderManager';
 
 
 export default class Dream {
@@ -18,6 +20,7 @@ export default class Dream {
     constructor(position, dreamData){
         this.position = position;
         this.dreamData = dreamData;
+        this.isLab = Object.entries(this.dreamData).length === 0;
         this.insidePartScene = new THREE.Scene();
         this.lights = [];
         this.colors = this.getColors();
@@ -38,22 +41,39 @@ export default class Dream {
      */
     createOutsidePart(){
         const outsidePartGroup = new THREE.Group();
-        const type = this.dreamData.type;
-        const outsideLoader = new GLTFLoader()
-            .setPath('../../src/assets/models/outsidePart/');
-        outsideLoader.load(`outsidePart_${type}.gltf`, (gltf) => {
-            outsidePartGroup.add(gltf.scene);
-        });
-        const ptLight = new THREE.PointLight(0xFFFFFF, 1, 1.2, 1);
-        outsidePartGroup.add(ptLight);
-        /*
+
+        // DATA ====================================================
+        let type = 5;
+        let mood = 0;
+        let impact = 0;
+        if(!this.isLab){
+            type = this.dreamData.type;
+            mood = map(this.dreamData.mood, -1, 1, 0, 100);
+            impact = this.dreamData.impact;
+        }
+
+        //==========================================================
+        const outsideModel = LoaderManager.getOutsideModel(type);
+        if(outsideModel){
+            outsidePartGroup.add(outsideModel.clone());
+        }
         outsidePartGroup.name = "OutsidePart";
-        const extPortalMesh = new THREE.Mesh(
-            new THREE.PlaneBufferGeometry(0.6, 1.2),
-            new THREE.MeshBasicMaterial({color: 0xFFFFFF})
-        )
-        extPortalMesh.position.set(0, 0, 0.01)
-        outsidePartGroup.add(extPortalMesh);*/
+
+        // TODO Pouvoir vérifier qu'un rêve a déjà été chargé
+        //      si c'est le cas ne pas le réafficher
+        
+        const ptLightS = new THREE.PointLight(0xFFFFFF, 0.3, 1.2, 1);
+        outsidePartGroup.add(ptLightS);
+        
+        const typeColors = getColorsByDreamType(type);
+        const ptLightMGradient = new Rainbow();
+        ptLightMGradient.setSpectrum(...typeColors);
+        const ptLightMColor = `#${ptLightMGradient.colourAt(mood)}`;
+        const ptLightMIntensity = map(impact, -1, 1, 0.2, 1.5);
+
+        const ptLightM = new THREE.PointLight(ptLightMColor, ptLightMIntensity, 6);
+        outsidePartGroup.add(ptLightM);
+
         outsidePartGroup.position.set(this.position, 0, 0);
         return outsidePartGroup;
     }
@@ -87,23 +107,29 @@ export default class Dream {
             this.createCrystal(),
         );
         
-        // PILLAR LOADING
-        const pillarLoader = new GLTFLoader()
-            .setPath('../../src/assets/models/pillar/');
-        
         const pillarId = this.getPillar();
-        pillarLoader.load(`pilier_${pillarId}.gltf`, (gltf) => {
-            insidePartGroup.add(this.createFloor(gltf.scene));
-        });
+        this.createPillar(pillarId, insidePartGroup);
 
-        //insidePartGroup.add(drawPoint(0, 0, 0));
         const type = this.dreamData.type ? this.dreamData.type : 1;
-        const basementLoader = new GLTFLoader();
-        basementLoader.load(`/basement_${type}.gltf`, (gltf) => {
-            gltf.scene.position.set(0, -0.8, 1);
-            //gltf.scene.position.set(0, 0, 0);
-            insidePartGroup.add(gltf.scene);
-        });
+        this.createBasement(
+            type, 
+            new THREE.Vector3(0, -0.8, 1), 
+            insidePartGroup
+        )
+
+        if(!this.isLab){
+            const extPortalMesh = new THREE.Mesh(
+                new THREE.PlaneBufferGeometry(0.6, 1.2),
+                new THREE.MeshBasicMaterial({
+                    color: 0xFFFFFF,
+                    transparent: true,
+                    opacity: 1,
+                })
+            )
+            extPortalMesh.name = "extPortalMesh";
+            extPortalMesh.position.set(0, 0, 2)
+            insidePartGroup.add(extPortalMesh);
+        }
 
         insidePartGroup.position.set(this.position, 0, -2);
 
@@ -138,11 +164,27 @@ export default class Dream {
     createFloor(pillarModel){
         const floor = new Floor();
         const flGp = floor.createFloor(pillarModel);
+        flGp.name = "floorGroup";
         floor.animateFloor();
         flGp.position.z = -0.5
         flGp.position.y = -0.8;
         
         return flGp
+    }
+    createPillar(pillarId, group){
+        const pillarLoader = new GLTFLoader()
+            .setPath('/pillars/');
+        pillarLoader.load(`pilier_${pillarId}.gltf`, (gltf) => {
+            group.add(this.createFloor(gltf.scene));
+        });
+    }
+    createBasement(type, {x, y, z}, group){
+        const basementLoader = new GLTFLoader();
+        basementLoader.load(`/basements/basement_${type}.gltf`, (gltf) => {
+            gltf.scene.position.set(x, y, z);
+            gltf.scene.name = "basement";
+            group.add(gltf.scene);
+        });
     }
     /**
      * @returns {THREE.Group}

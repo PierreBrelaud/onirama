@@ -1,11 +1,11 @@
 
 export const dreamTypes = [
-    { id: 0, value: 'nightmare', display: 'Cauchemar', description: 'Terrifiant, angoissant, réveil en sursaut' },
-    { id: 1, value: 'bad', display: 'Mauvais rêve', description: 'Tristesse, mélancolie et mauvais souvenir' },
-    { id: 2, value: 'erotic', display: 'Erotique', description: 'Fusionnel, exaltant et plus si affinité' },
-    { id: 3, value: 'contemplative', display: 'Contemplatif', description: 'Apaisant, créatif, joyeux ou nostalgique' },
-    { id: 4, value: 'daily', display: 'Vie quotidienne', description: 'Rêve qui semble encré dans la réalité' },
-    { id: 5, value: 'unclassifiable', display: 'Inclassifiable', description: 'Qui ne ressemble à aucun autre, rêve absurde' },
+    { id: 0, value: 'nightmare', display: 'Cauchemar', description: 'Terrifiant, angoissant, réveil en sursaut', colors: ['#7FD1C8', '#17485A', '#002669'] },
+    { id: 1, value: 'bad', display: 'Mauvais rêve', description: 'Tristesse, mélancolie et mauvais souvenir', colors: ['#C1EED1', '#92B9A2', '#66938E'] },
+    { id: 2, value: 'erotic', display: 'Erotique', description: 'Fusionnel, exaltant et plus si affinité', colors: ['#370FA0', '#D01119', '#D958BB'] },
+    { id: 3, value: 'contemplative', display: 'Contemplatif', description: 'Apaisant, créatif, joyeux ou nostalgique', colors: ['#E4A39F', '#EDE29B', '#D5731D'] },
+    { id: 4, value: 'daily', display: 'Vie quotidienne', description: 'Rêve qui semble encré dans la réalité', colors: ['#DDDFFF', '#6B89D9', '#3C43EB'] },
+    { id: 5, value: 'unclassifiable', display: 'Inclassifiable', description: 'Qui ne ressemble à aucun autre, rêve absurde', colors: ['#FFFFFF', '#FFFFFF'] },
 ]
 
 export const dreamEmotions = [
@@ -86,4 +86,8 @@ export const getSubEmotion = (emotionId, subEmotionId) => {
 
 export const getColorBySubEmotion = (emotionId, subEmotionId) => {
     return dreamEmotions[emotionId].data[subEmotionId].color;
+}
+
+export const getColorsByDreamType = (typeId) => {
+    return dreamTypes[typeId].colors;
 }

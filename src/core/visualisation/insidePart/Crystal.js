@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { degreeToRad, drawPoint, map, randomValueInArray } from '@/utils/threejsUtils';
 import gsap from 'gsap';
-import * as rainbow from 'rainbowvis.js';
+//import * as rainbow from 'rainbowvis.js';
 
 export default class Crystal {
     /**
@@ -51,7 +51,7 @@ export default class Crystal {
             crystalColor = '#FFFFFF';
         }
 
-        const crystalLineGradient = new rainbow();
+        const crystalLineGradient = new Rainbow();
         crystalLineGradient.setSpectrum('#FFFFFF', crystalColor);
         const lineColor = crystalLineGradient.colourAt(80);
 
