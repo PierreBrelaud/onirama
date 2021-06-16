@@ -68,6 +68,7 @@ import RestitutionEmotion from '@/components/restitution/RestitutionEmotion.vue'
 import RestitutionSurvey from '@/components/restitution/RestitutionSurvey.vue'
 import { memory, wakeUp } from '@/utils/restitutionData.js'
 import DreamController from '@/firebase/db/DreamController.js'
+import { dateToFirestoreTimestamp } from '@/utils/dateHelper.js'
 
 export default {
     data() {
@@ -100,6 +101,8 @@ export default {
         end() {
             this.$store.dispatch('loader/pending')
             DreamController.addDream({
+                publishDate: dateToFirestoreTimestamp(new Date()),
+                isGenerated: false, 
                 userId: this.$store.getters["auth/user"].data.uid,
                 labelingData: this.$store.getters["labeling/instance"].getFinalData,
                 ...this.$store.getters['restitution/data']

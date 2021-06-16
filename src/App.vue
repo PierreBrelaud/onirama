@@ -3,9 +3,9 @@
 	<div 
 		class="view"
 		:class="{ 'view--full': !isVisible }">
-		<router-view></router-view>
+		<router-view @showRestitution="showRestitution"></router-view>
 	</div>
-	<navigation v-if="isVisible"/>
+	<navigation :showRestitutionMenu="showRestitutionMenu" v-if="isVisible"/>
 </template>
 
 <script>
@@ -15,8 +15,17 @@ import auth from '@/firebase/auth'
 import { mapState } from 'vuex'
 
 export default {
+	methods: {
+		showRestitution: function() {
+			this.showRestitutionMenu = false;
+			setTimeout(() => {
+				this.showRestitutionMenu = true;
+			}, 100)
+		}
+	},
 	data() {
 		return {
+			showRestitutionMenu: false,
 			withoutNav: ['restitution', 'visualisation', 'authentification', 'portal-lab']
 		}
 	},

@@ -11,7 +11,7 @@
             @click="showRestitutionMenu = !showRestitutionMenu">
             <div
                 class="navigation__item__more" 
-                :class="{'navigation__item__more--active' : showRestitutionMenu}"
+                :class="{'navigation__item__more--active' : showRestitutionMenu }"
             ></div>
         </div>
         <router-link :to="'/statistiques'">
@@ -50,11 +50,6 @@
 import ScanText from '@/components/ScanText.vue'
 
 export default {
-    data() {
-        return {
-            showRestitutionMenu: false,
-        }
-    },
     methods: {
         scanSuccess(data) {
             this.$store.state.restitution.text = data
@@ -71,6 +66,13 @@ export default {
     computed: {
         storeData() {
             return this.$store.getters['restitution/data']
+        }
+    },
+    props: {
+        showRestitutionMenu: {
+            type: Boolean,
+            required: false,
+            default: false,
         }
     }
 }
