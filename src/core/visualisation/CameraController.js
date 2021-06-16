@@ -2,6 +2,8 @@ import gsap from "gsap";
 import * as THREE from 'three';
 import { OrbitControls } from "@three-ts/orbit-controls";
 
+import { map } from '@/utils/threejsUtils';
+
 export default class CameraController {
     /**
      * @param {THREE.PerspectiveCamera} camera 
@@ -35,10 +37,19 @@ export default class CameraController {
     /**
      * @param {Function} callback 
      */
-    zoomIn(callback){
+    zoomIn(extPortal, callback){
         gsap.to(this.camera.position, {
             y: 0,
-            z: 1.7,
+            z: 1.2,
+            onUpdate: () => {
+                extPortal.material.opacity = map(
+                    this.camera.position.z,
+                    4.7,
+                    1.2,
+                    1,
+                    0
+                )
+            },
             onComplete: () => {
                 callback();
             }
@@ -47,10 +58,19 @@ export default class CameraController {
     /**
      * @param {Function} callback 
      */
-    zoomOut(callback){
+    zoomOut(extPortal, callback){
         gsap.to(this.camera.position, {
             y: 0.1,
             z: 5,
+            onUpdate: () => {
+                extPortal.material.opacity = map(
+                    this.camera.position.z,
+                    1.2,
+                    4.7,
+                    0,
+                    1
+                )
+            },
             onComplete: () => {
                 callback();
             }

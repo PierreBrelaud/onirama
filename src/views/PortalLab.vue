@@ -48,6 +48,36 @@ export default {
       this.clock = new THREE.Clock();
       this.stats = Stats();
       document.body.appendChild(this.stats.dom);
+
+      const params = {
+        basement: 1,
+        pillar: 1,
+      };
+
+      const basements = { 
+        Cauchemar: 0,
+        Mauvais_rêve: 1,
+        Erotique: 2,
+        Contemplatif: 3,
+        Vie_quotidienne: 4,
+        Inclassifiable: 5,
+      };
+      const basementFolder = this.gui.addFolder("Basement");
+      basementFolder.add( params, 'basement', basements ).onChange((e) => {
+        this.changeBasement(e)
+      });
+
+      const pillars = {
+        Pillar1: 1,
+        Pillar2: 2,
+        Pillar3: 3,
+        Pillar4: 4,
+      }
+      const pillarFolder = this.gui.addFolder("Pillar");
+      pillarFolder.add( params, 'pillar', pillars ).onChange((e) => {
+        this.changePillar(e)
+      });
+
     },
     animate() {
       this.stats.begin();
@@ -89,22 +119,34 @@ export default {
       this.stats.end();
     },
     createDream() {
-      const dream = new Dream(0, {});
-      this.portalScene = dream.scene.portal;
-      this.dreamScene = dream.scene.insidePart;
-      dream.crystal.initGui(this.gui);
-      dream.background.initGui(this.gui);
+      this.dream = new Dream(0, {});
+      this.portalScene = this.dream.scene.portal;
+      this.dreamScene = this.dream.scene.insidePart;
+      this.dream.crystal.initGui(this.gui);
+      this.dream.background.initGui(this.gui);
 
       document.addEventListener("crystalChanged", () => {
         const insidePartGroup = this.dreamScene.getObjectByName("insidePartGroup");
         const crystalGroup = insidePartGroup.getObjectByName("crystal");
         crystalGroup.remove(crystalGroup.children[0]);
-        //console.log(crystal);
-        insidePartGroup.add(dream.crystal.createCrystal());
-        //dream.crystal.crystal.position.y = 0.01;
-        //dream.crystal.crystal.position.z = 1;
-        //dream.crystal.animateCrystal();
+        insidePartGroup.add(this.dream.crystal.createCrystal());
       });
+    },
+    changeBasement(type){
+      const insidePartGroup = this.dreamScene.getObjectByName("insidePartGroup");
+      const basement = insidePartGroup.getObjectByName("basement");
+      insidePartGroup.remove(basement);
+      this.dream.createBasement(
+        type, 
+        new THREE.Vector3(0, -0.8, 1), 
+        insidePartGroup
+      )
+    },
+    changePillar(pillarId){
+      const insidePartGroup = this.dreamScene.getObjectByName("insidePartGroup");
+      const floorGroup = insidePartGroup.getObjectByName("floorGroup");
+      insidePartGroup.remove(floorGroup);
+      this.dream.createPillar(pillarId, insidePartGroup);
     },
     getBackground(scene) {
       return scene.getObjectByName("background");

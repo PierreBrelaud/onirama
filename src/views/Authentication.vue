@@ -226,6 +226,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+*, *:before, *:after {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input, input:before, input:after {
+    -webkit-user-select: initial;
+    -khtml-user-select: initial;
+    -moz-user-select: initial;
+    -ms-user-select: initial;
+    user-select: initial;
+} 
+
 
 .welcome, .container {
     width: 80%;
