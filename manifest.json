@@ -1,0 +1,11 @@
+{
+    "name": "Onirama",
+    "short_name": "Onirama",
+    "description": "Ceci est une pwa ...",
+    "icons": [
+    ],
+    "start_url": "/",
+    "display": "fullscreen",
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF"
+}

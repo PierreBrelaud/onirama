@@ -74,7 +74,7 @@ export default class Background {
         bgFolder.addColor(this.material.uniforms.uColor1, 'value').name('Color1');
         bgFolder.addColor(this.material.uniforms.uColor2, 'value').name('Color2');
         bgFolder.addColor(this.material.uniforms.uColor3, 'value').name('Color3');
-        bgFolder.add(this.material.uniforms.uZoom, 'value', 0.5, 10., 0.01).name('zoom');
+        bgFolder.add(this.material.uniforms.uZoom, 'value', this.width / 2 , this.width * 8, 0.01).name('zoom');
         bgFolder.add(this.material.uniforms.uSpeed, 'value', 0.1, 10., 0.001).name('speed');
     }
 }

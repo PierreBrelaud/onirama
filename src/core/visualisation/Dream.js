@@ -29,6 +29,8 @@ export default class Dream {
      * @returns {Object}
      */
     createDream(){
+        const evt = new CustomEvent("newDream", {detail: this.dreamData});
+        window.dispatchEvent(evt);
         return {
             outsidePart: this.createOutsidePart(),
             portal: this.createPortal(),
@@ -63,7 +65,6 @@ export default class Dream {
         
         const ptLightS = new THREE.PointLight(0xFFFFFF, 0.3, 1.2, 1);
         outsidePartGroup.add(ptLightS);
-        
         const typeColors = getColorsByDreamType(type);
         const ptLightMGradient = new Rainbow();
         ptLightMGradient.setSpectrum(...typeColors);

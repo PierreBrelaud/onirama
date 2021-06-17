@@ -1,9 +1,26 @@
 <template>
-  <canvas id="visuCanvas" />
+  <div class="visu-container">
+    <canvas id="visuCanvas" />
+    <div v-if="isZoomed" class="btn-to btn-to-bottom" @click="onArrowClicked(-1)">
+      <img class="btn-icon" src="@/assets/images/icons/arrow-down.svg" alt="">
+    </div>
+    <div v-if="hasDream" class="dream-detail-container">
+      <div class="btn-to-top" @click="onArrowClicked(1)">
+        <img class="btn-icon" src="@/assets/images/icons/arrow-up.svg" alt="">
+      </div>
+      <h1 class="dream-title">{{dreamData.title}}</h1>
+      <h3 class="dream-date">{{dreamData.date}}</h3>
+      <p class="dream-text">{{ dreamData.text }}</p>
+      <div class="separator"></div>
+    </div>
+  </div>
 </template>
 
 <script>
 import * as THREE from "three";
+import { gsap } from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+gsap.registerPlugin(ScrollToPlugin);
 import { OrbitControls } from "@three-ts/orbit-controls";
 import swipeDetect from "swipe-detect";
 import Stats from "stats.js/src/Stats";
@@ -15,9 +32,20 @@ import DreamController from "@/firebase/db/DreamController";
 import LoaderManager from '@/core/visualisation/LoaderManager';
 
 export default {
+  data() {
+    return {
+      dreamData: {},
+      isZoomed: false,
+    }
+  },
   mounted() {
     this.init();
     this.animate();
+  },
+  computed: {
+    hasDream(){
+      return !!Object.keys(this.dreamData).length
+    },
   },
   methods: {
     init() {
@@ -52,8 +80,6 @@ export default {
       this.controls.enabled = false;
 
       this.cameraController = new CameraController(this.camera, this.controls);
-
-      this.isZoomed = false;
       // =====================================================================
 
       this.outsideWorldScene = new THREE.Scene();
@@ -135,11 +161,15 @@ export default {
 
       window.addEventListener("keydown", ({ key }) => this.onKeyPress(key));
       
-      window.addEventListener("click", (
+      this.canvas.addEventListener("click", (
         {clientX, clientY}) => this.onClick(clientX, clientY)
       );
 
       swipeDetect(this.renderer.domElement, (dir) => this.onSwipe(dir), 10);
+
+      window.addEventListener("newDream", ({detail}) => {
+        this.dreamData = detail;
+      })
     },
     animate() {
       this.stats.begin();
@@ -247,16 +277,66 @@ export default {
           }
         })
       }
+    },
+    onArrowClicked(dir){
+      // Stopper le renderer lorsqu'on est sur les détail du rêve
+      const visuContainer = document.querySelector('.visu-container');
+      gsap.to(visuContainer, {
+        y: `+=${this.canvas.offsetHeight * dir}`,
+      })
+
     }
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 * {
   box-sizing: border-box;
 }
-#visuCanvas {
-  overflow: hidden;
+.visu-container {
+  position: relative;
+  .btn-to {
+    height: 30px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .btn-to-bottom {
+    bottom: 0;
+    margin-bottom: 2rem;
+  }
+  .btn-to-top {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-icon {
+    height: 100%;
+    width: auto;
+  }
+  .dream-detail-container {
+    position: absolute;
+    height: 100vh;
+    margin: 2rem;
+    color: white;
+    .dream-title {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .dream-date {
+      text-align: center;
+      font-family: "Canela Light Italic";
+      font-size: 1.5rem;
+    }
+  }
+}
+.separator {
+  background: #FFFFFF;
+  opacity: 0.2;
+  height: 0.1rem;
+  width: 100%;
+  margin: 3rem 0;
 }
 </style> 

@@ -40,13 +40,12 @@ export default {
 <style lang='scss'>
 .view {
 	height: calc(100vh - 8rem);
-	overflow-y: auto;
-	overflow-x: hidden;
 	margin-bottom: 8rem;
 
 	&--full {
 		height: 100vh;
 		margin-bottom: 0;
+		overflow-y: hidden;
 		.appview {
 			height: 100vh;
 		}
