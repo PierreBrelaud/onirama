@@ -9,6 +9,8 @@ import { OrbitControls } from "@three-ts/orbit-controls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 import Dream from "@/core/visualisation/Dream.js";
+import { configurations } from "@/utils/settingsConfig";
+import { map } from '@/utils/threejsUtils';
 
 export default {
   mounted() {
@@ -29,16 +31,20 @@ export default {
 
       this.controls = new OrbitControls(this.camera, this.canvas);
 
+      const quality = configurations.high;
+
       this.renderer = new THREE.WebGLRenderer({
         canvas: this.canvas,
-        antialias: true,
+        antialias: quality.antialias,
       });
       this.renderer.setSize(width, height);
-      //this.renderer.setPixelRatio(window.devicePixelRatio);
+      if (quality.pixelRatio) this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.setClearColor(0xfff0ea);
       this.renderer.autoClear = false;
       this.renderer.physicallyCorrectLights = true;
       this.renderer.outputEncoding = THREE.sRGBEncoding;
+
+      window.addEventListener("resize", () => this.onResize());
 
       this.dreamScene = new THREE.Scene();
       this.portalScene = new THREE.Scene();
@@ -52,6 +58,9 @@ export default {
       const params = {
         basement: 1,
         pillar: 1,
+        light1: {r: 255, g: 255, b: 255},
+        light2: {r: 255, g: 255, b: 255},
+        light3: {r: 255, g: 255, b: 255}
       };
 
       const basements = { 
@@ -78,6 +87,7 @@ export default {
         this.changePillar(e)
       });
 
+      this.initColorGui(this.gui, params);
     },
     animate() {
       this.stats.begin();
@@ -118,7 +128,7 @@ export default {
       requestAnimationFrame(this.animate);
       this.stats.end();
     },
-    createDream() {
+    createDream(){
       this.dream = new Dream(0, {});
       this.portalScene = this.dream.scene.portal;
       this.dreamScene = this.dream.scene.insidePart;
@@ -148,8 +158,48 @@ export default {
       insidePartGroup.remove(floorGroup);
       this.dream.createPillar(pillarId, insidePartGroup);
     },
-    getBackground(scene) {
+    getBackground(scene){
       return scene.getObjectByName("background");
+    },
+    initColorGui(gui, params){
+      const lightFolder = gui.addFolder("Lights");
+      const crystalLight1 = this.dreamScene.getObjectByName("crystal-light-1");
+      lightFolder.addColor(params, 'light1').name('Crystal Light 1').onChange(({r, g, b}) => {
+        const color = new THREE.Color(
+          map(r, 0, 255, 0, 1),
+          map(g, 0, 255, 0, 1),
+          map(b, 0, 255, 0, 1),
+        )
+        crystalLight1.color = color;
+        crystalLight1.children[0].material.color = color
+      });
+
+      const crystalLight2 = this.dreamScene.getObjectByName("crystal-light-2");
+      lightFolder.addColor(params, 'light2').name('Crystal Light 2').onChange(({r, g, b}) => {
+        const color = new THREE.Color(
+          map(r, 0, 255, 0, 1),
+          map(g, 0, 255, 0, 1),
+          map(b, 0, 255, 0, 1),
+        )
+        crystalLight2.color = color;
+        crystalLight2.children[0].material.color = color
+      });
+
+      const crystalLight3 = this.dreamScene.getObjectByName("basement-light");
+      lightFolder.addColor(params, 'light3').name('Basement Light').onChange(({r, g, b}) => {
+        const color = new THREE.Color(
+          map(r, 0, 255, 0, 1),
+          map(g, 0, 255, 0, 1),
+          map(b, 0, 255, 0, 1),
+        )
+        crystalLight3.color = color;
+        crystalLight3.children[0].material.color = color
+      });
+    },
+    onResize() {
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
     },
   },
 };

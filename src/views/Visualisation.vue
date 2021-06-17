@@ -27,7 +27,7 @@ export default {
       document.body.appendChild(this.stats.dom);
       // =====================================================================
 
-      const quality = configurations.medium;
+      const quality = configurations.high;
       const size = {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -257,6 +257,6 @@ export default {
   box-sizing: border-box;
 }
 #visuCanvas {
-  width: 100%;
+  overflow: hidden;
 }
 </style> 
