@@ -274,6 +274,7 @@ export default class Dream {
         const pivot1 = new THREE.Group();
         pivot1.position.set(this.position, 0.2, -1);
         pivot1.rotation.x = degreeToRad(-30);
+        //pivot1.rotation.y = degreeToRad(30);
         this.insidePartScene.add(pivot1);
 
         const ptLight1 = new THREE.PointLight(lightColors[0], 0.8, 0.5);

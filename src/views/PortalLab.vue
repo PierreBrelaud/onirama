@@ -31,7 +31,7 @@ export default {
 
       this.controls = new OrbitControls(this.camera, this.canvas);
 
-      const quality = configurations.high;
+      const quality = configurations.medium;
 
       this.renderer = new THREE.WebGLRenderer({
         canvas: this.canvas,

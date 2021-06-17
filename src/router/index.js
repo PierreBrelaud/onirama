@@ -85,9 +85,11 @@ router.beforeEach(async (to, from, next) => {
 		next("/authentification");
 	}
 	else {
-		const visualisationStore = store.getters['visualisation/data'];
-		visualisationStore.previousView = to.fullPath;
-		store.commit('visualisation/setData', visualisationStore)
+		if(to.fullPath !== '/visualisation') {
+			const visualisationStore = store.getters['visualisation/data'];
+			visualisationStore.previousView = to.fullPath;
+			store.commit('visualisation/setData', visualisationStore)
+		}
 		next();
 	}
 });
