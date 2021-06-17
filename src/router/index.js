@@ -10,6 +10,8 @@ import Visualisation from '@/views/Visualisation.vue'
 import Authentication from '@/views/Authentication.vue'
 import Filter from '@/views/Filter.vue'
 import PortalLab from '@/views/PortalLab.vue'
+import store from '@/store'
+
 
 const routes = [
 	{
@@ -83,6 +85,9 @@ router.beforeEach(async (to, from, next) => {
 		next("/authentification");
 	}
 	else {
+		const visualisationStore = store.getters['visualisation/data'];
+		visualisationStore.previousView = to.fullPath;
+		store.commit('visualisation/setData', visualisationStore)
 		next();
 	}
 });

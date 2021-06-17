@@ -68,21 +68,22 @@ export default {
     components: { DreamTimer },
     mounted() {
         this.$store.dispatch('loader/pending')
-        DreamController.getNotGeneratedDream((res) => {
-            console.log(res.docs.length)
-            if(res.docs.length === 0) {
-                this.state = 0;
-            }
-            else {
-                const dream = res.docs[0].data();
-                this.dreamId = res.docs[0].id;
-                const delay = 6;
-                const now = new Date();
-                now.setHours(now.getHours() + delay);
-                this.publishDate = dream.publishDate.toDate()
-                this.state = 1;
-            }
-            this.$store.dispatch('loader/done')
+        DreamController.getNotGeneratedDream(
+            this.$store.getters["auth/user"].data.uid, 
+            (res) => {
+                if(res.docs.length === 0) {
+                    this.state = 0;
+                }
+                else {
+                    const dream = res.docs[0].data();
+                    this.dreamId = res.docs[0].id;
+                    const delay = 6;
+                    const now = new Date();
+                    now.setHours(now.getHours() + delay);
+                    this.publishDate = dream.publishDate.toDate()
+                    this.state = 1;
+                }
+                this.$store.dispatch('loader/done')
         }, (err) => {
             this.state = 0;
             this.$store.dispatch('loader/done')

@@ -2,6 +2,7 @@
     <div class="list">
         <div 
             class="list__item"
+            @click="onItemClicked(dream._id)"
             v-for="dream in data.hits.hits" :key="dream._id">
             <!-- left indicator -->
             <div class="list__item__indicator">
@@ -67,6 +68,26 @@ export default {
         }
     },
     methods: {
+        onItemClicked(id) {
+            const dreams = [];
+
+            const current = this.data.hits.hits.findIndex(dream => dream._id === id);
+
+            this.data.hits.hits.forEach(el => {
+                dreams.push(el._source)
+            })
+
+            const result = {
+                current: current,
+                dreams: dreams,
+                previousView: this.$store.getters['visualisation/data'].previousView
+            }
+            
+            this.$store.commit("visualisation/setData", result)
+
+            this.$router.push('/visualisation');
+            
+        },
         onResize() {
             this.windowWidth = window.innerWidth;
         },
@@ -161,6 +182,7 @@ export default {
         width: 100%;
         display: flex;
         margin-bottom: 20px;
+        cursor: pointer;
 
         /*last item style*/
         &:last-child {

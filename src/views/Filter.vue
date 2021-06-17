@@ -39,7 +39,7 @@
                 <div 
                     class="nav__slider__item" 
                     :class="{'nav__slider__item--selected' : navigationItem === 'chronology' }"
-                    @click="changeNavigationItem(item.CHRONOLOIY)">
+                    @click="changeNavigationItem(item.CHRONOLOGY)">
                     <h1>
                         Chronologie
                     </h1>

@@ -9,6 +9,9 @@ export const labeling = {
 		init({ commit }) {
 			commit("init")
 		},
+        destroy({commit}) {
+            commit("destroy")
+        }
 	},
 	mutations: {
 		init(state) {
