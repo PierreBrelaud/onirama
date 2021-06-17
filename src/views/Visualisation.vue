@@ -12,6 +12,9 @@
       <h3 class="dream-date">{{dreamData.date}}</h3>
       <p class="dream-text">{{ dreamData.text }}</p>
       <div class="separator"></div>
+      <p>
+        {{ getRestitutionSummary }}
+      </p>
     </div>
   </div>
 </template>
@@ -19,8 +22,6 @@
 <script>
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-gsap.registerPlugin(ScrollToPlugin);
 import { OrbitControls } from "@three-ts/orbit-controls";
 import swipeDetect from "swipe-detect";
 import Stats from "stats.js/src/Stats";
@@ -30,6 +31,7 @@ import CameraController from "@/core/visualisation/CameraController";
 import OutsideWorld from "@/core/visualisation/OutsideWorld";
 import DreamController from "@/firebase/db/DreamController";
 import LoaderManager from '@/core/visualisation/LoaderManager';
+import RestitutionSummary from '@/utils/restitutionSummary';
 
 export default {
   data() {
@@ -46,9 +48,16 @@ export default {
     hasDream(){
       return !!Object.keys(this.dreamData).length
     },
+    getRestitutionSummary(){
+      const summary = new RestitutionSummary(this.dreamData);
+      return summary.buildSummary();
+    },
   },
   methods: {
     init() {
+      //console.log(this.$store.state.visualisation);
+      //console.log(this.$store.state.auth.user.data);
+
       // DEBUG ===============================================================
       this.stats = new Stats();
       this.stats.showPanel(0);
@@ -319,8 +328,9 @@ export default {
   .dream-detail-container {
     position: absolute;
     height: 100vh;
-    margin: 2rem;
+    padding: 2rem;
     color: white;
+    width: 100%;
     .dream-title {
       text-align: center;
       margin-top: 2rem;

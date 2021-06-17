@@ -11,7 +11,7 @@ import { visualisation } from "@/store/modules/visualisation";
 const store = createStore({
     plugins: [createPersistedState({
         storage: window.sessionStorage,
-        paths: ['filter']
+        paths: ['filter', 'visualisation', 'auth']
     })],
     modules: {
         loader,
