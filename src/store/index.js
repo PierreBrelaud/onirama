@@ -5,6 +5,7 @@ import { labeling } from '@/store/modules/labeling'
 import { restitution } from "@/store/modules/restitution";
 import { auth } from "@/store/modules/auth";
 import { filter } from "@/store/modules/filter";
+import { visualisation } from "@/store/modules/visualisation";
 
 
 const store = createStore({
@@ -17,7 +18,8 @@ const store = createStore({
         labeling,
         restitution,
         auth,
-        filter
+        filter,
+        visualisation
     }
 })
 

@@ -89,6 +89,7 @@ export default {
             this.current = 4;
         },
         leave() {
+            this.$store.dispatch('labeling/destroy');
 		    this.$store.commit('restitution/resetData')
             this.$router.push('/')
         },

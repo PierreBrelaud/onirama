@@ -1,22 +1,13 @@
 
 const getInitialState = () => {
-	return {
-		title: '',
-		date: null,
-		text: '',
-		type: null,
-		emotions: [ {}, {}, {} ],
-		absurd: 0,
-		perception: 0,
-		lucidity: false,
-		recurrence: false,
-		impact: 0,
-		mood: 0,
-		sleep: -1,
-	}
+    return {
+        current: null,
+        dreams: null,
+        previousView: null,
+    }
 };
 
-export const restitution = {
+export const visualisation = {
 	namespaced: true,
 	state: getInitialState(),
 	getters: {
@@ -29,7 +20,9 @@ export const restitution = {
 			Object.assign(state, getInitialState())
 		},
 		setData(state, data) {
-			state = data
+            state.current = data.current;
+            state.dreams = data.dreams;
+			state.previousView = data.previousView;
 		}
 	},
 };

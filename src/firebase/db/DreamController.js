@@ -15,10 +15,11 @@ export default {
             })
             .catch(error => errorCallback(error)) 
     },
-    getNotGeneratedDream: (successCallback, errorCallback) => {
+    getNotGeneratedDream: (userId, successCallback, errorCallback) => {
         db
             .collection(collection)
             .where('isGenerated', '==', false)
+            .where('userid', '==', userId)
             .limit(1)
             .get()
             .then(result => successCallback(result))
@@ -34,6 +35,20 @@ export default {
             .catch((error) => {
                 errorCallback(error)
             })
+    },
+    getDreamsForVisualisation: (userId, successCallback, errorCallback) => {
+        db
+            .collection(collection)
+            .where('userId', '==', userId)
+            .limit(10)
+            .get()
+            .then((result) => {
+                successCallback(result)
+            })
+            .catch((error) => {
+                errorCallback(error)
+            })
+
     },
     getAll: (successCallback, errorCallback) => {
         db
