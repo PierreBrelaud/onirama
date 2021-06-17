@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from 'gsap';
-//import * as rainbow from 'rainbowvis.js';
 
 import Background from "@/core/visualisation/insidePart/Background";
 import Floor from "@/core/visualisation/insidePart/Floor";
@@ -30,6 +29,8 @@ export default class Dream {
      * @returns {Object}
      */
     createDream(){
+        const evt = new CustomEvent("newDream", {detail: this.dreamData});
+        window.dispatchEvent(evt);
         return {
             outsidePart: this.createOutsidePart(),
             portal: this.createPortal(),
@@ -64,7 +65,6 @@ export default class Dream {
         
         const ptLightS = new THREE.PointLight(0xFFFFFF, 0.3, 1.2, 1);
         outsidePartGroup.add(ptLightS);
-        
         const typeColors = getColorsByDreamType(type);
         const ptLightMGradient = new Rainbow();
         ptLightMGradient.setSpectrum(...typeColors);
@@ -74,8 +74,47 @@ export default class Dream {
         const ptLightM = new THREE.PointLight(ptLightMColor, ptLightMIntensity, 6);
         outsidePartGroup.add(ptLightM);
 
+        if(!this.isLab){
+            // DREAM TITLE
+            this.addText(
+                this.dreamData.title, 
+                0.05,
+                new THREE.Vector3(0, -0.4, 3.5), 
+                outsidePartGroup
+            );
+
+            // DREAM DATE
+            this.addText(
+                this.dreamData.date, 
+                0.025,
+                new THREE.Vector3(0, -0.45, 3.5), 
+                outsidePartGroup
+            );
+        }
+
         outsidePartGroup.position.set(this.position, 0, 0);
         return outsidePartGroup;
+    }
+    addText(message, size, {x, y, z}, group){
+        const loader = new THREE.FontLoader();
+        loader.load('fonts/Canela_Thin.json', (font) => {
+            const matLite = new THREE.MeshBasicMaterial({
+                color: 0xFFFFFF,
+                opacity: 1,
+                side: THREE.DoubleSide
+            });
+            const shapes = font.generateShapes(message, size);
+            const geometry = new THREE.ShapeGeometry(
+                shapes,
+                20
+            );
+            geometry.computeBoundingBox();
+			const xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+			geometry.translate( xMid, 0, 0 );
+            const text =  new THREE.Mesh( geometry, matLite );
+            text.position.set(x, y, z);
+            group.add(text);
+        })
     }
     /**
      * @returns {THREE.Scene}
@@ -239,6 +278,7 @@ export default class Dream {
 
         const ptLight1 = new THREE.PointLight(lightColors[0], 0.8, 0.5);
         ptLight1.position.set(0, 0, 0.3);
+        ptLight1.name = "crystal-light-1"
         ptLight1.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: lightColors[0] })));
         const ptH1 = new THREE.PointLightHelper(ptLight1, 0.1);
         pivot1.add(ptLight1);
@@ -246,6 +286,7 @@ export default class Dream {
 
         const ptLight2 = new THREE.PointLight(lightColors[1], 0.8, 0.5);
         ptLight2.position.set(0, 0, -0.5);
+        ptLight2.name = "crystal-light-2"
         ptLight2.add( new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({color: lightColors[1] })));
         const ptH2 = new THREE.PointLightHelper(ptLight2, 0.1);
         pivot1.add(ptLight2);
@@ -256,6 +297,7 @@ export default class Dream {
         this.insidePartScene.add(pivot2)
         const ptLight3 = new THREE.PointLight(lightColors[2], 0.2, 0.8, 1);
         ptLight3.position.set(0, 0, 0.3);
+        ptLight3.name = "basement-light"
         ptLight3.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: lightColors[2] })));
         pivot2.add(ptLight3);
         const ptH3 = new THREE.PointLightHelper(ptLight3, 0.1);
