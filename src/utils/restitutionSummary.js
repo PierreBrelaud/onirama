@@ -89,6 +89,7 @@ export default class RestitutionSummary {
     getEmotionsSentence(emotions) {
         const listEmotions = [];
         emotions.forEach(emotion => {
+            if(Object.entries(emotion).length === 0) return;
             const emoDisplay = getEmotion(emotion.emotionId).display.toLowerCase();
             const prefix = emoDisplay === 'dégout' ? 'du' : 'de la';
             const emoWithPrefix = `${prefix} ${emoDisplay}`;
@@ -106,6 +107,7 @@ export default class RestitutionSummary {
     getSubEmotionsSentence(emotions) {
         const listSubEmotions = [];
         emotions.forEach(emotion => {
+            if(Object.entries(emotion).length === 0) return;
             const subEmoDisplay = getSubEmotion(emotion.emotionId, emotion.subEmotionId).display.toLowerCase();
             listSubEmotions.push(subEmoDisplay);
         });

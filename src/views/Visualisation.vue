@@ -25,6 +25,7 @@ import { gsap } from "gsap";
 import { OrbitControls } from "@three-ts/orbit-controls";
 import swipeDetect from "swipe-detect";
 import Stats from "stats.js/src/Stats";
+import Hammer from "hammerjs";
 
 import { configurations } from "@/utils/settingsConfig";
 import CameraController from "@/core/visualisation/CameraController";
@@ -175,6 +176,15 @@ export default {
       );
 
       swipeDetect(this.renderer.domElement, (dir) => this.onSwipe(dir), 10);
+      
+      /*
+      const hammer = new Hammer(document.body);
+      hammer.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+      hammer.on('swipe', (evt) => {
+        if(this.isZoomed && evt.direction === 8){
+          this.onArrowClicked(-1);
+        }
+      })*/
 
       window.addEventListener("newDream", ({detail}) => {
         this.dreamData = detail;
@@ -327,10 +337,17 @@ export default {
   }
   .dream-detail-container {
     position: absolute;
-    height: 100vh;
     padding: 2rem;
     color: white;
     width: 100%;
+    .dream-img {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      img {
+        width: 30rem;
+      }
+    }
     .dream-title {
       text-align: center;
       margin-top: 2rem;
