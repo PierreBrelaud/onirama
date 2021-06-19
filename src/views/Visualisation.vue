@@ -1,5 +1,8 @@
 <template>
   <div class="visu-container">
+    <a class="btn-back" :href="previousView">
+      <img class="" src="@/assets/images/icons/right_arrow.svg" alt="">
+    </a>
     <canvas id="visuCanvas" />
     <div v-if="isZoomed" class="btn-to btn-to-bottom" @click="onArrowClicked(-1)">
       <img class="btn-icon" src="@/assets/images/icons/arrow-down.svg" alt="">
@@ -39,6 +42,7 @@ export default {
     return {
       dreamData: {},
       isZoomed: false,
+      previousView: '/',
     }
   },
   mounted() {
@@ -56,12 +60,10 @@ export default {
   },
   methods: {
     init() {
-      //console.log(this.$store.state.visualisation);
-      //console.log(this.$store.state.auth.user.data);
-
       // DEBUG ===============================================================
       this.stats = new Stats();
       this.stats.showPanel(0);
+      this.stats.dom.style.cssText = 'position:fixed;top:0px;right:0px;cursor:pointer;opacity: 0.9;z-index:10000;';
       document.body.appendChild(this.stats.dom);
       // =====================================================================
 
@@ -132,20 +134,30 @@ export default {
       return renderer;
     },
     async getDreamsData() {
-      DreamController.getAll((snapshot) => {
-        const data = [];
-        snapshot.docs.forEach((doc) => {
-          data.push(doc.data());
-        });
+      //console.log(this.$store.state.auth.user.data);
+      const dreamData = this.$store.state.visualisation;
+      if(dreamData.dreams !== null){
         LoaderManager.loadOutsideModels(() => {
-          this.initOutsideWorldScene(data);
+          this.previousView = dreamData.previousView;
+          this.initOutsideWorldScene(dreamData);
         });
-      });
+      } else {
+        DreamController.getAll((snapshot) => {
+          const data = [];
+          snapshot.docs.forEach((doc) => {
+            data.push(doc.data());
+          });
+          LoaderManager.loadOutsideModels(() => {
+            this.initOutsideWorldScene(data);
+          });
+        });
+      }
     },
     /**
      * @param {[Object]} dreamsData
      */
     initOutsideWorldScene(dreamsData) {
+      /*
       const textureCube = new THREE.CubeTextureLoader()
       .setPath( '../../src/assets/textures/cubemap/NightSky/' )
       .load( [
@@ -157,8 +169,8 @@ export default {
           'nz.png'
       ] );
       textureCube.mapping = THREE.CubeRefractionMapping;
-      //this.outsideWorldScene.background = textureCube;
-
+      this.outsideWorldScene.background = textureCube;
+      */
       this.outsideWorld = new OutsideWorld(
         this.outsideWorldScene,
         this.portalScenes,
@@ -315,6 +327,11 @@ export default {
 }
 .visu-container {
   position: relative;
+  .btn-back {
+    height: 30px;
+    position: absolute;
+    top: 0;
+  }
   .btn-to {
     height: 30px;
     position: absolute;
