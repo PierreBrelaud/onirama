@@ -10,6 +10,7 @@ import Visualisation from '@/views/Visualisation.vue'
 import Authentication from '@/views/Authentication.vue'
 import Filter from '@/views/Filter.vue'
 import PortalLab from '@/views/PortalLab.vue'
+import ArduinoDataVisualizer from '@/views/ArduinoDataVisualizer.vue'
 import store from '@/store'
 
 
@@ -69,6 +70,11 @@ const routes = [
 		path: "/portal-lab",
 		name: "portal-lab",
 		component: PortalLab,
+	},
+	{
+		path: "/arduino-visualizer",
+		name: 'arduino-visualizer',
+		component: ArduinoDataVisualizer,
 	}
 ];
 
