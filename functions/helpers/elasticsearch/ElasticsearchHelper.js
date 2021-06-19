@@ -83,17 +83,17 @@ class ElasticsearchHelper {
 	/**
 	 * Get dream by type
 	 * @param {String} userId 
-	 * @param {Number} emotionId 
+	 * @param {Number} typeId 
 	 * @returns {Promise}
 	 */
-	async getDreamsByType(userId, emotionId) {
+	async getDreamsByType(userId, type) {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
 				query: {
 					bool: {
 						must: [
-							{ match: { emotionId: emotionId } },
+							{ match: { type: type } },
 							{ match: { userId: userId } },
 						],
 					},
