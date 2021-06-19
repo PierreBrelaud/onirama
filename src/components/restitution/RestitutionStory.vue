@@ -12,7 +12,7 @@
             <input 
                 v-model="storeData.date"
                 type="date" 
-                placeholder="plop"
+                placeholder="Date de votre rêve"
                 class="input-sm story__header__date story__item"
             />
         </div>
@@ -69,6 +69,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+*, *:before, *:after {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input, input:before, input:after, .story__content__text {
+    -webkit-user-select: initial;
+    -khtml-user-select: initial;
+    -moz-user-select: initial;
+    -ms-user-select: initial;
+    user-select: initial;
+} 
+
 .story {
     width: 100%;
     margin: 0 auto;
@@ -119,7 +134,7 @@ export default {
             resize: none;
             line-height: 2rem;
             width: 85%;
-            height: 100%;
+            height: 100vh;
             margin: auto;
             display: block;
             border: none;

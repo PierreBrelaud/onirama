@@ -16,19 +16,12 @@ export default class OutsideWorld {
         this.outsideWorldScene = outsideWorldScene;
         this.portalScenes = portalScenes;
         this.dreamScenes = dreamScenes;
-        this.dreamsData = dreamsData;
+        this.dreamsData = dreamsData.dreams ? dreamsData.dreams : dreamsData;
         this.landscapeSize = 9.37;
         this.dreams = {
-			current: 8,
+			current: dreamsData.current ? dreamsData.current : 0,
 			min: 0,
-			max: this.dreamsData.length, 
-			data: [
-				{text: "dream 0"},
-				{text: "dream 1"},
-				{text: "dream 2"},
-				{text: "dream 3"},
-				{text: "dream 4"},
-			]
+			max: this.dreamsData.length,
 		};
         this.displayedLandscape = [3, 4, 0, 1, 2];
         this.loader = new GLTFLoader().setPath(
