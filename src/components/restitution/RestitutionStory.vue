@@ -16,12 +16,9 @@
                   placeholder="Date de votre rêve"
                   class="input-sm story__header__date story__item"
               />
-              <input
-                  :value="dateText"
-                  type="text"
-                  @click="clickTrigger"
-                  class="input-sm story__header__date story__item"
-              />
+              <div @click="clickTrigger" class="input-sm story__header__date story__item">
+                {{dateText}}
+              </div>
             </div>
         </div>
         <div class="story__dataDevice" ref="dataDevice" v-if="deviceDatas">
@@ -117,7 +114,6 @@ export default {
           }
       },
       openList(e) {
-        console.log(this.$refs.dataDevice)
         gsap.to(this.$refs.dataDevice, {display: 'flex'})
         gsap.fromTo(this.$refs.dataDevice.children, {y : -300}, {y : 0, stagger: 0.1, duration: 0.5})
         this.$data.isOpen = true
