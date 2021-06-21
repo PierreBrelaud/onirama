@@ -1,6 +1,6 @@
 <template>
   <div class="visu-container">
-    <button id="startButton"></button>
+    <!--<button id="startButton"></button>-->
     <div id="debug">
       {{mobile}}
       <div>alpha: <span id="alpha"></span></div>
@@ -201,7 +201,7 @@ export default {
 
       swipeDetect(this.renderer.domElement, (dir) => this.onSwipe(dir), 10);
 
-                    
+      /*              
       document.getElementById("startButton").addEventListener("click", () => {
         if(!isMobile())return;
         document.getElementById('debug').style.background = 'yellow';
@@ -220,7 +220,7 @@ export default {
           //camera.position.y = Math.cos((angleV * Math.PI) / 180) * 8;
           //camera.position.z = Math.sin((angleV * Math.PI) / 180) * 8;
         });
-        /*
+        
         DeviceOrientationEvent.requestPermission()
         .then((response) => {
           document.getElementById("alpha").innerHTML = 0;
@@ -242,7 +242,7 @@ export default {
             });
           }
         })
-        .catch(e => document.getElementById('debug').style.background = 'red');*/
+        .catch(e => document.getElementById('debug').style.background = 'red');
       })
               
       
