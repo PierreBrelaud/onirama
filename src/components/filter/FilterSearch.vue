@@ -52,6 +52,7 @@ export default {
 
             //call async function
 			try {
+				this.$store.dispatch('loader/pending');
 				const result = await this.searchDreams(
 					this.abortController.signal
 				);
@@ -59,6 +60,7 @@ export default {
 			}
             finally {
 				this.abortController = null;
+				this.$store.dispatch('loader/done');
 			}
 		},
 		async searchDreams(abortSignal) {

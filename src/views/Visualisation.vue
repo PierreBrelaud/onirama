@@ -1,5 +1,12 @@
 <template>
   <div class="visu-container">
+    <button id="startButton"></button>
+    <div id="debug">
+      {{mobile}}
+      <div>alpha: <span id="alpha"></span></div>
+      <div>beta: <span id="beta"></span></div>
+      <div>gamma: <span id="gamma"></span></div>
+    </div>
     <a class="btn-back" :href="previousView">
       <img class="" src="@/assets/images/icons/right_arrow.svg" alt="">
     </a>
@@ -36,6 +43,7 @@ import OutsideWorld from "@/core/visualisation/OutsideWorld";
 import DreamController from "@/firebase/db/DreamController";
 import LoaderManager from '@/core/visualisation/LoaderManager';
 import RestitutionSummary from '@/utils/restitutionSummary';
+import { isMobile, map } from '@/utils/threejsUtils';
 
 export default {
   data() {
@@ -43,6 +51,7 @@ export default {
       dreamData: {},
       isZoomed: false,
       previousView: '/',
+      mobile: isMobile(),
     }
   },
   mounted() {
@@ -61,10 +70,12 @@ export default {
   methods: {
     init() {
       // DEBUG ===============================================================
+      /*
       this.stats = new Stats();
       this.stats.showPanel(0);
       this.stats.dom.style.cssText = 'position:fixed;top:0px;right:0px;cursor:pointer;opacity: 0.9;z-index:10000;';
       document.body.appendChild(this.stats.dom);
+      */
       // =====================================================================
 
       const quality = configurations.high;
@@ -136,6 +147,7 @@ export default {
     async getDreamsData() {
       //console.log(this.$store.state.auth.user.data);
       const dreamData = this.$store.state.visualisation;
+      console.log(dreamData);
       if(dreamData.dreams !== null){
         LoaderManager.loadOutsideModels(() => {
           this.previousView = dreamData.previousView;
@@ -188,6 +200,51 @@ export default {
       );
 
       swipeDetect(this.renderer.domElement, (dir) => this.onSwipe(dir), 10);
+
+                    
+      document.getElementById("startButton").addEventListener("click", () => {
+        if(!isMobile())return;
+        document.getElementById('debug').style.background = 'yellow';
+        window.addEventListener("deviceorientation", (e) => {
+          if(!this.isZoomed) return; 
+          document.getElementById("alpha").innerHTML = Math.round(e.alpha);
+          document.getElementById("beta").innerHTML = Math.round(e.beta);
+          document.getElementById("gamma").innerHTML = Math.round(e.gamma);
+          if (e.gamma >= -30 && e.gamma <= 30) {
+            const angleH = map(e.gamma, 120, 60, -30, 30);
+            this.camera.position.x = Math.cos((angleH * Math.PI) / 180) * 1.3;
+            this.camera.position.z = Math.sin((angleH * Math.PI) / 180) * 1.3;
+          }
+
+          //const angleV = map(e.beta, 72, 110, 0, 110);
+          //camera.position.y = Math.cos((angleV * Math.PI) / 180) * 8;
+          //camera.position.z = Math.sin((angleV * Math.PI) / 180) * 8;
+        });
+        /*
+        DeviceOrientationEvent.requestPermission()
+        .then((response) => {
+          document.getElementById("alpha").innerHTML = 0;
+          document.getElementById('debug').style.background = 'green';
+          if (response == "granted") {
+            window.addEventListener("deviceorientation", (e) => {
+              document.getElementById("alpha").innerHTML = Math.round(e.alpha);
+              document.getElementById("beta").innerHTML = Math.round(e.beta);
+              document.getElementById("gamma").innerHTML = Math.round(e.gamma);
+              if (e.gamma >= -30 && e.gamma <= 30) {
+                const angleH = map(e.gamma, 120, 60, -30, 30);
+                this.camera.position.x = Math.cos((angleH * Math.PI) / 180) * 8;
+                this.camera.position.z = Math.sin((angleH * Math.PI) / 180) * 8;
+              }
+
+              //const angleV = map(e.beta, 72, 110, 0, 110);
+              //camera.position.y = Math.cos((angleV * Math.PI) / 180) * 8;
+              //camera.position.z = Math.sin((angleV * Math.PI) / 180) * 8;
+            });
+          }
+        })
+        .catch(e => document.getElementById('debug').style.background = 'red');*/
+      })
+              
       
       /*
       const hammer = new Hammer(document.body);
@@ -203,7 +260,7 @@ export default {
       })
     },
     animate() {
-      this.stats.begin();
+      //this.stats.begin();
 
       this.controls.update();
 
@@ -239,7 +296,7 @@ export default {
         gl.stencilMask(0xff);
         gl.disable(gl.STENCIL_TEST);
 
-        this.stats.end();
+        //this.stats.end();
 
         this.renderer.clearStencil();
       }
@@ -292,6 +349,7 @@ export default {
       if(!this.cameraController.canInteract) return;
       const extPortal = this.dreamScenes[0].getObjectByName("extPortalMesh");
       if(this.isZoomed === true){
+        // Remettre la camera et supprimer la détection du gyroscope
         this.cameraController.zoomOut(extPortal, () => {
           this.isZoomed = false;
         })
@@ -304,7 +362,10 @@ export default {
         this.portalScenes.forEach(scene => {
           const intersects = raycaster.intersectObjects(scene.children);
           if(intersects.length > 0){
-            this.cameraController.zoomIn(extPortal, () => {this.isZoomed = true});
+            this.cameraController.zoomIn(extPortal, () => {
+              this.isZoomed = true;
+              // Activer le gyroscope
+            });
           }
         })
       }
@@ -325,6 +386,27 @@ export default {
 * {
   box-sizing: border-box;
 }
+#debug {
+  display: none;
+  padding: 1em;
+  position: absolute;
+  height: 20vh;
+  width: 100%;
+  background: cornflowerblue;
+  bottom: 0;
+}
+#startButton {
+  position: absolute;
+  width: 3em;
+  height: 6em;
+  background: transparent;
+  //border: solid 1px red;
+  border:none;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%
+}
+
 .visu-container {
   position: relative;
   .btn-back {

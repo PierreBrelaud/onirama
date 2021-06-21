@@ -1,15 +1,26 @@
 <template>
     <div class="loader">
-        <!-- <div class="loader__icon"></div> -->
+        <!-- <div class="loader__icon"></div> 
         <h1 class="loader__title">
             onirama
-        </h1>
+        </h1>-->
+        <div class="loader__lottie"></div>
     </div>
 </template>
 
 <script>
-export default {
+import lottie from 'lottie-web'
 
+export default {
+    mounted(){
+        lottie.loadAnimation({
+            container: document.querySelector('.loader__lottie'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '/onirama-loader.json'
+        })
+    }
 }
 </script>
 
@@ -21,7 +32,7 @@ export default {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: black;
+    background: rgba($color: #000000, $alpha: 0.5);
     color: white;
     display: flex;
     flex-direction: column;
@@ -29,8 +40,6 @@ export default {
     align-items: center;
 
     &__icon {
-        
-
         width: 5rem;
         height: 5rem;
         background: white;
@@ -40,6 +49,10 @@ export default {
 
     &__title {
         font-size: 4rem;
+    }
+    &__lottie {
+        z-index:4;
+        width: 20rem;
     }
 }
 </style>

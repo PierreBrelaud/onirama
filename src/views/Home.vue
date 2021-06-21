@@ -26,13 +26,14 @@
                 </p>
             </div>
             <div class="container__content">
-                <p class="container__content__subtitle">
+                <!--<p class="container__content__subtitle">
                     L’exploration démarre dans
-                </p>
+                </p>-->
                 <dream-timer 
                     v-on:endTimer="onTimerEnded"
                     v-if="publishDate" 
                     :timeStamp="publishDate"
+                    type="time"
                 />
             </div>
             <div class="container__footer">
@@ -63,6 +64,7 @@
 <script>
 import DreamController from '@/firebase/db/DreamController.js'
 import DreamTimer from '@/components/DreamTimer.vue'
+import { dateToFirestoreTimestamp } from '../utils/dateHelper'
 
 export default {
     components: { DreamTimer },
@@ -80,7 +82,9 @@ export default {
                     const delay = 6;
                     const now = new Date();
                     now.setHours(now.getHours() + delay);
-                    this.publishDate = dream.publishDate.toDate()
+                    
+                    this.publishDate = dream.publishDate.toDate();
+                    
                     this.state = 1;
                 }
                 this.$store.dispatch('loader/done')
@@ -101,10 +105,14 @@ export default {
             this.state = 2;
         },
         generateDream() {
+            // is generated  > 9 > order by date -> dans dream controller
+            // voir le resultat > mon dream
             DreamController.generateDream(this.dreamId, 
             (res) => {
             }, 
             (err) => console.log(err));
+            // ajouter dans le store visu -> cf filtre
+            // go visu
         }
     }
 }
