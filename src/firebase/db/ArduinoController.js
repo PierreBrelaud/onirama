@@ -3,7 +3,7 @@ import { db } from '@/firebase/index.js'
 const collection = 'user'
 
 export default {
-    getDeviceData: (userId, successCallback, errorCallback) => {
+    getDeviceState: (userId, successCallback, errorCallback) => {
         db
             .collection(collection)
             .doc(userId)
