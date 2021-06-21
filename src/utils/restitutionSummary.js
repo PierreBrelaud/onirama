@@ -44,7 +44,7 @@ export default class RestitutionSummary {
         const perceptionSentence = this.getQuantitativeWord(perception, 'flou', 'net');
         summary += `Le souvenir de mon rêve était ${absurdSentence} et ${perceptionSentence}. `;
 
-        const lucid = this.dreamData.lucid;
+        const lucid = this.dreamData.lucidity;
         const recurrence = this.dreamData.recurrence;
         summary += this.getLucidRecurrenceSentence(lucid, recurrence);
         
@@ -59,13 +59,6 @@ export default class RestitutionSummary {
         return summary;
     }
     getSleepSentence(sleepValue){
-        switch (sleepValue) {
-            case 0 : return 'très mal';
-            case 1 : return 'mal';
-            case 2 : return 0;
-            case 3 : return 'bien';
-            case 4 : return 
-        }
         if(sleepValue === -1) return 0; 
         const words = ['très mal', 'mal', 0, 'bien', 'très bien'];
         return words[sleepValue];
@@ -89,6 +82,7 @@ export default class RestitutionSummary {
     getEmotionsSentence(emotions) {
         const listEmotions = [];
         emotions.forEach(emotion => {
+            if(Object.entries(emotion).length === 0) return;
             const emoDisplay = getEmotion(emotion.emotionId).display.toLowerCase();
             const prefix = emoDisplay === 'dégout' ? 'du' : 'de la';
             const emoWithPrefix = `${prefix} ${emoDisplay}`;
@@ -106,6 +100,7 @@ export default class RestitutionSummary {
     getSubEmotionsSentence(emotions) {
         const listSubEmotions = [];
         emotions.forEach(emotion => {
+            if(Object.entries(emotion).length === 0) return;
             const subEmoDisplay = getSubEmotion(emotion.emotionId, emotion.subEmotionId).display.toLowerCase();
             listSubEmotions.push(subEmoDisplay);
         });

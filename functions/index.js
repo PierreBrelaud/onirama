@@ -99,10 +99,15 @@ exports.deviceListener = functions.firestore
 		const data = change.after.data();
 		const status = data.status;
 
+		//init helper
+		const helper = new DeviceHelper(userId, db);
+
+		if(status === "pending") {
+			await helper.setStartDate();
+		}
 		//if data are available
 		if (status === "done") {
-			//init helper
-			const helper = new DeviceHelper(userId, db);
+			await helper.setEndDate();
 			//get temp data from device
 			const data = await helper.getData();
 			//save data as a new dream

@@ -14,7 +14,7 @@
                 :class="{'navigation__item__more--active' : showRestitutionMenu }"
             ></div>
         </div>
-        <router-link :to="'/statistiques'">
+        <router-link :to="'/visualisation'">
             <div class="navigation__item navigation__item--statistics"></div>
         </router-link>
         <router-link :to="'/profil'">
