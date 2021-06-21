@@ -52,6 +52,12 @@
 						<h2 class="block__checkbox__title block__title">
 							{{ data.title }}
 						</h2>
+						<info-pop-up 
+								class="info-checkbox"
+								v-if="data.needInfo" 
+								:info="data.info"
+								:title="data.title">
+						</info-pop-up>
 
 						<label class="block__checkbox__switch">
 							<input
@@ -81,9 +87,16 @@
 					</div>
 					<!-- slider -->
 					<div v-if="data.type === 'slider'" class="block__slider">
-						<h2 class="block__slider__title block__title">
-							{{ data.title }}
-						</h2>
+						<div class="slider-header" >
+							<h2 class="block__slider__title block__title">
+								{{ data.title }}
+							</h2>
+							<info-pop-up 
+								v-if="data.needInfo" 
+								:info="data.info"
+								:title="data.title">
+							</info-pop-up>
+						</div>
 						<input
 							class="block__slider__input"
 							v-model.number="storeData[data.id]"
@@ -103,6 +116,7 @@
 
 <script>
 import RestitutionBullet from "@/components/restitution/RestitutionBullet.vue";
+import InfoPopUp from "@/components/layouts/InfoPopUp.vue"
 
 export default {
 	watch: {
@@ -132,7 +146,10 @@ export default {
 			return this.$store.getters['restitution/data']
 		}
 	},	
-	components: { RestitutionBullet }
+	components: { RestitutionBullet, InfoPopUp },
+	mounted(){
+		console.log(this.survey.data);
+	}
 };
 </script>
 
@@ -344,5 +361,13 @@ export default {
 			}
 		}
 	}
+}
+
+.slider-header {
+	display: flex;
+	justify-content: space-between;
+}
+.info-checkbox {
+	margin-left: 2rem;
 }
 </style>

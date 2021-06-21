@@ -11,6 +11,7 @@
       <img class="" src="@/assets/images/icons/right_arrow.svg" alt="">
     </a>
     <canvas id="visuCanvas" />
+    <div v-show="!isZoomed" class="lottie-indication"></div>
     <div v-if="isZoomed" class="btn-to btn-to-bottom" @click="onArrowClicked(-1)">
       <img class="btn-icon" src="@/assets/images/icons/arrow-down.svg" alt="">
     </div>
@@ -34,6 +35,7 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import { OrbitControls } from "@three-ts/orbit-controls";
 import swipeDetect from "swipe-detect";
+import lottie from 'lottie-web'
 import Stats from "stats.js/src/Stats";
 import Hammer from "hammerjs";
 
@@ -57,6 +59,14 @@ export default {
   mounted() {
     this.init();
     this.animate();
+
+    lottie.loadAnimation({
+      container: document.querySelector('.lottie-indication'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '/onirama-indication.json'
+    })
   },
   computed: {
     hasDream(){
@@ -70,12 +80,12 @@ export default {
   methods: {
     init() {
       // DEBUG ===============================================================
-      /*
+      
       this.stats = new Stats();
       this.stats.showPanel(0);
       this.stats.dom.style.cssText = 'position:fixed;top:0px;right:0px;cursor:pointer;opacity: 0.9;z-index:10000;';
       document.body.appendChild(this.stats.dom);
-      */
+      
       // =====================================================================
 
       const quality = configurations.high;
@@ -147,7 +157,6 @@ export default {
     async getDreamsData() {
       //console.log(this.$store.state.auth.user.data);
       const dreamData = this.$store.state.visualisation;
-      console.log(dreamData);
       if(dreamData.dreams !== null){
         LoaderManager.loadOutsideModels(() => {
           this.previousView = dreamData.previousView;
@@ -260,7 +269,7 @@ export default {
       })
     },
     animate() {
-      //this.stats.begin();
+      this.stats.begin();
 
       this.controls.update();
 
@@ -296,7 +305,7 @@ export default {
         gl.stencilMask(0xff);
         gl.disable(gl.STENCIL_TEST);
 
-        //this.stats.end();
+        this.stats.end();
 
         this.renderer.clearStencil();
       }
@@ -413,6 +422,9 @@ export default {
     height: 30px;
     position: absolute;
     top: 0;
+    img {
+      transform: scaleX(-1);
+    }
   }
   .btn-to {
     height: 30px;
@@ -464,5 +476,14 @@ export default {
   height: 0.1rem;
   width: 100%;
   margin: 3rem 0;
+}
+
+.lottie-indication {
+  position: absolute;
+  width: 8rem;
+  height: 12vh;
+  transform: translate(-50%, 0);
+  bottom: 1rem;
+  left: 50%;
 }
 </style> 
