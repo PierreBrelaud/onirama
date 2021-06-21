@@ -15,4 +15,17 @@ export default {
                 errorCallback(error)
             })
     },
+    getDeviceData: (userId, successCallback, errorCallback) => {
+        db
+            .collection(collection)
+            .doc(userId)
+            .collection('deviceData')
+            .get()
+            .then((result) => {
+                successCallback(result)
+            })
+            .catch((error) => {
+                errorCallback(error)
+            })
+    },
 }
