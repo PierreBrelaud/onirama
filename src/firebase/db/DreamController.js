@@ -19,7 +19,7 @@ export default {
         db
             .collection(collection)
             .where('isGenerated', '==', false)
-            .where('userid', '==', userId)
+            .where('userId', '==', userId)
             .limit(1)
             .get()
             .then(result => successCallback(result))

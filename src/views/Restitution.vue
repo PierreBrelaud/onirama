@@ -110,6 +110,7 @@ export default {
             }, 
             (result) => {
                 this.$store.dispatch('loader/done')
+                this.$router.push('/')
             }, 
             (error) => {
                 this.$store.dispatch('loader/done')

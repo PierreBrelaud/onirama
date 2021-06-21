@@ -152,7 +152,7 @@ export default {
 		},
 		async fetchData(type) {
 			//init loader
-			// this.$store.dispatch('loader/pending');
+			this.$store.dispatch('loader/pending');
 
 			switch (type) {
 				case "emotion":
@@ -168,7 +168,7 @@ export default {
 					break;
 			}
 			//close loader
-			// this.$store.dispatch('loader/done');
+			this.$store.dispatch('loader/done');
 		},
 		async getEmotionsCount() {
 			const emotions = await this.cfGetEmotionsCount({

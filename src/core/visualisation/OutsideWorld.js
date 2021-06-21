@@ -83,6 +83,7 @@ export default class OutsideWorld {
         this.currentPos += this.landscapeSize * dir;
     }
 	initDream(){
+        console.log(this.dreamsData);
         const dreamData = this.dreamsData[this.currentDream];
 		const dream = new Dream(this.currentPos, dreamData);
 

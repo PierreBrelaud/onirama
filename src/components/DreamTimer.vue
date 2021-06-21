@@ -81,7 +81,7 @@ export default {
 			secondLeft: null,
 			maxSecond: null,
 			counterInterval: null,
-			endInHours: 0.9,
+			endInHours: 0,
 		};
 	},
 	watch: {
@@ -105,7 +105,7 @@ export default {
 			let hours = Math.floor(hoursLeft / 3600);
 			let minutesLeft = Math.floor(hoursLeft - hours * 3600);
 			let minutes = Math.floor(minutesLeft / 60);
-			let remainingSeconds = this.$data.secondLeft % 60;
+			let remainingSeconds = Math.floor(this.$data.secondLeft % 60);
 			function pad(n) {
 				return n < 10 ? "0" + n : n;
 			}
@@ -156,7 +156,7 @@ export default {
 		let timeStart = this.$props.timeStamp;
 		let timeEnd = new Date(timeStart);
 
-		timeEnd.setHours(timeEnd.getHours(), 30);
+		timeEnd.setHours(timeEnd.getHours(), this.endInHours * 60 );
 
 		let currentDate = new Date(stringCurrentDate);
 
@@ -213,7 +213,7 @@ export default {
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		width: 100%;
+		width: 50%;
 
 		&__fill {
 			width: 100%;
