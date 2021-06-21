@@ -22,10 +22,12 @@ export default {
     },
     methods: {
         async getDreams() {
+            this.$store.dispatch('loader/pending');
             const dreams = await this.cfGetDremByDate({
 				userId: this.$store.getters["auth/user"].data.uid
 			});
             this.dreams = dreams.data;
+            this.$store.dispatch('loader/done');
         }
     },
     components: { FilterList }
