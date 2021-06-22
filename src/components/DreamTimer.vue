@@ -1,53 +1,55 @@
 <template>
-	<div v-if="type === 'text'" class="dreamTimerText">
-		<h1 class="dreamTimerText__text">{{ dateLabel }}</h1>
-	</div>
-	<div v-if="type === 'time'" class="dreamTimer">
-		<div class="dreamTimer__circle">
-			<svg
-				class="dreamTimer__circle__empty"
-				width="100%"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 1000 1000"
-				overflow="visible"
-			>
-				<circle
-					r="45%"
-					fill="none"
-					cx="500"
-					cy="500"
-					stroke="white"
-					stroke-width="50"
-				/>
-			</svg>
+	<div>
+		<div v-if="type === 'text'" class="dreamTimerText">
+			<h1 class="dreamTimerText__text">{{ dateLabel }}</h1>
 		</div>
-		<div class="dreamTimer__circle">
-			<svg
-				class="dreamTimer__circle__fill"
-				width="100%"
-				ref="svgCircle"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 1000 1000"
-				overflow="visible"
-			>
-				<circle
-					r="45%"
-					ref="circleFill"
-					fill="none"
-					cx="500"
-					cy="500"
-					stroke="white"
-					stroke-width="50"
-				/>
-			</svg>
-		</div>
-		<div class="dreamTimer__container">
-			<div class="dreamTimer__container__title">
-				Visualisation <br />
-				disponible dans
+		<div v-if="type === 'time'" class="dreamTimer">
+			<div class="dreamTimer__circle">
+				<svg
+					class="dreamTimer__circle__empty"
+					width="100%"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 1000 1000"
+					overflow="visible"
+				>
+					<circle
+						r="45%"
+						fill="none"
+						cx="500"
+						cy="500"
+						stroke="white"
+						stroke-width="50"
+					/>
+				</svg>
 			</div>
-			<div class="dreamTimer__container__timer">
-				{{ dateLabel }}
+			<div class="dreamTimer__circle">
+				<svg
+					class="dreamTimer__circle__fill"
+					width="100%"
+					ref="svgCircle"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 1000 1000"
+					overflow="visible"
+				>
+					<circle
+						r="45%"
+						ref="circleFill"
+						fill="none"
+						cx="500"
+						cy="500"
+						stroke="white"
+						stroke-width="50"
+					/>
+				</svg>
+			</div>
+			<div class="dreamTimer__container">
+				<div class="dreamTimer__container__title">
+					Visualisation <br />
+					disponible dans
+				</div>
+				<div class="dreamTimer__container__timer">
+					{{ dateLabel }}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -82,6 +84,8 @@ export default {
 			maxSecond: null,
 			counterInterval: null,
 			endInHours: 0,
+      		endInMin : 1,
+      		endInSec : 0,
 		};
 	},
 	watch: {
@@ -155,10 +159,9 @@ export default {
 
 		let timeStart = this.$props.timeStamp;
 		let timeEnd = new Date(timeStart);
+		timeEnd.setHours(timeEnd.getHours()  + this.endInHours, timeEnd.getMinutes() + this.endInMin, timeEnd.getSeconds() + this.endInSec);
 
-		timeEnd.setHours(timeEnd.getHours(), this.endInHours * 60 );
-
-		let currentDate = new Date(stringCurrentDate);
+		let currentDate = new Date(stringCurrentDate.replace(/-/g, '/'));
 
 		if (Math.sign(currentDate - timeEnd) < 0) {
 			let diffDateStart = formatDateAsString(
