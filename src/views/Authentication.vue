@@ -3,7 +3,7 @@
         <!-- welcome -->
         <div v-if="state === 'welcome'" class="welcome">
             <div class="welcome__logo">
-                <h1>LOGO ONIRAMA</h1>
+                <img src="@/assets/images/logo_onirama.svg" alt="">
             </div>
             <div class="welcome__actions">
                 <button 
@@ -23,7 +23,7 @@
         <!-- register -->
         <div v-if="state === 'register'" class="container">
             <div class="container__logo">
-                <h1>LOGO ONIRAMA</h1>
+                <img src="@/assets/images/logo_onirama.svg" alt="">
             </div>
             <div class="container__title">
                 <h1>Créer un compte</h1>
@@ -61,7 +61,7 @@
         <!-- login -->
         <div v-if="state === 'login'" class="container">
             <div class="container__logo">
-                <h1>LOGO ONIRAMA</h1>
+                <img src="@/assets/images/logo_onirama.svg" alt="">
             </div>
             <div class="container__title">
                 <h1>Se connecter</h1>
@@ -166,7 +166,7 @@ export default {
             this.state = state
         },
         onRegister() {
-            if (this.login.email && this.login.password) {
+            if (this.register.email && this.register.password) {
                 auth.register(
                     this.register.email,
                     this.register.password,
@@ -180,6 +180,7 @@ export default {
                         })
                     },
                     (err) => {
+                        console.log(err);
                         this.register.error = authError.getAuthErrorMessage(err.code)
                     }
                 )
@@ -189,6 +190,7 @@ export default {
             }
         },
         onLogin() {
+            console.log(this.login);
             if (this.login.email && this.login.password) {
                 auth.login(
                     this.login.email,
@@ -256,7 +258,16 @@ input, input:before, input:after {
 .container {
     
     &__logo {
-        margin-bottom: 6rem;
+        margin-bottom: 4rem;
+        height: 20vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img{
+            height: 100%;
+            width: auto;
+        }
     }
 
     &__title {
@@ -302,6 +313,15 @@ input, input:before, input:after {
 .welcome {
     &__logo {
         margin-bottom: 6rem;
+        height: 26vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img{
+            height: 100%;
+            width: auto;
+        }
     }
     &__actions {
         display: flex;

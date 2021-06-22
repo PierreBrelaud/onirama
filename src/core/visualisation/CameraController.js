@@ -58,8 +58,9 @@ export default class CameraController {
     /**
      * @param {Function} callback 
      */
-    zoomOut(extPortal, callback){
+    zoomOut(camPosX, extPortal, callback){
         gsap.to(this.camera.position, {
+            x: camPosX,
             y: 0.1,
             z: 5,
             onUpdate: () => {
