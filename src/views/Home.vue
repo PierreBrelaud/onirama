@@ -82,7 +82,7 @@ export default {
                     const delay = 6;
                     const now = new Date();
                     now.setHours(now.getHours() + delay);
-                    
+
                     this.publishDate = dream.publishDate.toDate();
                     
                     this.state = 1;
@@ -98,6 +98,7 @@ export default {
             state: null,
             publishDate: null,
             dreamId: null,
+            debug: '',
         }
     },
     methods: {
