@@ -166,7 +166,7 @@ export default {
             this.state = state
         },
         onRegister() {
-            if (this.login.email && this.login.password) {
+            if (this.register.email && this.register.password) {
                 auth.register(
                     this.register.email,
                     this.register.password,
@@ -180,6 +180,7 @@ export default {
                         })
                     },
                     (err) => {
+                        console.log(err);
                         this.register.error = authError.getAuthErrorMessage(err.code)
                     }
                 )
@@ -189,6 +190,7 @@ export default {
             }
         },
         onLogin() {
+            console.log(this.login);
             if (this.login.email && this.login.password) {
                 auth.login(
                     this.login.email,

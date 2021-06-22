@@ -1,5 +1,5 @@
 <template>
-	<global-loader v-if="loading" />
+	<global-loader v-show="loading" />
 	<div 
 		class="view"
 		:class="{ 'view--full': !isVisible }">
