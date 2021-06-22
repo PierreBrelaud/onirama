@@ -84,8 +84,8 @@ export default {
 			maxSecond: null,
 			counterInterval: null,
 			endInHours: 0,
-      		endInMin : 1,
-      		endInSec : 0,
+      		endInMin : 0,
+      		endInSec : 3,
 		};
 	},
 	watch: {

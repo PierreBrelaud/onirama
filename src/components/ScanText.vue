@@ -3,6 +3,7 @@
         <p 
             @click="$refs.inputFile.click()"
             class="scantext__label"
+            :style="`opacity:${opacity}`"
         >
             Scanner le texte
         </p>
@@ -38,12 +39,17 @@ export default {
             //clean string
             const base64ImageCleaned = removeBase64Head(base64Image)
             //call api with base 64&
-            this.apiCall(base64ImageCleaned)
+            if(this.$store.getters['fake/isFake'] === false) {
+                this.apiCall(base64ImageCleaned)
+            } else {
+                setTimeout(() => {
+                    this.successCallback(this.$store.getters['fake/fakeText'])
+                }, 5000);
+            }
         },
 
         apiCall: function(base64Image) {
             const imageToText = functions.httpsCallable('imageToText');
-
             imageToText({ 
                 base64Image: base64Image 
             }).then((response) => {
@@ -60,6 +66,10 @@ export default {
         },
         errorCallback: {
             type: Function,
+            required: true,
+        },
+        opacity: {
+            type: Number,
             required: true,
         }
     }

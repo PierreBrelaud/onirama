@@ -26,10 +26,12 @@
         :class="{'restitution--active' : showRestitutionMenu }"
     >
         <div class="restitution__item">
+            <div class="fakeScanBtn" @click="onFakeClicked"></div>
             <div class="restitution__item__icon restitution__item__icon--scan"></div>
             <scan-text 
                 :successCallback="scanSuccess"
                 :errorCallback="scanError"
+                :opacity="isFake? 0.8 : 1"
             />
         </div>
         <router-link :to="'/restitution'">
@@ -50,6 +52,11 @@
 import ScanText from '@/components/ScanText.vue'
 
 export default {
+    data() {
+        return {
+            isFake: false,
+        }
+    },
     methods: {
         scanSuccess(data) {
             this.$store.state.restitution.text = data
@@ -58,6 +65,10 @@ export default {
         },
         scanError(error) {
             this.$store.dispatch('loader/done')
+        },
+        onFakeClicked() {
+            this.$data.isFake = !this.$data.isFake;
+            this.$store.commit("fake/setIsFake", this.$data.isFake);
         }
     },
     components: {
@@ -134,6 +145,7 @@ export default {
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        position: relative;
 
         &:first-child {
             border-bottom: solid thin $C-extradark;
@@ -242,5 +254,12 @@ export default {
             }
         }
     }
+}
+
+.fakeScanBtn {
+    position: absolute;
+    width: 5rem;
+    left: 0;
+    height: 100%
 }
 </style> 

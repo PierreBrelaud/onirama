@@ -6,6 +6,7 @@ import { restitution } from "@/store/modules/restitution";
 import { auth } from "@/store/modules/auth";
 import { filter } from "@/store/modules/filter";
 import { visualisation } from "@/store/modules/visualisation";
+import { fake } from "@/store/modules/fake";
 
 
 const store = createStore({
@@ -19,7 +20,8 @@ const store = createStore({
         restitution,
         auth,
         filter,
-        visualisation
+        visualisation,
+        fake,
     }
 })
 
