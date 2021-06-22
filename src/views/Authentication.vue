@@ -180,7 +180,6 @@ export default {
                         })
                     },
                     (err) => {
-                        console.log(err);
                         this.register.error = authError.getAuthErrorMessage(err.code)
                     }
                 )
@@ -190,7 +189,6 @@ export default {
             }
         },
         onLogin() {
-            console.log(this.login);
             if (this.login.email && this.login.password) {
                 auth.login(
                     this.login.email,
