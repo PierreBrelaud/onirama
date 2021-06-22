@@ -13,6 +13,10 @@ const getInitialState = () => {
 		impact: 0,
 		mood: 0,
 		sleep: -1,
+		selectedDeviceId: null,
+		selectedDeviceText: null,
+		temperatureAvg: null,
+		cardiacAvg: null
 	}
 };
 
