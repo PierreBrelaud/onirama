@@ -81,7 +81,7 @@ export default {
 			secondLeft: null,
 			maxSecond: null,
 			counterInterval: null,
-			endInHours: 0,
+			endInHours: 1, // 30 seconds
 		};
 	},
 	watch: {

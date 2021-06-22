@@ -3,14 +3,16 @@
     <!--<button id="startButton"></button>-->
     <div id="debug">
       {{mobile}}
-      <div>alpha: <span id="alpha"></span></div>
-      <div>beta: <span id="beta"></span></div>
       <div>gamma: <span id="gamma"></span></div>
     </div>
     <a class="btn-back" :href="previousView">
       <img class="" src="@/assets/images/icons/right_arrow.svg" alt="">
     </a>
+    <div v-show="isZoomed" id="btn-gyro">
+      <img src="@/assets/images/icons/rotate.svg" alt="">
+    </div>
     <canvas id="visuCanvas" />
+    <div v-show="!isZoomed" class="lottie-indication"></div>
     <div v-if="isZoomed" class="btn-to btn-to-bottom" @click="onArrowClicked(-1)">
       <img class="btn-icon" src="@/assets/images/icons/arrow-down.svg" alt="">
     </div>
@@ -34,6 +36,7 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import { OrbitControls } from "@three-ts/orbit-controls";
 import swipeDetect from "swipe-detect";
+import lottie from 'lottie-web'
 import Stats from "stats.js/src/Stats";
 import Hammer from "hammerjs";
 
@@ -57,6 +60,14 @@ export default {
   mounted() {
     this.init();
     this.animate();
+
+    lottie.loadAnimation({
+      container: document.querySelector('.lottie-indication'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '/onirama-indication.json'
+    })
   },
   computed: {
     hasDream(){
@@ -70,12 +81,12 @@ export default {
   methods: {
     init() {
       // DEBUG ===============================================================
-      /*
+      
       this.stats = new Stats();
       this.stats.showPanel(0);
-      this.stats.dom.style.cssText = 'position:fixed;top:0px;right:0px;cursor:pointer;opacity: 0.9;z-index:10000;';
+      this.stats.dom.style.cssText = 'position:fixed;bottom:0px;right:0px;cursor:pointer;opacity: 0.9;z-index:10000;';
       document.body.appendChild(this.stats.dom);
-      */
+      
       // =====================================================================
 
       const quality = configurations.high;
@@ -103,6 +114,8 @@ export default {
       this.controls.enabled = false;
 
       this.cameraController = new CameraController(this.camera, this.controls);
+
+      this.camPosX = 0;
       // =====================================================================
 
       this.outsideWorldScene = new THREE.Scene();
@@ -115,6 +128,11 @@ export default {
        * @type {[THREE.Scene]}
        */
       this.dreamScenes = [];
+
+      this.isGyro = false;
+
+      // TODO To delete
+      this.angleH = 90;
 
       this.getDreamsData();
       this.initListeners();
@@ -147,7 +165,6 @@ export default {
     async getDreamsData() {
       //console.log(this.$store.state.auth.user.data);
       const dreamData = this.$store.state.visualisation;
-      console.log(dreamData);
       if(dreamData.dreams !== null){
         LoaderManager.loadOutsideModels(() => {
           this.previousView = dreamData.previousView;
@@ -201,6 +218,31 @@ export default {
 
       swipeDetect(this.renderer.domElement, (dir) => this.onSwipe(dir), 10);
 
+      window.addEventListener("newDream", ({detail}) => {
+        this.dreamData = detail;
+      })
+
+      document.getElementById("btn-gyro").addEventListener("click", () => {
+        if(!isMobile() || !this.isZoomed)return;
+        DeviceOrientationEvent.requestPermission()
+        .then((response) => {
+          if (response == "granted") {
+            window.addEventListener("deviceorientation", (e) => {
+              if(!this.isGyro) return;
+              document.getElementById("gamma").innerHTML = Math.round(e.gamma);
+              if (e.gamma >= -30 && e.gamma <= 30) {
+                this.angleH = map(e.gamma, 120, 60, -30, 30);
+                this.camera.position.x = Math.cos((this.angleH * Math.PI) / 180) * 1.2 + this.camPosX;
+                this.camera.position.z = Math.sin((this.angleH * Math.PI) / 180) * 1.2;
+              }
+            })
+          }
+        })
+        .catch(e => {})
+      });
+
+                
+
       /*              
       document.getElementById("startButton").addEventListener("click", () => {
         if(!isMobile())return;
@@ -220,29 +262,6 @@ export default {
           //camera.position.y = Math.cos((angleV * Math.PI) / 180) * 8;
           //camera.position.z = Math.sin((angleV * Math.PI) / 180) * 8;
         });
-        
-        DeviceOrientationEvent.requestPermission()
-        .then((response) => {
-          document.getElementById("alpha").innerHTML = 0;
-          document.getElementById('debug').style.background = 'green';
-          if (response == "granted") {
-            window.addEventListener("deviceorientation", (e) => {
-              document.getElementById("alpha").innerHTML = Math.round(e.alpha);
-              document.getElementById("beta").innerHTML = Math.round(e.beta);
-              document.getElementById("gamma").innerHTML = Math.round(e.gamma);
-              if (e.gamma >= -30 && e.gamma <= 30) {
-                const angleH = map(e.gamma, 120, 60, -30, 30);
-                this.camera.position.x = Math.cos((angleH * Math.PI) / 180) * 8;
-                this.camera.position.z = Math.sin((angleH * Math.PI) / 180) * 8;
-              }
-
-              //const angleV = map(e.beta, 72, 110, 0, 110);
-              //camera.position.y = Math.cos((angleV * Math.PI) / 180) * 8;
-              //camera.position.z = Math.sin((angleV * Math.PI) / 180) * 8;
-            });
-          }
-        })
-        .catch(e => document.getElementById('debug').style.background = 'red');
       })
               
       
@@ -254,13 +273,9 @@ export default {
           this.onArrowClicked(-1);
         }
       })*/
-
-      window.addEventListener("newDream", ({detail}) => {
-        this.dreamData = detail;
-      })
     },
     animate() {
-      //this.stats.begin();
+      this.stats.begin();
 
       this.controls.update();
 
@@ -296,7 +311,7 @@ export default {
         gl.stencilMask(0xff);
         gl.disable(gl.STENCIL_TEST);
 
-        //this.stats.end();
+        this.stats.end();
 
         this.renderer.clearStencil();
       }
@@ -311,6 +326,7 @@ export default {
         this.outsideWorld.loadNextDream(dir);
 
         this.cameraController.moveToDirection(dir, () => {
+          this.camPosX += 9.37 * dir;
           this.outsideWorldScene.remove(this.outsideWorld.getOutsideParts[0]);
           this.outsideWorld.getOutsideParts.shift();
           this.portalScenes.shift();
@@ -334,6 +350,17 @@ export default {
      * @param {String} key
      */
     onKeyPress(key) {
+      if (key === "ArrowUp") {
+        this.angleH += 1;
+        console.log(this.angleH)
+        this.camera.position.x = Math.cos((this.angleH * Math.PI) / 180) * 1.2 + this.camPosX;
+        this.camera.position.z = Math.sin((this.angleH * Math.PI) / 180) * 1.2;
+      } else if (key === "ArrowDown") {
+        this.angleH -= 1;
+        console.log(this.angleH)
+        this.camera.position.x = Math.cos((this.angleH * Math.PI) / 180) * 1.2 + this.camPosX;
+        this.camera.position.z = Math.sin((this.angleH * Math.PI) / 180) * 1.2;
+      }
       if (!this.cameraController.canInteract || this.isZoomed) return;
       if (key === "ArrowRight") {
         this.moveTo(1);
@@ -350,7 +377,9 @@ export default {
       const extPortal = this.dreamScenes[0].getObjectByName("extPortalMesh");
       if(this.isZoomed === true){
         // Remettre la camera et supprimer la détection du gyroscope
-        this.cameraController.zoomOut(extPortal, () => {
+        this.isGyro = false;
+        this.angleH = 90;
+        this.cameraController.zoomOut(this.camPosX, extPortal, () => {
           this.isZoomed = false;
         })
       } else {
@@ -364,6 +393,7 @@ export default {
           if(intersects.length > 0){
             this.cameraController.zoomIn(extPortal, () => {
               this.isZoomed = true;
+              this.isGyro = true;
               // Activer le gyroscope
             });
           }
@@ -390,7 +420,7 @@ export default {
   display: none;
   padding: 1em;
   position: absolute;
-  height: 20vh;
+  height: 10vh;
   width: 100%;
   background: cornflowerblue;
   bottom: 0;
@@ -413,6 +443,9 @@ export default {
     height: 30px;
     position: absolute;
     top: 0;
+    img {
+      transform: scaleX(-1);
+    }
   }
   .btn-to {
     height: 30px;
@@ -464,5 +497,27 @@ export default {
   height: 0.1rem;
   width: 100%;
   margin: 3rem 0;
+}
+
+.lottie-indication {
+  position: absolute;
+  width: 8rem;
+  height: 12vh;
+  transform: translate(-50%, 0);
+  bottom: 1rem;
+  left: 50%;
+}
+
+#btn-gyro {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 4.5rem;
+  width: 4.5rem;
+  margin: 0.5rem 0.5rem 0 0;
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
 </style> 

@@ -248,6 +248,9 @@ export default {
 		height: 3rem;
 		top: 0.5rem;
 		left: 0.5rem;
+		img {
+			transform: scaleX(-1);
+		}
 	}
 }
 .nebula {

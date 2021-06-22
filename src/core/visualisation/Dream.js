@@ -122,8 +122,8 @@ export default class Dream {
     createPortal(){
         const portalScene = new THREE.Scene();
         portalScene.name = "portal";
-
-        const planeGeo = new THREE.PlaneGeometry(0.6, 1.2);
+        const width = map(this.dreamData.absurd, -1, 1, 0.3, 0.9)
+        const planeGeo = new THREE.PlaneGeometry(width, 1.2);
         const planeMat = new THREE.MeshBasicMaterial();
         const planeMesh = new THREE.Mesh(planeGeo, planeMat);
         planeMesh.position.set(this.position, 0, 0);
@@ -158,7 +158,7 @@ export default class Dream {
 
         if(!this.isLab){
             const extPortalMesh = new THREE.Mesh(
-                new THREE.PlaneBufferGeometry(0.6, 1.2),
+                new THREE.PlaneBufferGeometry(0.9, 1.2),
                 new THREE.MeshBasicMaterial({
                     color: 0xFFFFFF,
                     transparent: true,
