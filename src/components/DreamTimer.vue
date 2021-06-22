@@ -81,7 +81,9 @@ export default {
 			secondLeft: null,
 			maxSecond: null,
 			counterInterval: null,
-			endInHours: 1, // 30 seconds
+			endInHours: 0,
+      endInMin : 30,
+      endInSec : 0
 		};
 	},
 	watch: {
@@ -155,8 +157,9 @@ export default {
 
 		let timeStart = this.$props.timeStamp;
 		let timeEnd = new Date(timeStart);
+		timeEnd.setHours(timeEnd.getHours()  + this.endInHours, timeEnd.getMinutes() + this.endInMin, timeEnd.getSeconds() + this.endInSec);
 
-		timeEnd.setHours(timeEnd.getHours(), this.endInHours * 60 );
+    console.log(timeEnd)
 
 		let currentDate = new Date(stringCurrentDate);
 
