@@ -40,7 +40,7 @@ export default class CameraController {
     zoomIn(extPortal, callback){
         gsap.to(this.camera.position, {
             y: 0,
-            z: 1.2,
+            z: 1.3,
             onUpdate: () => {
                 extPortal.material.opacity = map(
                     this.camera.position.z,

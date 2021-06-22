@@ -3,8 +3,8 @@
         <router-link :to="'/'">
             <div class="navigation__item navigation__item--home"></div>
         </router-link>
-        <router-link :to="'/tri'">
-            <div class="navigation__item navigation__item--sleep"></div>
+        <router-link :to="'/visualisation'">
+            <div class="navigation__item navigation__item--statistics"></div>
         </router-link>
         <div 
             class="navigation__item navigation__item--more"
@@ -14,8 +14,8 @@
                 :class="{'navigation__item__more--active' : showRestitutionMenu }"
             ></div>
         </div>
-        <router-link :to="'/visualisation'">
-            <div class="navigation__item navigation__item--statistics"></div>
+        <router-link :to="'/tri'">
+            <div class="navigation__item navigation__item--sleep"></div>
         </router-link>
         <router-link :to="'/profil'">
             <div class="navigation__item navigation__item--profile"></div>
@@ -203,23 +203,23 @@ export default {
         background: $C-light;
 
         &--home {
-            -webkit-mask: url('@/assets/images/icons/home.svg') no-repeat center;
-            mask: url('@/assets/images/icons/home.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/home_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/home_icon.svg') no-repeat center;
         }
 
         &--sleep {
-            -webkit-mask: url('@/assets/images/icons/sleep.svg') no-repeat center;
-            mask: url('@/assets/images/icons/sleep.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/filters_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/filters_icon.svg') no-repeat center;
         }
 
         &--statistics {
-            -webkit-mask: url('@/assets/images/icons/statistics.svg') no-repeat center;
-            mask: url('@/assets/images/icons/statistics.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/visu_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/visu_icon.svg') no-repeat center;
         }
 
         &--profile {
-            -webkit-mask: url('@/assets/images/icons/profile.svg') no-repeat center;
-            mask: url('@/assets/images/icons/profile.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/account_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/account_icon.svg') no-repeat center;
         }
         
         &__more {

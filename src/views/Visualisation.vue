@@ -9,7 +9,7 @@
       <img class="" src="@/assets/images/icons/right_arrow.svg" alt="">
     </a>
     <div v-show="isZoomed" id="btn-gyro">
-      <img src="@/assets/images/icons/rotate.svg" alt="">
+      <img src="@/assets/images/icons/gyroscope.svg" alt="">
     </div>
     <canvas id="visuCanvas" />
     <div v-show="!isZoomed" class="lottie-indication"></div>
@@ -232,8 +232,8 @@ export default {
               document.getElementById("gamma").innerHTML = Math.round(e.gamma);
               if (e.gamma >= -30 && e.gamma <= 30) {
                 this.angleH = map(e.gamma, 120, 60, -30, 30);
-                this.camera.position.x = Math.cos((this.angleH * Math.PI) / 180) * 1.2 + this.camPosX;
-                this.camera.position.z = Math.sin((this.angleH * Math.PI) / 180) * 1.2;
+                this.camera.position.x = Math.cos((this.angleH * Math.PI) / 180) * 1.3 + this.camPosX;
+                this.camera.position.z = Math.sin((this.angleH * Math.PI) / 180) * 1.3;
               }
             })
           }
@@ -514,10 +514,10 @@ export default {
   right: 0;
   height: 4.5rem;
   width: 4.5rem;
-  margin: 0.5rem 0.5rem 0 0;
+  margin: 1rem 0.5rem 0 0;
   img {
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 100%;
   }
 }
 </style> 
