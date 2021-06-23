@@ -56,7 +56,6 @@ export default {
         setSelected(value) {
             this.current = this.qualities[value];
             this.$store.commit("settings/setQuality", this.current);
-            console.log(this.$store.getters['settings/getQuality']);
         }
     }
 }
