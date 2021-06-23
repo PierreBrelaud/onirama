@@ -17,7 +17,4 @@ export const fake = {
             state.isFake = value
         }
     },
-    actions: {
-        
-    }
 }

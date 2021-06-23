@@ -12,7 +12,7 @@
       <img src="@/assets/images/icons/gyroscope.svg" alt="">
     </div>
     <canvas id="visuCanvas" />
-    <div v-show="!isZoomed" class="lottie-indication"></div>
+    <div v-show="!isZoomed && !hasAlreadyScrolled" class="lottie-indication"></div>
     <div v-if="isZoomed" class="btn-to btn-to-bottom" @click="onArrowClicked(-1)">
       <img class="btn-icon" src="@/assets/images/icons/arrow-down.svg" alt="">
     </div>
@@ -20,11 +20,17 @@
       <div class="btn-to-top" @click="onArrowClicked(1)">
         <img class="btn-icon" src="@/assets/images/icons/arrow-up.svg" alt="">
       </div>
-      <h1 class="dream-title">{{dreamData.title}}</h1>
-      <h3 class="dream-date">{{dreamData.date}}</h3>
+      <div 
+        class="dream-header"
+        :style="`background-image:url(${'/notes.png'})`"
+      >
+        <h1 class="dream-title">{{dreamData.title}}</h1>
+        <h3 class="dream-date">{{displayTimestamp(dreamData.date)}}</h3>
+      </div>
       <p class="dream-text">{{ dreamData.text }}</p>
       <div class="separator"></div>
-      <p>
+      <h2 class="intro-dream-text">Cette nuit ...</h2>
+      <p class="dream-summary">
         {{ getRestitutionSummary }}
       </p>
     </div>
@@ -39,6 +45,7 @@ import swipeDetect from "swipe-detect";
 import lottie from 'lottie-web'
 import Stats from "stats.js/src/Stats";
 import Hammer from "hammerjs";
+import { displayTimestamp } from '@/utils/dateHelper.js'
 
 import { configurations } from "@/utils/settingsConfig";
 import CameraController from "@/core/visualisation/CameraController";
@@ -55,6 +62,7 @@ export default {
       isZoomed: false,
       previousView: '/',
       mobile: isMobile(),
+      hasAlreadyScrolled: false,
     }
   },
   mounted() {
@@ -89,7 +97,7 @@ export default {
       
       // =====================================================================
 
-      const quality = configurations.high;
+      const quality = this.getQuality();
       const size = {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -342,6 +350,7 @@ export default {
      * @param {String} dir - direction
      */
     onSwipe(dir) {
+      this.hasAlreadyScrolled = true;
       dir = dir === "left" ? 1 : -1;
       if (!this.cameraController.canInteract || this.isZoomed) return;
       this.moveTo(dir);
@@ -407,6 +416,17 @@ export default {
         y: `+=${this.canvas.offsetHeight * dir}`,
       })
 
+    },
+    displayTimestamp,
+    getQuality(){
+      switch(this.$store.getters['settings/getQuality']) {
+        case 'Basse':
+          return configurations.low;
+        case 'Moyenne':
+          return configurations.medium;
+        case 'Haute':
+          return configurations.high;
+      }
     }
   },
 };
@@ -434,7 +454,7 @@ export default {
   border:none;
   left: 50%;
   transform: translate(-50%, -50%);
-  top: 50%
+  top: 50%;
 }
 
 .visu-container {
@@ -462,6 +482,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 2rem;
   }
   .btn-icon {
     height: 100%;
@@ -472,6 +493,29 @@ export default {
     padding: 2rem;
     color: white;
     width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    .dream-header {
+      height: 18rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin-bottom: 3rem;
+      .dream-title {
+        text-align: center;
+        font-size: 5rem;
+      }
+      .dream-date {
+        text-align: center;
+        font-family: "Canela Light Italic";
+        font-size: 1.8rem;
+        margin: 0;
+        padding-top: 0.5rem;
+      }
+    }
     .dream-img {
       width: 100%;
       display: flex;
@@ -480,14 +524,15 @@ export default {
         width: 30rem;
       }
     }
-    .dream-title {
-      text-align: center;
-      margin-top: 2rem;
+    .dream-text {
+      margin: 0 2.8rem; 
+      line-height: 2.5rem;
     }
-    .dream-date {
-      text-align: center;
-      font-family: "Canela Light Italic";
-      font-size: 1.5rem;
+    .intro-dream-text {
+      margin-bottom: 1rem; 
+    }
+    .dream-summary {
+      line-height: 2.2rem;
     }
   }
 }
