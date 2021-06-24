@@ -24,6 +24,10 @@
             </div>
         </div>
         <div class="separator"></div>
+        <div class="btnToData" @click="goToVisualizer">
+         Visualisation de données
+        </div>
+        <div class="separator"></div>
         <div v-if="user.data" class="infos">
             <p>{{ user.data.email }}</p>
             <div class="separator smaller"></div>
@@ -57,7 +61,10 @@ export default {
         setSelected(value) {
             this.current = this.qualities[value];
             this.$store.commit("settings/setQuality", this.current);
-        }
+        },
+      goToVisualizer() {
+          this.$router.push('/arduino-visualizer')
+      }
     }
 }
 </script>
@@ -108,7 +115,7 @@ h1, h2 {
 }
 .infos {
     height: 100%;
-    margin-top: 22rem;
+    margin-top: 15rem;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -118,6 +125,18 @@ h1, h2 {
 }
 .uid {
     font-size: 1rem;
+}
+.btnToData {
+  background: $C-white;
+  color: $C-black;
+  text-align: center;
+  width: 25rem;
+  margin: auto;
+  font-size: 1.5rem;
+  padding: 2rem 0;
+  border-radius: 3rem;
+  font-family: $F-bellota;
+  box-shadow: 0 0 5px 0 #ffffff;
 }
 .btn-logout {
     position: absolute;
