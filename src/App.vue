@@ -26,7 +26,7 @@ export default {
 	data() {
 		return {
 			showRestitutionMenu: false,
-			withoutNav: ['restitution', 'visualisation', 'authentification', 'portal-lab', 'arduino-visualizer']
+			withoutNav: ['restitution', 'visualisation', 'authentification', 'portal-lab']
 		}
 	},
 	created() {
