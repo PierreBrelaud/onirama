@@ -70,7 +70,8 @@ export default class Dream {
         const ptLightMGradient = new Rainbow();
         ptLightMGradient.setSpectrum(...typeColors);
         const ptLightMColor = `#${ptLightMGradient.colourAt(mood)}`;
-        const ptLightMIntensity = map(impact, -1, 1, 0.2, 1.5);
+        //const ptLightMIntensity = map(impact, -1, 1, 0.2, 1.5);
+        const ptLightMIntensity = 1.5;
 
         const ptLightM = new THREE.PointLight(ptLightMColor, ptLightMIntensity, 6);
         outsidePartGroup.add(ptLightM);

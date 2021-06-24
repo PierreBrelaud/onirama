@@ -1,5 +1,7 @@
 <template>
-    <div v-if="step !== 0" @click="onBackClicked">BACK</div>
+    <div v-if="step !== 0" @click="onBackClicked">
+        <img class="btn-back" src="@/assets/images/icons/right_arrow.png" alt="">
+    </div>
     <!-- dream types -->
     <div v-if="step === 0">
         <div 
@@ -7,7 +9,7 @@
             :key="dreamType.id"
             @click="getDreams(dreamType.id, dreamType.display)"
             class="map-container"
-            :style="`background-image:url('./src/assets/images/maps/map_${dreamType.id}.png')`"  
+            :style="`background-image:url('/maps/map_${dreamType.id}.png')`"  
         >
             <h2>{{ dreamType.display }}</h2>
             
@@ -17,7 +19,7 @@
     <div v-if="step === 1">
         <div 
             class="selected-map-img map-container"
-            :style="`background-image:url('./src/assets/images/maps/map_${currentType.type}.png')`"
+            :style="`background-image:url('/maps/map_${currentType.type}.png')`"
         >
             <h2>{{currentType.display}}</h2>
         </div>
@@ -112,5 +114,8 @@ export default {
 .selected-map-img {
     width: 100%;
     margin-bottom: 3.8rem;
+}
+.btn-back {
+    transform: scaleX(-1);
 }
 </style>

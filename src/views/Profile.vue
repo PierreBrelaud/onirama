@@ -25,9 +25,10 @@
         </div>
         <div class="separator"></div>
         <div v-if="user.data" class="infos">
-            <h3>Utilisateur : {{ user.data.email }}</h3>
-            <h3>UID : {{ user.data.uid }}</h3>
-            <button class="btn" @click="logout">Logout</button>
+            <p>{{ user.data.email }}</p>
+            <div class="separator smaller"></div>
+            <p class="uid">{{ user.data.uid }}</p>  
+            <button class="btn btn-logout" @click="logout">Se déconnecter</button>
         </div>
     </div>
 </template>
@@ -64,6 +65,11 @@ export default {
 <style lang='scss' scoped>
 .appview {
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+h1 {
+    margin: 6rem 0;
 }
 h1, h2 {
     text-align: center;
@@ -71,14 +77,20 @@ h1, h2 {
 .separator {
     background: #FFFFFF;
     opacity: 0.2;
-    height: 0.1rem;
+    height: 0.2rem;
     width: 100%;
-    margin: 3rem 0;
+    margin: 2rem 0;
+}
+.separator.smaller{
+    width: 60%;
+    align-self: center;
+    opacity: 0.5;
+    margin: 1rem 0;
 }
 .quality-list {
     display: flex;
     width: 100%;
-    margin: 1rem 0;
+    margin-top: 2.5rem;
 }
 .quality-item {
     width: 100%;
@@ -93,5 +105,26 @@ h1, h2 {
     color: black;
     box-shadow: 0px 0px 5px 0px #ffffff;
     border-radius: 30px;
+}
+.infos {
+    height: 100%;
+    margin-top: 22rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.infos p {
+    text-align: center;
+}
+.uid {
+    font-size: 1rem;
+}
+.btn-logout {
+    position: absolute;
+    bottom: 0;
+    left: 50%; transform: translateX(-50%);
+    width: 25rem;
+    background: transparent;
+    color: white;
 }
 </style> 

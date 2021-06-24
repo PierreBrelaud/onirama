@@ -1,6 +1,7 @@
 <template>
     <div class="story">
         <div class="story__header">
+            <div class="fakeBtnWrite" @click="onFakeBtnWriteClicked"></div>
             <!-- title -->
             <input 
                 v-model="storeData.title" 
@@ -106,6 +107,41 @@ export default {
         updateTextValue(ev) {
             this.storeData.text = ev.target.innerText;
         },
+        onFakeBtnWriteClicked(){
+          //Ajouter un texte dans le champs
+          const text = "Ceci est mon récit de rêve que je vais faire semblant de rentrer à la main";
+          const splitText = text.split(' ');
+          let count = 0;
+          this.randomInterval((stop) => {
+              this.$refs.text.innerText += ' ' + splitText[count];
+              this.storeData.text = this.$refs.text.innerText;
+              count+=1;
+
+              if (count > splitText.length - 1) {
+                  stop();
+              }
+          }, 50, 300)
+        },
+        randomInterval(callback, min, max) {
+          const randomNum = (max, min = 0) => Math.random() * (max - min) + min;
+
+          let targetTime = randomNum(min, max);
+          let lastInvoke = performance.now();
+
+          const stop = () => targetTime = null
+
+          const tick = () => {
+              if (!targetTime) return;
+
+              if (performance.now() - lastInvoke > targetTime) {
+                  lastInvoke = performance.now();
+                  targetTime = randomNum(min, max);
+                  callback && typeof callback === "function" && callback(stop);
+              }
+            requestAnimationFrame(tick)
+          }
+          tick();
+        },
       clickTrigger() {
           if(this.$data.isOpen) {
             this.closeList()
@@ -114,14 +150,14 @@ export default {
           }
       },
       openList(e) {
-        gsap.to(this.$refs.dataDevice, {display: 'flex'})
-        gsap.fromTo(this.$refs.dataDevice.children, {y : -300}, {y : 0, stagger: 0.1, duration: 0.5})
+        gsap.set(this.$refs.dataDevice, {display: 'flex'})
+        //gsap.fromTo(this.$refs.dataDevice.children, {y : -300}, {y : 0, stagger: 0.1, duration: 0.5})
         this.$data.isOpen = true
       },
       closeList(e) {
         this.$data.isOpen = false
-        gsap.fromTo(this.$refs.dataDevice.children, {y : 0}, {y : -300, stagger: 0.1, duration: 0.5})
-        gsap.to(this.$refs.dataDevice, {display: 'none'})
+        //gsap.fromTo(this.$refs.dataDevice.children, {y : 0}, {y : -300, stagger: 0.1, duration: 0.5})
+        gsap.set(this.$refs.dataDevice, {display: 'none'})
       },
       pickElementInList(e) {
           let dates = []
@@ -187,6 +223,7 @@ input, input:before, input:after, .story__content__text {
 
     &__header {
         padding: 0 7.5%;
+        position: relative;
 
         &__row {
           display: flex;
@@ -323,5 +360,13 @@ input, input:before, input:after, .story__content__text {
       }
     }
   }
+}
+.fakeBtnWrite {
+  width: 5rem;
+  height: 4rem;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%)
 }
 </style>

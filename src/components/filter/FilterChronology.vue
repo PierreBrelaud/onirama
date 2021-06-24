@@ -27,6 +27,7 @@ export default {
 				userId: this.$store.getters["auth/user"].data.uid
 			});
             this.dreams = dreams.data;
+            console.log(this.dreams);
             this.$store.dispatch('loader/done');
         }
     },

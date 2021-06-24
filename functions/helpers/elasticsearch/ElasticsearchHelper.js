@@ -13,7 +13,7 @@ class ElasticsearchHelper {
 	initClient() {
 
 		const env = functions.config();
-
+		
 		const node = env.elasticsearch.url;
 		const auth = {
 			username: env.elasticsearch.username,
@@ -67,6 +67,7 @@ class ElasticsearchHelper {
 		const result = await this.client.search({
 			index: "dream",
 			body: {
+				size : 30,
 				query: {
 					match: {
 						userId: userId,
