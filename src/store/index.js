@@ -6,12 +6,14 @@ import { restitution } from "@/store/modules/restitution";
 import { auth } from "@/store/modules/auth";
 import { filter } from "@/store/modules/filter";
 import { visualisation } from "@/store/modules/visualisation";
+import { fake } from "@/store/modules/fake";
+import { settings } from "@/store/modules/settings";
 
 
 const store = createStore({
     plugins: [createPersistedState({
         storage: window.sessionStorage,
-        paths: ['filter', 'visualisation', 'auth']
+        paths: ['filter', 'visualisation', 'auth', 'settings']
     })],
     modules: {
         loader,
@@ -19,7 +21,9 @@ const store = createStore({
         restitution,
         auth,
         filter,
-        visualisation
+        visualisation,
+        fake,
+        settings
     }
 })
 

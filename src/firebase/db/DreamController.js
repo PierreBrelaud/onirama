@@ -40,6 +40,7 @@ export default {
         db
             .collection(collection)
             .where('userId', '==', userId)
+            .orderBy("publishDate", "desc")
             .limit(10)
             .get()
             .then((result) => {

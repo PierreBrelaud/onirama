@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from 'gsap';
+import { displayTimestamp } from '@/utils/dateHelper.js'
 
 import Background from "@/core/visualisation/insidePart/Background";
 import Floor from "@/core/visualisation/insidePart/Floor";
@@ -85,7 +86,7 @@ export default class Dream {
 
             // DREAM DATE
             this.addText(
-                this.dreamData.date, 
+                displayTimestamp(this.dreamData.date), 
                 0.025,
                 new THREE.Vector3(0, -0.45, 3.5), 
                 outsidePartGroup
@@ -122,7 +123,10 @@ export default class Dream {
     createPortal(){
         const portalScene = new THREE.Scene();
         portalScene.name = "portal";
-        const width = map(this.dreamData.absurd, -1, 1, 0.3, 0.9)
+        let width = 0.6;
+        if(this.dreamData.absurd < 0) {
+            width = map(this.dreamData.absurd, -1, 0, 0.1, 0.6)
+        }
         const planeGeo = new THREE.PlaneGeometry(width, 1.2);
         const planeMat = new THREE.MeshBasicMaterial();
         const planeMesh = new THREE.Mesh(planeGeo, planeMat);

@@ -121,6 +121,7 @@ export default {
 
 <style lang="scss" scoped>
 .filter {
+    overflow-x: hidden;
     .header {
         height: 4rem;
     }

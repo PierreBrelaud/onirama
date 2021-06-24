@@ -10,10 +10,10 @@ export default class RestitutionSummary {
         
         // SLEEP QUALITY
         if(this.getSleepSentence(this.dreamData.sleep) !== 0) {
-            summary += `Cette nuit j'ai ${this.getSleepSentence(this.dreamData.sleep)} dormi.`;
+            summary += `j'ai ${this.getSleepSentence(this.dreamData.sleep)} dormi. `;
         }
 
-        summary += ` J'ai fait `;
+        summary += `j'ai fait `;
         // TYPE
         const typeDisplay = getTypeDisplay(type);
         if(['Cauchemar', 'Mauvais rêve'].includes(typeDisplay)) {

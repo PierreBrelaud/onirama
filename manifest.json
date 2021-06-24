@@ -2,8 +2,11 @@
     "name": "Onirama",
     "short_name": "Onirama",
     "description": "Ceci est une pwa ...",
-    "icons": [
-    ],
+    "icons": [{
+        "src": "/icon_app.png",
+        "sizes": "1080x1080",
+        "type": "image/png"
+    }],
     "start_url": "/",
     "display": "fullscreen",
     "theme_color": "#FFFFFF",

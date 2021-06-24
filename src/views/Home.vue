@@ -107,11 +107,31 @@ export default {
         },
         generateDream() {
             // is generated  > 9 > order by date -> dans dream controller
-            // voir le resultat > mon dream
-            DreamController.generateDream(this.dreamId, 
-            (res) => {
-            }, 
+            const userId = this.$store.getters["auth/user"].data.uid;
+            const dreams = [];
+
+            DreamController.getDreamsForVisualisation(userId, (result) => {
+                result.docs.forEach(doc => {
+                    dreams.push(doc.data());
+                });
+                DreamController.generateDream(this.dreamId, 
+                (res) => {
+                    const result = {
+                        current: 0,
+                        dreams: dreams,
+                        previousView: this.$store.getters['visualisation/data'].previousView
+                    }
+                    
+                    this.$store.commit("visualisation/setData", result)
+
+                    this.$router.push('/visualisation');
+                }, 
+                (err) => console.log(err));
+            },
             (err) => console.log(err));
+            
+            // voir le resultat > mon dream
+            
             // ajouter dans le store visu -> cf filtre
             // go visu
         }

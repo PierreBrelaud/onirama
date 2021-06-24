@@ -147,9 +147,6 @@ export default {
 		}
 	},	
 	components: { RestitutionBullet, InfoPopUp },
-	mounted(){
-		console.log(this.survey.data);
-	}
 };
 </script>
 

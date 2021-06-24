@@ -3,8 +3,8 @@
         <router-link :to="'/'">
             <div class="navigation__item navigation__item--home"></div>
         </router-link>
-        <router-link :to="'/tri'">
-            <div class="navigation__item navigation__item--sleep"></div>
+        <router-link :to="'/visualisation'">
+            <div class="navigation__item navigation__item--statistics"></div>
         </router-link>
         <div 
             class="navigation__item navigation__item--more"
@@ -14,8 +14,8 @@
                 :class="{'navigation__item__more--active' : showRestitutionMenu }"
             ></div>
         </div>
-        <router-link :to="'/visualisation'">
-            <div class="navigation__item navigation__item--statistics"></div>
+        <router-link :to="'/tri'">
+            <div class="navigation__item navigation__item--sleep"></div>
         </router-link>
         <router-link :to="'/profil'">
             <div class="navigation__item navigation__item--profile"></div>
@@ -26,10 +26,12 @@
         :class="{'restitution--active' : showRestitutionMenu }"
     >
         <div class="restitution__item">
+            <div class="fakeScanBtn" @click="onFakeClicked"></div>
             <div class="restitution__item__icon restitution__item__icon--scan"></div>
             <scan-text 
                 :successCallback="scanSuccess"
                 :errorCallback="scanError"
+                :opacity="isFake? 0.8 : 1"
             />
         </div>
         <router-link :to="'/restitution'">
@@ -50,6 +52,11 @@
 import ScanText from '@/components/ScanText.vue'
 
 export default {
+    data() {
+        return {
+            isFake: false,
+        }
+    },
     methods: {
         scanSuccess(data) {
             this.$store.state.restitution.text = data
@@ -58,6 +65,10 @@ export default {
         },
         scanError(error) {
             this.$store.dispatch('loader/done')
+        },
+        onFakeClicked() {
+            this.$data.isFake = !this.$data.isFake;
+            this.$store.commit("fake/setIsFake", this.$data.isFake);
         }
     },
     components: {
@@ -134,6 +145,7 @@ export default {
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        position: relative;
 
         &:first-child {
             border-bottom: solid thin $C-extradark;
@@ -191,23 +203,23 @@ export default {
         background: $C-light;
 
         &--home {
-            -webkit-mask: url('@/assets/images/icons/home.svg') no-repeat center;
-            mask: url('@/assets/images/icons/home.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/home_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/home_icon.svg') no-repeat center;
         }
 
         &--sleep {
-            -webkit-mask: url('@/assets/images/icons/sleep.svg') no-repeat center;
-            mask: url('@/assets/images/icons/sleep.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/filters_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/filters_icon.svg') no-repeat center;
         }
 
         &--statistics {
-            -webkit-mask: url('@/assets/images/icons/statistics.svg') no-repeat center;
-            mask: url('@/assets/images/icons/statistics.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/visu_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/visu_icon.svg') no-repeat center;
         }
 
         &--profile {
-            -webkit-mask: url('@/assets/images/icons/profile.svg') no-repeat center;
-            mask: url('@/assets/images/icons/profile.svg') no-repeat center;
+            -webkit-mask: url('@/assets/images/icons/account_icon.svg') no-repeat center;
+            mask: url('@/assets/images/icons/account_icon.svg') no-repeat center;
         }
         
         &__more {
@@ -242,5 +254,12 @@ export default {
             }
         }
     }
+}
+
+.fakeScanBtn {
+    position: absolute;
+    width: 5rem;
+    left: 0;
+    height: 100%
 }
 </style> 

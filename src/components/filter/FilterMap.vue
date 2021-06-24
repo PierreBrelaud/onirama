@@ -1,22 +1,31 @@
 <template>
-    <h3>Map</h3>
     <div v-if="step !== 0" @click="onBackClicked">BACK</div>
     <!-- dream types -->
     <div v-if="step === 0">
-        <p 
+        <div 
             v-for="dreamType in dreamTypes" 
             :key="dreamType.id"
-            @click="getDreams(dreamType.id)"    
+            @click="getDreams(dreamType.id, dreamType.display)"
+            class="map-container"
+            :style="`background-image:url('./src/assets/images/maps/map_${dreamType.id}.png')`"  
         >
-            {{ dreamType.display }}
-        </p>
+            <h2>{{ dreamType.display }}</h2>
+            
+        </div>
     </div>
     <!-- dreams -->
     <div v-if="step === 1">
+        <div 
+            class="selected-map-img map-container"
+            :style="`background-image:url('./src/assets/images/maps/map_${currentType.type}.png')`"
+        >
+            <h2>{{currentType.display}}</h2>
+        </div>
         <filter-list 
             :data="dreams"
         />
     </div>
+    <div class="spacer"></div>
 </template>
 
 <script>
@@ -33,6 +42,7 @@ export default {
             cfGetDremByType: functions.httpsCallable('getDreamByType'),
             dreamTypes: dreamTypes,
             step: null,
+            currentType: null,
         }
     },
     methods: {
@@ -53,8 +63,14 @@ export default {
             });
             this.step = 0;
         },
-        async getDreams(typeId) {
+        async getDreams(typeId, display) {
             this.$store.dispatch('loader/pending');
+
+            this.$data.currentType = {
+                type: typeId,
+                display
+            };
+
             //get dreams
             const dreams = await this.cfGetDremByType({ 
                 userId: this.$store.getters['auth/user'].data.uid,
@@ -75,6 +91,26 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.map-container {
+    height: 25rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+.map-container h2{
+    position: absolute;
+    bottom: 3rem;
+    font-size: 4rem;
+    width: 100%;
+    text-align: center;
+}
+.spacer {
+    height: 8rem;
+}
+.selected-map-img {
+    width: 100%;
+    margin-bottom: 3.8rem;
+}
 </style>
