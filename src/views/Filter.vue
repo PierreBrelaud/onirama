@@ -5,7 +5,7 @@
         <div class="header"></div>
         <div class="nav">
             <div class="nav__slider" :class="'nav__slider--' + navigationItem">
-                <!-- map -->
+                <!-- map 
                 <div 
                     class="nav__slider__item" 
                     :class="{'nav__slider__item--selected' : navigationItem === 'map' }"
@@ -14,8 +14,8 @@
                         Cartographie onirique
                     </h1>
                 </div>
-
-                <!-- search -->
+                -->
+                <!-- search 
                 <div 
                     class="nav__slider__item" 
                     :class="{'nav__slider__item--selected' : navigationItem === 'search' }"
@@ -24,8 +24,8 @@
                         Recherche
                     </h1>
                 </div>
-
-                <!-- nebula -->
+                -->
+                <!-- nebula 
                 <div 
                     class="nav__slider__item" 
                     :class="{'nav__slider__item--selected' : navigationItem === 'nebula' }"
@@ -34,7 +34,7 @@
                         Nébuleuse émotionnelle
                     </h1>
                 </div>
-
+                -->
                 <!-- chronology -->
                 <div 
                     class="nav__slider__item" 
@@ -46,22 +46,22 @@
                 </div>
             </div>
         </div>
-        <!-- map -->
+        <!-- map 
         <filter-map 
             v-if="navigationItem === item.MAP"
-        />
+        />-->
         <!-- chronology -->
         <filter-chronology 
             v-if="navigationItem === item.CHRONOLOGY"
         />
-        <!-- nebula -->
+        <!-- nebula 
         <filter-nebula 
             v-if="navigationItem === item.NEBULA"
-        />
-        <!-- search -->
+        />-->
+        <!-- search 
         <filter-search 
             v-if="navigationItem === item.SEARCH"
-        />
+        />-->
     </div>
 
 </template>
@@ -147,7 +147,7 @@ export default {
                 left: -110vw;
             }
             &--chronology {
-                left: -166vw;
+                left: 0vw;
             }
 
             &__item {

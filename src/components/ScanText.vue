@@ -43,7 +43,8 @@ export default {
                 this.apiCall(base64ImageCleaned)
             } else {
                 setTimeout(() => {
-                    this.successCallback(this.$store.getters['fake/fakeText'])
+                    const currentFake = this.$store.getters['fake/currentFake']
+                    this.successCallback(this.$store.getters['fake/fakeText'][currentFake])
                 }, 5000);
             }
         },

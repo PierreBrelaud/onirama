@@ -2,8 +2,8 @@
     <div class="list">
         <div 
             class="list__item"
-            @click="onItemClicked(dream._id)"
-            v-for="dream in data.hits.hits" :key="dream._id">
+            v-for="(dream, index) in data" :key="`dream-${index}`"
+            @click="onItemClicked(index)">
             <!-- left indicator -->
             <div class="list__item__indicator">
                 <div class="circle"></div>
@@ -14,21 +14,21 @@
                 <div class="content">
                     <div class="content__header">
                         <!-- title -->
-                        <div v-if="type === 'search'" v-html="formatHighlightedText(dream._source.title, 'title')" class="content__header__title">
+                        <div v-if="type === 'search'" v-html="formatHighlightedText(dream.title, 'title')" class="content__header__title">
                         </div>
                         <div v-else class="content__header__title">
-                            {{ formatText(dream._source.title, 'title') }}
+                            {{ formatText(dream.title, 'title') }}
                         </div>
                         <!-- date -->
                         <div class="content__header__date">
-                            {{ displayTimestamp(dream._source.date)}}
+                            {{ displayTimestamp(dream.date)}}
                         </div>
                     </div>
                     <!-- text -->
-                    <p v-if="type === 'search'" class="content__text" v-html="formatHighlightedText(dream._source.text, 'text')">
+                    <p v-if="type === 'search'" class="content__text" v-html="formatHighlightedText(dream.text, 'text')">
                     </p>
                     <p v-else class="content__text">
-                        {{ formatText(dream._source.text, 'text') }}
+                        {{ formatText(dream.text, 'text') }}
                     </p>
                 </div>
                 <!-- <ul>
@@ -46,6 +46,7 @@
 <script>
 import { getSubEmotion } from '@/utils/surveyData.js'
 import { displayTimestamp } from '@/utils/dateHelper.js'
+import DreamController from "@/firebase/db/DreamController";
 
 export default {
     mounted() {
@@ -70,23 +71,32 @@ export default {
     methods: {
         onItemClicked(id) {
             const dreams = [];
+            const userUid = this.$store.getters['auth/user'].data.uid;
+            
+            //const current = this.data.hits.hits.findIndex(dream => dream._id === id);
 
-            const current = this.data.hits.hits.findIndex(dream => dream._id === id);
-
-            this.data.hits.hits.forEach(el => {
+            /*this.data.hits.hits.forEach(el => {
                 dreams.push(el._source)
-            })
+            })*/
 
-            const result = {
-                current: current,
-                dreams: dreams,
-                previousView: this.$store.getters['visualisation/data'].previousView
-            }
-            
-            this.$store.commit("visualisation/setData", result)
+            DreamController.getDreamsForVisualisation(userUid, 
+                (res) => {
+                    res.docs.forEach(doc => {
+                        dreams.push(doc.data());
+                    })
+                    const result = {
+                        current: id,
+                        dreams: dreams,
+                        previousView: this.$store.getters['visualisation/data'].previousView
+                    }
+                    this.$store.commit("visualisation/setData", result)
 
-            this.$router.push('/visualisation');
-            
+                    this.$router.push('/visualisation');
+                },
+                (err) => {
+                    console.error(err);
+                }
+            ) 
         },
         onResize() {
             this.windowWidth = window.innerWidth;

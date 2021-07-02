@@ -90,11 +90,13 @@ export default {
     init() {
       // DEBUG ===============================================================
       
+      /*
       this.stats = new Stats();
       this.stats.showPanel(0);
       this.stats.dom.style.cssText = 'position:fixed;bottom:0px;right:0px;cursor:pointer;opacity: 0.9;z-index:10000;';
       document.body.appendChild(this.stats.dom);
-      
+      */
+
       // =====================================================================
 
       const quality = this.getQuality();
@@ -283,7 +285,7 @@ export default {
       })*/
     },
     animate() {
-      this.stats.begin();
+      //this.stats.begin();
 
       this.controls.update();
 
@@ -319,7 +321,7 @@ export default {
         gl.stencilMask(0xff);
         gl.disable(gl.STENCIL_TEST);
 
-        this.stats.end();
+        //this.stats.end();
 
         this.renderer.clearStencil();
       }

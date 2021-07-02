@@ -1,7 +1,6 @@
 <template>
     <div class="story">
         <div class="story__header">
-            <div class="fakeBtnWrite" @click="onFakeBtnWriteClicked"></div>
             <!-- title -->
             <input 
                 v-model="storeData.title" 

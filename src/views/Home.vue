@@ -1,5 +1,22 @@
 <template>
     <div class="home appview">
+        <div class="star star-nightmare" @click="onStarClicked('nightmare')">
+            <div class="star-element"></div>
+        </div>
+        <div class="star star-baddream" @click="onStarClicked('badDream')">
+            <div class="star-element"></div>
+        </div>
+        <div class="star star-erotic" @click="onStarClicked('erotic')">
+            <div class="star-element"></div>
+        </div>
+        <div class="star star-contemplatif" @click="onStarClicked('contemplative')">
+            <div class="star-element"></div>
+        </div>
+        <div class="star star-inclassifiable" @click="onStarClicked('unclassifiable')">
+            <div class="star-element"></div>
+        </div>
+        <div class="selected-star">{{ currentFake }}</div>
+
         <!-- default -->
         <div v-if="state === 0" class="container">
             <div class="container__header">
@@ -99,6 +116,7 @@ export default {
             publishDate: null,
             dreamId: null,
             debug: '',
+            currentFake:'',
         }
     },
     methods: {
@@ -134,6 +152,10 @@ export default {
             
             // ajouter dans le store visu -> cf filtre
             // go visu
+        },
+        onStarClicked(type){
+            this.currentFake = type.charAt(0).toUpperCase();
+            this.$store.commit("fake/setCurrentFake", type);
         }
     }
 }
@@ -193,5 +215,48 @@ export default {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    position: relative;
+}
+.star {
+    width: 5rem;
+    height: 5rem;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.star-nightmare {
+    left: 0.2rem;
+    top: 0.2rem;
+}
+.star-baddream {
+    right: 1rem;
+    top: 0.5rem;
+}
+.star-erotic {
+    top: 20rem;
+    left: 8rem;
+}
+.star-contemplatif {
+    top: 24rem;
+    right: 8rem;
+}
+.star-inclassifiable {
+    right: 6rem;
+    bottom: 18rem;
+}
+.selected-star {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 1.5rem;
+    opacity: 0.5;
+}
+.star-element {
+    height: 0.5rem;
+    width: 0.5rem;
+    background: white;
+    border-radius: 100%;
+    box-shadow: 0px 0px 5px 0px #ffffff;
 }
 </style>
